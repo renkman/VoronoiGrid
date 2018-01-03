@@ -38,12 +38,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Elements\HalfEdge.cs" />
+    <Compile Include="Elements\Tuple.cs" />
     <Compile Include="Structures\EventQueue.cs" />
     <Compile Include="Elements\INode.cs" />
     <Compile Include="Elements\Leaf.cs" />
     <Compile Include="Elements\Node.cs" />
     <Compile Include="Elements\Point.cs" />
-    <Compile Include="Structures\Sweepline.cs" />
+    <Compile Include="Structures\BeachLine.cs" />
     <Compile Include="Events\CircleEvent.cs" />
     <Compile Include="Events\IEvent.cs" />
     <Compile Include="Events\SiteEvent.cs" />

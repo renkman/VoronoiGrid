@@ -2,6 +2,8 @@
 {
     public interface INode
     {
-        Point Point { get; set; }
+        bool IsLeaf { get; }
+
+        INode Find(Point point);
     }
 }

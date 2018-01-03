@@ -1,14 +1,14 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using NUnit.Framework;
 using VoronoiEngine.Elements;
 using VoronoiEngine.Events;
 using VoronoiEngine.Structures;
 
 namespace VoronoiTests
 {
-    [TestClass]
+    [TestFixture]
     public class EventQueueTest
     {
-        [TestMethod]
+        [Test]
         public void TestHasEvents()
         {
             var sites = new[] { new Point() { X = 1, Y = 2 } };
@@ -18,7 +18,7 @@ namespace VoronoiTests
             Assert.IsTrue(eventQueue.HasEvents);
         }
 
-        [TestMethod]
+        [Test]
         public void TestHasNoEvents()
         {
             var eventQueue = new EventQueue();
@@ -26,7 +26,7 @@ namespace VoronoiTests
             Assert.IsFalse(eventQueue.HasEvents);
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetNextEvent()
         {
             var sites = new[] { new Point() { X = 1, Y = 2 }, new Point() { X = 1, Y = 1 }, new Point() { X = 1, Y = 5 } };
@@ -41,7 +41,7 @@ namespace VoronoiTests
             Assert.AreEqual(resultSet[3], null);
         }
 
-        [TestMethod]
+        [Test]
         public void TestInsert()
         {
             var sites = new[] { new Point() { X = 1, Y = 16 }, new Point() { X = 1, Y = 64 } };
@@ -57,9 +57,9 @@ namespace VoronoiTests
             Assert.AreEqual(resultSet[2].Point, sites[0]);
         }
 
-        [TestMethod]
+        [Test]
         public void TestRemove()
-        {
+        { 
             var sites = new[] { new Point() { X = 1, Y = 64 }, new Point() { X = 1, Y = 16 } };
             var circleEvent = new CircleEvent { Point = new Point { X = 2, Y = 32 } };
             var eventQueue = new EventQueue();
