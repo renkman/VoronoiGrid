@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using VoronoiEngine.Events;
 
 namespace VoronoiEngine.Elements
@@ -19,6 +21,18 @@ namespace VoronoiEngine.Elements
         public INode Find(Point point)
         {
             return this;
+        }
+
+        public void GetDescendants(Point start, TraverseDirection direction, ICollection<INode> descendants, int count)
+        {
+            if (Site == start)
+            {
+                descendants.Add(this);
+                return;
+            }
+
+            if (descendants.Any())
+                descendants.Add(this);
         }
     }
 }

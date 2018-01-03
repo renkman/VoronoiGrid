@@ -39,6 +39,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Elements\HalfEdge.cs" />
+    <Compile Include="Elements\TraverseDirection.cs" />
     <Compile Include="Elements\Tuple.cs" />
     <Compile Include="Structures\EventQueue.cs" />
     <Compile Include="Elements\INode.cs" />

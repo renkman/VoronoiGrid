@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace VoronoiEngine.Elements
 {
@@ -26,7 +27,6 @@ namespace VoronoiEngine.Elements
             // x = (ay*by - Sqrt(ay*by((ay-by)²+b²))) / (ay-by)
             var x = (int)Math.Round((Breakpoint.Left.Y * Breakpoint.Right.X - Math.Sqrt(Breakpoint.Left.Y * Breakpoint.Right.Y * (Math.Pow(Breakpoint.Left.Y - Breakpoint.Right.Y, 2) + Math.Pow(Breakpoint.Right.X, 2)))) / (Breakpoint.Left.Y - Breakpoint.Right.Y));
 
-            //var x = Breakpoint.Left.X + Math.Abs(Breakpoint.Left.X - Breakpoint.Right.X) / 2;
             return new Point { X = x, Y = y };
         }
 
@@ -42,6 +42,29 @@ namespace VoronoiEngine.Elements
             if (Right != null)
                 return Right.Find(site);
             throw new InvalidOperationException("Nodes without leaves must not exist!");
+        }
+
+        public void GetDescendants(Point start, TraverseDirection direction, ICollection<INode> descendants, int count)
+        {
+            if (direction == TraverseDirection.CounterClockwise)
+            {
+                if (Left != null)
+                    Left.GetDescendants(start, direction, descendants, count);
+
+                if (Right != null)
+                    Right.GetDescendants(start, direction, descendants, count);
+            }
+            else
+            {
+                if (Right != null)
+                    Right.GetDescendants(start, direction, descendants, count);
+
+                if (Left != null)
+                    Left.GetDescendants(start, direction, descendants, count);
+            }
+
+            if (descendants.Count == count)
+                return;
         }
 
         public void Insert(Point site, Action<Node, Leaf, Leaf> replace)

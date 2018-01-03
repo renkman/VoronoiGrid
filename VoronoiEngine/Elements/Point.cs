@@ -11,5 +11,14 @@ namespace VoronoiEngine.Elements
         {
             return X.CompareTo(other.X);
         }
+
+        public static Point operator -(Point a, Point b)
+        {
+            return new Point
+            {
+                X = Math.Abs(a.X - b.X),
+                Y = Math.Abs(a.Y - b.Y)
+            };
+        }
     }
 }
