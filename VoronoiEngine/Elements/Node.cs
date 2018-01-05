@@ -46,10 +46,16 @@ namespace VoronoiEngine.Elements
 
         public void GetDescendants(Point start, TraverseDirection direction, ICollection<INode> descendants, int count)
         {
+            if (descendants.Count == count)
+                return;
+
             if (direction == TraverseDirection.CounterClockwise)
             {
                 if (Left != null)
                     Left.GetDescendants(start, direction, descendants, count);
+
+                if (descendants.Count == count)
+                    return;
 
                 if (Right != null)
                     Right.GetDescendants(start, direction, descendants, count);
@@ -59,12 +65,12 @@ namespace VoronoiEngine.Elements
                 if (Right != null)
                     Right.GetDescendants(start, direction, descendants, count);
 
+                if (descendants.Count == count)
+                    return;
+
                 if (Left != null)
                     Left.GetDescendants(start, direction, descendants, count);
             }
-
-            if (descendants.Count == count)
-                return;
         }
 
         public void Insert(Point site, Action<Node, Leaf, Leaf> replace)

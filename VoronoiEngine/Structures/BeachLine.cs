@@ -7,9 +7,9 @@ using VoronoiEngine.Events;
 namespace VoronoiEngine.Structures
 {
     public class BeachLine
-    {        
+    {
         public INode Root { get; private set; }
-      
+
         public CircleEvent FindCircleEventAbove(Point site)
         {
             if (Root == null)
@@ -46,7 +46,7 @@ namespace VoronoiEngine.Structures
             Root = node;
             ReplaceLeaf(node, leaf, rootLeaf);
         }
-        
+
         public ICollection<CircleEvent> GenerateCircleEvent(Point site)
         {
             var root = Root as Node;
@@ -55,7 +55,7 @@ namespace VoronoiEngine.Structures
 
             var circleEvents = new List<CircleEvent>();
 
-            // Find triple of consecutive arcs where the arc for the new site is 
+            // Find triple of consecutive arcs where the arc for the new site is
             // the left arc...
             var leftArcs = new List<INode>();
             root.GetDescendants(site, TraverseDirection.Clockwise, leftArcs, 3);
@@ -64,7 +64,11 @@ namespace VoronoiEngine.Structures
             {
                 var leftEvent = DetermineCircleEvent(leftArcs);
                 if (leftEvent != null)
+                {
+                    var leaf = leftArcs.Cast<Leaf>().ElementAt(1);
+                    leaf.CircleEvent = leftEvent;
                     circleEvents.Add(leftEvent);
+                }
             }
 
             // ... and where it is the right arc.
@@ -76,10 +80,14 @@ namespace VoronoiEngine.Structures
 
             var rightEvent = DetermineCircleEvent(rightArcs);
             if (rightEvent != null)
+            {
+                var leaf = leftArcs.Cast<Leaf>().ElementAt(1);
+                leaf.CircleEvent = rightEvent;
                 circleEvents.Add(rightEvent);
+            }
             return circleEvents;
         }
-        
+
         private static void ReplaceLeaf(Node subRoot, Leaf newLeaf, Leaf arc)
         {
             // Build subtree
@@ -100,10 +108,17 @@ namespace VoronoiEngine.Structures
 
         private static CircleEvent DetermineCircleEvent(ICollection<INode> arcs)
         {
-            var sites = arcs.Cast<Leaf>().Select(l => l.Site).ToList();
+            var sites = arcs.Cast<Leaf>().Select(l => l.Site).OrderBy(s => s.X).ToList();
             var circumcenter = CheckConversion(sites[0], sites[1], sites[2]);
+            if (circumcenter == null)
+                return null;
+
             var circleEventPoint = CalculateCircle(circumcenter, sites[0]);
-            return new CircleEvent { Point = circleEventPoint };
+            return new CircleEvent
+            {
+                Point = circleEventPoint,
+                Vertex = circumcenter
+            };
         }
 
         private static Point CheckConversion(Point a, Point b, Point c)
@@ -113,7 +128,8 @@ namespace VoronoiEngine.Structures
             var baLength = Math.Pow(ba.X, 2) + Math.Pow(ba.Y, 2);
             var caLength = Math.Pow(ca.X, 2) + Math.Pow(ca.Y, 2);
             var denominator = 2 * (ba.X * ca.Y - ba.Y * ca.X);
-            if (denominator <= 0)
+            //if (denominator <= 0)
+            if (denominator >= 0)
                 // Equals 0 for colinear points.  Less than zero if points are ccw and arc is diverging.
                 return null;  // Don't use this circle event!
 

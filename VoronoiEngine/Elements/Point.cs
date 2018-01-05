@@ -20,5 +20,18 @@ namespace VoronoiEngine.Elements
                 Y = Math.Abs(a.Y - b.Y)
             };
         }
+
+        public override bool Equals(object obj)
+        {
+            var point = obj as Point;
+            if (point == null)
+                return false;
+            return X == point.X && Y == point.Y;
+        }
+
+        public override int GetHashCode()
+        {
+            return X ^ Y + Y;
+        }
     }
 }

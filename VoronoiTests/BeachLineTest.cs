@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using System.Linq;
 using VoronoiEngine.Elements;
 using VoronoiEngine.Structures;
 
@@ -57,7 +58,6 @@ namespace VoronoiTests
             Assert.AreEqual(nodeLeft.Breakpoint.Right, site2);
         }
 
-
         [Test]
         public void TestAddThreeLeaves()
         {
@@ -98,6 +98,51 @@ namespace VoronoiTests
             Assert.AreEqual(site1, leafLeftLeftRight.Site);
             Assert.AreEqual(site1, leafLeftLeftLeftLeft.Site);
             Assert.AreEqual(site3, leafLeftLeftLeftRight.Site);
+        }
+
+        [Test]
+        public void TestGenerateCircleEvent()
+        {
+            var beachLine = new BeachLine();
+            var site1 = new Point { X = 40, Y = 60 };
+            var site2 = new Point { X = 20, Y = 40 };
+            var site3 = new Point { X = 60, Y = 40 };
+
+            beachLine.InsertSite(site1);
+            beachLine.InsertSite(site2);
+            beachLine.InsertSite(site3);
+
+            var expectedCricleEvent = new Point { X = 40, Y = 20 };
+            var expectedVertex = new Point { X = 40, Y = 40 };
+
+            var result = beachLine.GenerateCircleEvent(site3);
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(1, result.Count);
+            Assert.AreEqual(expectedCricleEvent, result.First().Point);
+            Assert.AreEqual(expectedVertex, result.First().Vertex);
+        }
+
+        [Test]
+        public void TestFindCircleEventAbove()
+        {
+            var beachLine = new BeachLine();
+            var site1 = new Point { X = 40, Y = 60 };
+            var site2 = new Point { X = 20, Y = 40 };
+            var site3 = new Point { X = 60, Y = 40 };
+            var site4 = new Point { X = 40, Y = 30 };
+
+            beachLine.InsertSite(site1);
+            beachLine.InsertSite(site2);
+            beachLine.InsertSite(site3);
+
+            var circleEvents = beachLine.GenerateCircleEvent(site3);
+
+            var result = beachLine.FindCircleEventAbove(site4);
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(circleEvents.First().Point, result.Point);
+            Assert.AreEqual(circleEvents.First().Vertex, result.Vertex);
         }
     }
 }

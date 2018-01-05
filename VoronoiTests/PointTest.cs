@@ -38,5 +38,13 @@ namespace VoronoiTests
             var result = a.CompareTo(b);
             Assert.AreEqual(1, result);
         }
+
+        [Test] public void TestGetHashCode()
+        {
+            var a = new Point { X = 4, Y = 8 };
+            var b = new Point { X = 8, Y = 4 };
+
+            Assert.AreNotEqual(a.GetHashCode(), b.GetHashCode());
+        }
     }
 }
