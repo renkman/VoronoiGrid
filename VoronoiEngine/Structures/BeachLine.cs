@@ -42,7 +42,7 @@ namespace VoronoiEngine.Structures
             }
 
             var rootLeaf = Root as Leaf;
-            var node = new Node();
+            var node = new Node(null);
             Root = node;
             ReplaceLeaf(node, leaf, rootLeaf);
         }
@@ -67,6 +67,7 @@ namespace VoronoiEngine.Structures
                 {
                     var leaf = leftArcs.Cast<Leaf>().ElementAt(1);
                     leaf.CircleEvent = leftEvent;
+                    leftEvent.Arc = leaf;
                     circleEvents.Add(leftEvent);
                 }
             }
@@ -83,15 +84,39 @@ namespace VoronoiEngine.Structures
             {
                 var leaf = leftArcs.Cast<Leaf>().ElementAt(1);
                 leaf.CircleEvent = rightEvent;
+                rightEvent.Arc = leaf;
                 circleEvents.Add(rightEvent);
             }
             return circleEvents;
         }
 
+        public void RemoveLeaf(Leaf leaf)
+        {
+            var parent = leaf.Parent as Node;
+            var parentParent = parent.Parent as Node;
+            if (parent.Left == leaf)
+            {
+                parent.Left = null;
+                var right = parent.Right;                
+                if(parentParent.Left == parent)
+                    parentParent.Left = right;
+                else
+                    parentParent.Right = right;
+                return;
+            }
+
+            parent.Right = null;
+            var left = parent.Left;
+            if (parentParent.Left == parent)
+                parentParent.Left = left;
+            else
+                parentParent.Right = left;
+        }
+
         private static void ReplaceLeaf(Node subRoot, Leaf newLeaf, Leaf arc)
         {
             // Build subtree
-            var node = new Node();
+            var node = new Node(subRoot);
 
             subRoot.Left = node;
             subRoot.Right = arc;
@@ -99,11 +124,15 @@ namespace VoronoiEngine.Structures
             subRoot.Edge = subRoot.Edge ?? new HalfEdge();
             subRoot.Edge.Add(subRoot.CalculateBreakpoint(newLeaf.Site.Y));
 
-            node.Left = arc;
+            arc.Parent = subRoot;
+
+            node.Left = arc.Clone();
             node.Right = newLeaf;
             node.Breakpoint = new Tuple { Left = arc.Site, Right = newLeaf.Site };
             node.Edge = new HalfEdge();
             node.Edge.Add(node.CalculateBreakpoint(newLeaf.Site.Y));
+            node.Left.Parent = node;
+            newLeaf.Parent = node;
         }
 
         private static CircleEvent DetermineCircleEvent(ICollection<INode> arcs)
@@ -117,7 +146,7 @@ namespace VoronoiEngine.Structures
             return new CircleEvent
             {
                 Point = circleEventPoint,
-                Vertex = circumcenter
+                Vertex = circumcenter,
             };
         }
 

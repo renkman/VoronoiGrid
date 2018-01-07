@@ -5,6 +5,8 @@ namespace VoronoiEngine.Elements
 {
     public class Node : INode
     {
+        public INode Parent { get; set; }
+
         public bool IsLeaf { get { return false; } }
 
         public INode Left { get; set; }
@@ -12,6 +14,11 @@ namespace VoronoiEngine.Elements
 
         public Tuple Breakpoint { get; set; }
         public HalfEdge Edge { get; set; }
+
+        public Node(Node parent)
+        {
+            Parent = parent;
+        }
 
         public Point CalculateBreakpoint(int y)
         {
@@ -111,7 +118,7 @@ namespace VoronoiEngine.Elements
 
         private void ReplaceLeaf(Point site, Leaf arc, bool isLeft, Action<Node, Leaf, Leaf> replace)
         {
-            var node = new Node();
+            var node = new Node(this);
             if (isLeft)
                 Left = node;
             else

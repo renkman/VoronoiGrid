@@ -11,7 +11,7 @@ namespace VoronoiTests
         [Test]
         public void TestCalculateBreakpoint()
         {
-            var node = new Node
+            var node = new Node(null)
             {
                 Breakpoint = new Tuple
                 {
@@ -29,7 +29,7 @@ namespace VoronoiTests
         [Test]
         public void TestCalculateBreakpointSameY()
         {
-            var node = new Node
+            var node = new Node(null)
             {
                 Breakpoint = new Tuple
                 {
@@ -47,7 +47,7 @@ namespace VoronoiTests
         [Test]
         public void TestCalculateBreakpointLeftOnSweepline()
         {
-            var node = new Node
+            var node = new Node(null)
             {
                 Breakpoint = new Tuple
                 {
@@ -65,7 +65,7 @@ namespace VoronoiTests
         [Test]
         public void TestCalculateBreakpointRightOnSweepline()
         {
-            var node = new Node
+            var node = new Node(null)
             {
                 Breakpoint = new Tuple
                 {
@@ -125,7 +125,7 @@ namespace VoronoiTests
         [Test]
         public void TestCalculateBreakpointTemp()
         {
-            var node = new Node
+            var node = new Node(null)
             {
                 Breakpoint = new Tuple
                 {
@@ -142,6 +142,34 @@ namespace VoronoiTests
 
             var resultB = node.CalculateBreakpoint(64);
             Assert.IsNotNull(resultB);
+        }
+
+        [Test]
+        public void TestCalculateBreakpointTemp2()
+        {
+            var node = new Node(null)
+            {
+                Breakpoint = new Tuple
+                {
+                    Left = new Point { X = 60, Y = 40 },
+                    Right = new Point { X = 40, Y = 60 }
+                }
+            };
+
+            var resultA = node.CalculateBreakpoint(30);
+            Assert.IsNotNull(resultA);
+
+            node.Breakpoint.Left = new Point { X = 40, Y = 60 };
+            node.Breakpoint.Right = new Point { X = 60, Y = 40 };
+
+            var resultB = node.CalculateBreakpoint(30);
+            Assert.IsNotNull(resultB);
+
+            node.Breakpoint.Left = new Point { X = 20, Y = 40 };
+            node.Breakpoint.Right = new Point { X = 40, Y = 60 };
+
+            var resultC = node.CalculateBreakpoint(30);
+            Assert.IsNotNull(resultC);
         }
     }
 }

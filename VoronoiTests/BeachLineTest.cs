@@ -11,7 +11,6 @@ namespace VoronoiTests
     [TestFixture]
     public class BeachLineTest
     {
-
         [Test]
         public void TestAddSingleLeaf()
         {
@@ -33,7 +32,7 @@ namespace VoronoiTests
 
             beachLine.InsertSite(site1);
             beachLine.InsertSite(site2);
-            
+
             var root = beachLine.Root as Node;
             Assert.IsNotNull(root);
 
@@ -81,7 +80,7 @@ namespace VoronoiTests
             Assert.IsNotNull(nodeLeftLeft);
             Assert.IsNotNull(nodeLeftLeftLeft);
 
-            var leafRight = root.Right as Leaf;            
+            var leafRight = root.Right as Leaf;
             var leafLeftRight = nodeLeft.Right as Leaf;
             var leafLeftLeftRight = nodeLeftLeft.Right as Leaf;
             var leafLeftLeftLeftLeft = nodeLeftLeftLeft.Left as Leaf;
@@ -119,8 +118,9 @@ namespace VoronoiTests
 
             Assert.IsNotNull(result);
             Assert.AreEqual(1, result.Count);
-            Assert.AreEqual(expectedCricleEvent, result.First().Point);
-            Assert.AreEqual(expectedVertex, result.First().Vertex);
+            Assert.AreEqual(expectedCricleEvent, result.Single().Point);
+            Assert.AreEqual(expectedVertex, result.Single().Vertex);
+            Assert.AreEqual(site1, result.Single().Arc.Site);
         }
 
         [Test]
@@ -130,7 +130,7 @@ namespace VoronoiTests
             var site1 = new Point { X = 40, Y = 60 };
             var site2 = new Point { X = 20, Y = 40 };
             var site3 = new Point { X = 60, Y = 40 };
-            var site4 = new Point { X = 40, Y = 30 };
+            var site4 = new Point { X = 20, Y = 30 };
 
             beachLine.InsertSite(site1);
             beachLine.InsertSite(site2);
@@ -143,6 +143,36 @@ namespace VoronoiTests
             Assert.IsNotNull(result);
             Assert.AreEqual(circleEvents.First().Point, result.Point);
             Assert.AreEqual(circleEvents.First().Vertex, result.Vertex);
+        }
+
+        [Test]
+        public void TestRemoveLeaf()
+        {
+            var beachLine = new BeachLine();
+            var site1 = new Point { X = 40, Y = 60 };
+            var site2 = new Point { X = 20, Y = 40 };
+            var site3 = new Point { X = 60, Y = 40 };
+
+            beachLine.InsertSite(site1);
+            beachLine.InsertSite(site2);
+            beachLine.InsertSite(site3);
+
+            var circleEvents = beachLine.GenerateCircleEvent(site3);
+            var circleEvent = circleEvents.Single();
+
+            beachLine.RemoveLeaf(circleEvent.Arc);
+
+            var rightSubtree = ((Node)beachLine.Root).Right as Node;
+            var leafLeft = rightSubtree.Left as Leaf;
+            var leafRight = rightSubtree.Right as Leaf;
+
+            Assert.IsNotNull(leafLeft);
+            Assert.IsNotNull(leafRight);
+
+            Assert.AreEqual(rightSubtree.Breakpoint.Left, site3);
+            Assert.AreEqual(rightSubtree.Breakpoint.Right, site1);
+            Assert.AreEqual(leafLeft.Site, site3);
+            Assert.AreEqual(leafRight.Site, site1);
         }
     }
 }

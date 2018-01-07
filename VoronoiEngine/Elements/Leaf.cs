@@ -7,6 +7,8 @@ namespace VoronoiEngine.Elements
 {
     public class Leaf : INode
     {
+        public INode Parent { get; set; }
+
         public Leaf(Point site)
         {
             Site = site;
@@ -33,6 +35,11 @@ namespace VoronoiEngine.Elements
 
             if (descendants.Any())
                 descendants.Add(this);
+        }
+
+        public Leaf Clone()
+        {
+            return new Leaf(Site);
         }
     }
 }
