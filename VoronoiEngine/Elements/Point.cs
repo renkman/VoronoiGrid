@@ -2,7 +2,7 @@
 
 namespace VoronoiEngine.Elements
 {
-    public class Point : IComparable<Point>
+    public class Point : IComparable<Point>, IGeometry
     {
         public int X { get; set; }
         public int Y { get; set; }
