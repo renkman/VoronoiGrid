@@ -2,7 +2,7 @@
 
 namespace VoronoiEngine.Elements
 {
-    public class Point : IComparable<Point>, IGeometry
+    public class Point : IComparable<Point>, IEquatable<Point>
     {
         public int X { get; set; }
         public int Y { get; set; }
@@ -32,6 +32,11 @@ namespace VoronoiEngine.Elements
         public override int GetHashCode()
         {
             return X ^ Y + Y;
+        }
+
+        public bool Equals(Point other)
+        {
+            return X == other.X && Y == other.Y;
         }
     }
 }

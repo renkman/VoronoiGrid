@@ -22,7 +22,7 @@ namespace VoronoiEngine.Structures
             return arc.CircleEvent;
         }
 
-        public void InsertSite(Point point)
+        public ICollection<HalfEdge> InsertSite(Point point)
         {
             var leaf = new Leaf(point);
 
@@ -30,7 +30,7 @@ namespace VoronoiEngine.Structures
             if (Root == null)
             {
                 Root = leaf;
-                return;
+                return new List<HalfEdge>();
             }
 
             // Add site to existing tree
@@ -38,13 +38,14 @@ namespace VoronoiEngine.Structures
             if (rootNode != null)
             {
                 rootNode.Insert(point, ReplaceLeaf);
-                return;
+                return new List< HalfEdge > ();
             }
 
             var rootLeaf = Root as Leaf;
             var node = new Node(null);
             Root = node;
             ReplaceLeaf(node, leaf, rootLeaf);
+            return new List<HalfEdge> { node.Edge };
         }
 
         public ICollection<CircleEvent> GenerateCircleEvent(Point site)
@@ -64,12 +65,7 @@ namespace VoronoiEngine.Structures
             {
                 var leftEvent = DetermineCircleEvent(leftArcs);
                 if (leftEvent != null)
-                {
-                    var leaf = leftArcs.Cast<Leaf>().ElementAt(1);
-                    leaf.CircleEvent = leftEvent;
-                    leftEvent.Arc = leaf;
                     circleEvents.Add(leftEvent);
-                }
             }
 
             // ... and where it is the right arc.
@@ -81,13 +77,28 @@ namespace VoronoiEngine.Structures
 
             var rightEvent = DetermineCircleEvent(rightArcs);
             if (rightEvent != null)
-            {
-                var leaf = leftArcs.Cast<Leaf>().ElementAt(1);
-                leaf.CircleEvent = rightEvent;
-                rightEvent.Arc = leaf;
                 circleEvents.Add(rightEvent);
-            }
             return circleEvents;
+        }
+
+        public CircleEvent GenerateSingleCircleEvent(Leaf arc)
+        {
+            var root = Root as Node;
+            if (root == null)
+                return null;
+
+            // Find triple of consecutive arcs where the passed arc is the middle arc
+            var leftArc = root.GetNeighbor(arc, TraverseDirection.Clockwise);
+            if (leftArc == null)
+                return null;
+
+            var rightArc = root.GetNeighbor(arc, TraverseDirection.CounterClockwise);
+            if (rightArc == null)
+                return null;
+
+            var arcs = new List<INode> { leftArc, arc, rightArc };
+            var circleEvent = DetermineCircleEvent(arcs);
+            return circleEvent;
         }
 
         public void RemoveLeaf(Leaf leaf)
@@ -97,8 +108,8 @@ namespace VoronoiEngine.Structures
             if (parent.Left == leaf)
             {
                 parent.Left = null;
-                var right = parent.Right;                
-                if(parentParent.Left == parent)
+                var right = parent.Right;
+                if (parentParent.Left == parent)
                     parentParent.Left = right;
                 else
                     parentParent.Right = right;
@@ -121,33 +132,40 @@ namespace VoronoiEngine.Structures
             subRoot.Left = node;
             subRoot.Right = arc;
             subRoot.Breakpoint = new Tuple { Left = newLeaf.Site, Right = arc.Site };
-            subRoot.Edge = subRoot.Edge ?? new HalfEdge();
-            subRoot.Edge.Add(subRoot.CalculateBreakpoint(newLeaf.Site.Y));
+            var subRootEdgeStart = subRoot.CalculateBreakpoint(newLeaf.Site.Y);
+            subRoot.Edge = subRoot.Edge ?? new HalfEdge(subRootEdgeStart);
+            subRoot.Edge.Add(subRootEdgeStart);
 
             arc.Parent = subRoot;
 
             node.Left = arc.Clone();
             node.Right = newLeaf;
             node.Breakpoint = new Tuple { Left = arc.Site, Right = newLeaf.Site };
-            node.Edge = new HalfEdge();
-            node.Edge.Add(node.CalculateBreakpoint(newLeaf.Site.Y));
+            var nodeEdgeStart = node.CalculateBreakpoint(newLeaf.Site.Y);
+            node.Edge = new HalfEdge(nodeEdgeStart);
+            node.Edge.Add(nodeEdgeStart);
             node.Left.Parent = node;
             newLeaf.Parent = node;
         }
 
         private static CircleEvent DetermineCircleEvent(ICollection<INode> arcs)
         {
-            var sites = arcs.Cast<Leaf>().Select(l => l.Site).OrderBy(s => s.X).ToList();
-            var circumcenter = CheckConversion(sites[0], sites[1], sites[2]);
+            var leaves = arcs.Cast<Leaf>().Select(l => l).OrderBy(s => s.Site.X).ToList();
+            var circumcenter = CheckConversion(leaves[0].Site, leaves[1].Site, leaves[2].Site);
             if (circumcenter == null)
                 return null;
 
-            var circleEventPoint = CalculateCircle(circumcenter, sites[0]);
-            return new CircleEvent
+            var circleEventPoint = CalculateCircle(circumcenter, leaves[0].Site);
+            var circleEvent = new CircleEvent
             {
                 Point = circleEventPoint,
                 Vertex = circumcenter,
+                LeftArc = leaves[0],
+                CenterArc = leaves[1],
+                RightArc = leaves[2]
             };
+            leaves[1].CircleEvent = circleEvent;
+            return circleEvent;
         }
 
         private static Point CheckConversion(Point a, Point b, Point c)

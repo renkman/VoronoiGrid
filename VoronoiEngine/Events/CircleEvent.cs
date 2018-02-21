@@ -6,6 +6,8 @@ namespace VoronoiEngine.Events
     {
         public Point Vertex { get; set; }
         public Point Point { get; set; }
-        public Leaf Arc { get; set; }
+        public Leaf LeftArc { get; set; }
+        public Leaf CenterArc { get; set; }
+        public Leaf RightArc { get; set; }
     }
 }

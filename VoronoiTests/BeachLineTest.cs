@@ -120,10 +120,11 @@ namespace VoronoiTests
             Assert.AreEqual(1, result.Count);
             Assert.AreEqual(expectedCricleEvent, result.Single().Point);
             Assert.AreEqual(expectedVertex, result.Single().Vertex);
-            Assert.AreEqual(site1, result.Single().Arc.Site);
+            Assert.AreEqual(site2, result.Single().LeftArc.Site);
+            Assert.AreEqual(site1, result.Single().CenterArc.Site);
+            Assert.AreEqual(site3, result.Single().RightArc.Site);
         }
-
-
+        
         [Test]
         public void TestGenerateCircleEvent()
         {
@@ -145,7 +146,9 @@ namespace VoronoiTests
             Assert.AreEqual(1, result.Count);
             Assert.AreEqual(expectedCricleEvent, result.Single().Point);
             Assert.AreEqual(expectedVertex, result.Single().Vertex);
-            Assert.AreEqual(site1, result.Single().Arc.Site);
+            Assert.AreEqual(site2, result.Single().LeftArc.Site);
+            Assert.AreEqual(site1, result.Single().CenterArc.Site);
+            Assert.AreEqual(site3, result.Single().RightArc.Site);
         }
 
         [Test]
@@ -187,7 +190,7 @@ namespace VoronoiTests
             var circleEvents = beachLine.GenerateCircleEvent(site3);
             var circleEvent = circleEvents.Single();
 
-            beachLine.RemoveLeaf(circleEvent.Arc);
+            beachLine.RemoveLeaf(circleEvent.CenterArc);
 
             var rightSubtree = ((Node)beachLine.Root).Right as Node;
             var leafLeft = rightSubtree.Left as Leaf;

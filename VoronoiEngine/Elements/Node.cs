@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace VoronoiEngine.Elements
 {
@@ -22,7 +23,7 @@ namespace VoronoiEngine.Elements
 
         public Point CalculateBreakpoint(int y)
         {
-            if(Breakpoint.Left.Y == Breakpoint.Right.Y)
+            if (Breakpoint.Left.Y == Breakpoint.Right.Y)
                 return new Point { X = (int)(Breakpoint.Right.X * 0.5m), Y = y };
 
             if (Breakpoint.Left.Y == y)
@@ -30,7 +31,7 @@ namespace VoronoiEngine.Elements
 
             if (Breakpoint.Right.Y == y)
                 return new Elements.Point { X = Breakpoint.Right.X, Y = y };
-            
+
             // x = (ay*by - Sqrt(ay*by((ay-by)²+b²))) / (ay-by)
             var x = (int)Math.Round((Breakpoint.Left.Y * Breakpoint.Right.X - Math.Sqrt(Breakpoint.Left.Y * Breakpoint.Right.Y * (Math.Pow(Breakpoint.Left.Y - Breakpoint.Right.Y, 2) + Math.Pow(Breakpoint.Right.X, 2)))) / (Breakpoint.Left.Y - Breakpoint.Right.Y));
 
@@ -77,6 +78,57 @@ namespace VoronoiEngine.Elements
 
                 if (Left != null)
                     Left.GetDescendants(start, direction, descendants, count);
+            }
+        }
+
+        public INode GetNeighbor(INode start, TraverseDirection direction)
+        {
+            var consecutives = new List<INode>();
+            FindNeighbor(start, direction, consecutives);
+            if (consecutives.Count == 2)
+                return consecutives[1];
+            return null;
+        }
+
+        private void FindNeighbor(INode start, TraverseDirection direction, IList<INode> consecutives)
+        {
+            if (consecutives.Count == 2)
+                return;
+
+            if (direction == TraverseDirection.CounterClockwise)
+            {
+                if (Left != null)
+                    FindNeighbour(Left, start, direction, consecutives);
+
+                if (consecutives.Count == 2)
+                    return;
+
+                if (Right != null)
+                    FindNeighbour(Right, start, direction, consecutives);
+            }
+            else
+            {
+                if (Right != null)
+                    FindNeighbour(Right, start, direction, consecutives);
+
+                if (consecutives.Count == 2)
+                    return;
+
+                if (Left != null)
+                    FindNeighbour(Left, start, direction, consecutives);
+            }
+        }
+
+        private static void FindNeighbour(INode currentNode, INode start, TraverseDirection direction, IList<INode> consecutives)
+        {
+            var node = currentNode as Node;
+            if (node != null)
+                node.FindNeighbor(start, direction, consecutives);
+            else
+            {
+                var leaf = currentNode.GetNeighbor(start, direction);
+                if (leaf == start || consecutives.Any())
+                    consecutives.Add(leaf);                
             }
         }
 

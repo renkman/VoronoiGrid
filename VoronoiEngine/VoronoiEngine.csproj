@@ -40,6 +40,7 @@
   <ItemGroup>
     <Compile Include="Elements\HalfEdge.cs" />
     <Compile Include="Elements\IGeometry.cs" />
+    <Compile Include="Elements\Site.cs" />
     <Compile Include="Elements\TraverseDirection.cs" />
     <Compile Include="Elements\Tuple.cs" />
     <Compile Include="Structures\EventQueue.cs" />
@@ -55,6 +56,10 @@
     <Compile Include="Elements\Vertex.cs" />
     <Compile Include="Structures\VoronoiMap.cs" />
     <Compile Include="VoronoiFactory.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Geomerty\" />
+    <Folder Include="Map\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

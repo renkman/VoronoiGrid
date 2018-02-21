@@ -43,15 +43,33 @@ namespace VoronoiEngine.Structures
 
         public void Insert(CircleEvent circleEvent)
         {
+            if (circleEvent == null)
+                return;
+
             var successor = _events.Where(e => e.Point.Y < circleEvent.Point.Y).FirstOrDefault();
             var index = Math.Max(_events.IndexOf(successor), 0);
             _events.Insert(index, circleEvent);
         }
 
+        public void Insert(IEnumerable<CircleEvent> circleEvents)
+        {
+            if (circleEvents == null)
+                return;
+
+            foreach (var circleEvent in circleEvents)
+                Insert(circleEvent);
+        }
+
         public void Remove(CircleEvent circleEvent)
         {
+            // Remove circle event
             if (_events.Contains(circleEvent))
                 _events.Remove(circleEvent);
+
+            // And remove circle events containing the current circle event center arc
+            var relatedEvents = _events.Where(e => e is CircleEvent).Cast<CircleEvent>().Where(c => c.LeftArc == circleEvent.CenterArc || c.RightArc == circleEvent.CenterArc);
+            foreach (var relatedEvent in relatedEvents)
+                _events.Remove(relatedEvent);
         }
     }
 }

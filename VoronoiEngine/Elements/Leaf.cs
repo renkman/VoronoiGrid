@@ -37,6 +37,11 @@ namespace VoronoiEngine.Elements
                 descendants.Add(this);
         }
 
+        public INode GetNeighbor(INode start, TraverseDirection direction)
+        {
+            return this;
+        }
+
         public Leaf Clone()
         {
             return new Leaf(Site);

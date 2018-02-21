@@ -171,5 +171,49 @@ namespace VoronoiTests
             var resultC = node.CalculateBreakpoint(30);
             Assert.IsNotNull(resultC);
         }
+
+        [Test]
+        public void TestGetNeighborClockwise()
+        {
+            var beachLine = new BeachLine();
+            var site1 = new Point { X = 40, Y = 60 };
+            var site2 = new Point { X = 20, Y = 40 };
+            var site3 = new Point { X = 60, Y = 40 };
+
+            beachLine.InsertSite(site1);
+            beachLine.InsertSite(site2);
+            beachLine.InsertSite(site3);
+
+            var rootNode = beachLine.Root as Node;
+            var leaf = ((Node)((Node)rootNode.Right).Left).Left as Leaf;
+            var expected = ((Node)rootNode.Left).Right as Leaf;
+
+            var result = beachLine.Root.GetNeighbor(leaf, TraverseDirection.Clockwise);
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(expected, result);
+        }
+
+        [Test]
+        public void TestGetNeighborCounterClockwise()
+        {
+            var beachLine = new BeachLine();
+            var site1 = new Point { X = 40, Y = 60 };
+            var site2 = new Point { X = 20, Y = 40 };
+            var site3 = new Point { X = 60, Y = 40 };
+
+            beachLine.InsertSite(site1);
+            beachLine.InsertSite(site2);
+            beachLine.InsertSite(site3);
+
+            var rootNode = beachLine.Root as Node;
+            var leaf = ((Node)((Node)rootNode.Right).Left).Left as Leaf;
+            var expected = ((Node)((Node)rootNode.Right).Left).Right as Leaf;
+
+            var result = beachLine.Root.GetNeighbor(leaf, TraverseDirection.CounterClockwise);
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(expected, result);
+        }
     }
 }
