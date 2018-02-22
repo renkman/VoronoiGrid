@@ -4,6 +4,7 @@ using System.Linq;
 using VoronoiEngine.Elements;
 using VoronoiEngine.Events;
 using VoronoiEngine.Structures;
+using VoronoiEngine.Utilities;
 
 namespace VoronoiEngine
 {
@@ -21,27 +22,30 @@ namespace VoronoiEngine
 
         private VoronoiFactory()
         {
+            _siteGenerator = new SiteGenerator();
         }
 
         private BeachLine _beachLine;
         private EventQueue _eventQueue;
+        private SiteGenerator _siteGenerator;
 
         public VoronoiMap CreateVoronoiMap(int x, int y, int pointQuantity)
         {
             _eventQueue = new EventQueue();
             _beachLine = new BeachLine();
-            return new VoronoiMap();
+            
+            var sites = _siteGenerator.GenerateSites(x, y, pointQuantity);
+            return CreateVoronoiMap(sites);
         }
 
-        public VoronoiMap CreateVoronoiMap(IEnumerable<Point> sites)
+        public VoronoiMap CreateVoronoiMap(IEnumerable<Site> sites)
         {
             _eventQueue = new EventQueue();
             _beachLine = new BeachLine();
             var map = new VoronoiMap();
 
-            _eventQueue.Initialize(sites);
-            var siteSites = sites.Select(s => new Site { Point = s }).Cast<IGeometry>();
-            map.AddRange(siteSites);
+            _eventQueue.Initialize(sites.Select(s=>s.Point));
+            map.AddRange(sites.Cast<IGeometry>());
 
             while (_eventQueue.HasEvents)
             {

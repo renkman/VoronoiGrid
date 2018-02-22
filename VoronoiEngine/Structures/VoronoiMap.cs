@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using VoronoiEngine.Elements;
 
 namespace VoronoiEngine.Structures
@@ -32,6 +33,21 @@ namespace VoronoiEngine.Structures
         IEnumerator IEnumerable.GetEnumerator()
         {
             return _map.GetEnumerator();
+        }
+
+        public IGeometry[,] ToArray()
+        {
+            var x = _map.Keys.Select(k => k.X).Max() + 10;
+            var y = _map.Keys.Select(k => k.Y).Max() + 10;
+
+            var result = new IGeometry[x,y];
+
+            foreach(var geometryItem in _map)
+            {
+                result[geometryItem.Key.X + 5, geometryItem.Key.Y + 5] = geometryItem.Value;
+            }
+
+            return result;
         }
     }
 }

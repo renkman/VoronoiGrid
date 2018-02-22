@@ -65,7 +65,9 @@
     <Compile Include="PointTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="NodeTest.cs" />
+    <Compile Include="SiteGeneratorTest.cs" />
     <Compile Include="VoronoiFactoryTest.cs" />
+    <Compile Include="VoronoiMapTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

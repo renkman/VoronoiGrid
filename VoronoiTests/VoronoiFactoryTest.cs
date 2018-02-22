@@ -14,11 +14,11 @@ namespace VoronoiTests
         {
             var factory = VoronoiFactory.Instance;
 
-            var sites = new List<Point>
+            var sites = new List<Site>
             {
-                new Point { X = 40, Y = 60 },
-                new Point { X = 20, Y = 40 },
-                new Point { X = 60, Y = 40 }
+                new Site { Point = new Point { X = 40, Y = 60 } },
+                new Site { Point = new Point { X = 20, Y = 40 } },
+                new Site { Point = new Point { X = 60, Y = 40 } }
             };
 
             var map = factory.CreateVoronoiMap(sites);
@@ -26,6 +26,15 @@ namespace VoronoiTests
             Assert.IsNotNull(map);
             var vertex = map.Single(g => g is Vertex);
             Assert.AreEqual(vertex.Point, new Point { X = 40, Y = 40 });
+        }
+
+        [Test]
+        public void TestCreateVoronoiMapGenerate()
+        {
+            var factory = VoronoiFactory.Instance;
+            var map = factory.CreateVoronoiMap(20, 20, 6);
+
+            Assert.IsNotNull(map);
         }
     }
 }
