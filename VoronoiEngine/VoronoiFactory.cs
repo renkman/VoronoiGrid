@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using VoronoiEngine.Elements;
+using VoronoiEngine.EventHandler;
 using VoronoiEngine.Events;
 using VoronoiEngine.Structures;
 using VoronoiEngine.Utilities;
@@ -23,11 +24,16 @@ namespace VoronoiEngine
         private VoronoiFactory()
         {
             _siteGenerator = new SiteGenerator();
+            _siteEventHandler = new SiteEventHandlerStrategy();
+            _circleEventHandler = new CircleEventHandlerStrategy();
         }
 
         private BeachLine _beachLine;
         private EventQueue _eventQueue;
         private SiteGenerator _siteGenerator;
+
+        private IEventHandlerStrategy<SiteEvent, HalfEdge> _siteEventHandler;
+        private IEventHandlerStrategy<CircleEvent, Vertex> _circleEventHandler;
 
         public VoronoiMap CreateVoronoiMap(int x, int y, int pointQuantity)
         {
@@ -54,8 +60,8 @@ namespace VoronoiEngine
                 var siteEvent = sweepEvent as SiteEvent;
                 if (siteEvent != null)
                 {
-                    var halfEdges = HandleSiteEvent(siteEvent);
-                    map.AddRange(halfEdges.Cast<IGeometry>());
+                    var halfEdges = _siteEventHandler.HandleEvent(siteEvent, _eventQueue, _beachLine);
+                    map.AddRange(halfEdges);
                     continue;
                 }
 
@@ -63,35 +69,11 @@ namespace VoronoiEngine
                 if (circleEvent == null)
                     throw new InvalidOperationException("SweepEvent is neither SiteEvent nor CircleEvent");
 
-                var vertex = HandleCircleEvent(circleEvent);
-                map.Add(vertex);
+                var vertices = _circleEventHandler.HandleEvent(circleEvent, _eventQueue, _beachLine);
+                map.AddRange(vertices);
             }
 
             return map;
-        }
-
-        private ICollection<HalfEdge> HandleSiteEvent(SiteEvent siteEvent)
-        {
-            var circleEvent = _beachLine.FindCircleEventAbove(siteEvent.Point);
-            if (circleEvent != null)
-                _eventQueue.Remove(circleEvent);
-
-            var halfEdges = _beachLine.InsertSite(siteEvent.Point);
-
-            var circleEvents = _beachLine.GenerateCircleEvent(siteEvent.Point);
-            _eventQueue.Insert(circleEvents);
-            return halfEdges;
-        }
-
-        private Vertex HandleCircleEvent(CircleEvent circleEvent)
-        {
-            _beachLine.RemoveLeaf(circleEvent.CenterArc);
-            var leftCircleEvent = _beachLine.GenerateSingleCircleEvent(circleEvent.LeftArc);
-            var rightCircleEvent = _beachLine.GenerateSingleCircleEvent(circleEvent.RightArc);
-
-            _eventQueue.Insert(leftCircleEvent);
-            _eventQueue.Insert(rightCircleEvent);
-            return new Vertex { Point = circleEvent.Vertex };
         }
     }
 }

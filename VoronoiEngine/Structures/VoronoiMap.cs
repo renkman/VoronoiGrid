@@ -19,7 +19,7 @@ namespace VoronoiEngine.Structures
             _map[element.Point] = element;
         }
 
-        public void AddRange(IEnumerable<IGeometry> elements)
+        public void AddRange<TGeometry>(IEnumerable<TGeometry> elements) where TGeometry : IGeometry
         {
             foreach (var element in elements)
                 Add(element);
