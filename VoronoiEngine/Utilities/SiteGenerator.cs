@@ -5,7 +5,7 @@ using VoronoiEngine.Elements;
 
 namespace VoronoiEngine.Utilities
 {
-    public class SiteGenerator
+    public class SiteGenerator : ISiteGenerator
     {
         public ICollection<Site> GenerateSites(int x, int y, int quantity)
         {

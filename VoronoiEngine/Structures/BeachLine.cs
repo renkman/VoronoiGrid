@@ -1,13 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using VoronoiEngine.Elements;
 using VoronoiEngine.Events;
+using VoronoiEngine.Geomerty;
 
 namespace VoronoiEngine.Structures
 {
     public class BeachLine
     {
+        private readonly ICircleEventCalculationService _circleEventCalculationService;
+
+        public BeachLine()
+        {
+            _circleEventCalculationService = new CircleEventCalculationService();
+        }
+
+        public BeachLine(ICircleEventCalculationService circleEventCalculationService)
+        {
+            _circleEventCalculationService = circleEventCalculationService;
+        }
+
         public INode Root { get; private set; }
 
         public CircleEvent FindCircleEventAbove(Point site)
@@ -38,7 +49,7 @@ namespace VoronoiEngine.Structures
             if (rootNode != null)
             {
                 rootNode.Insert(point, ReplaceLeaf);
-                return new List< HalfEdge > ();
+                return new List<HalfEdge>();
             }
 
             var rootLeaf = Root as Leaf;
@@ -63,7 +74,7 @@ namespace VoronoiEngine.Structures
 
             if (leftArcs.Count == 3)
             {
-                var leftEvent = DetermineCircleEvent(leftArcs);
+                var leftEvent = _circleEventCalculationService.DetermineCircleEvent(leftArcs);
                 if (leftEvent != null)
                     circleEvents.Add(leftEvent);
             }
@@ -75,7 +86,7 @@ namespace VoronoiEngine.Structures
             if (rightArcs.Count < 3)
                 return circleEvents;
 
-            var rightEvent = DetermineCircleEvent(rightArcs);
+            var rightEvent = _circleEventCalculationService.DetermineCircleEvent(rightArcs);
             if (rightEvent != null)
                 circleEvents.Add(rightEvent);
             return circleEvents;
@@ -97,7 +108,7 @@ namespace VoronoiEngine.Structures
                 return null;
 
             var arcs = new List<INode> { leftArc, arc, rightArc };
-            var circleEvent = DetermineCircleEvent(arcs);
+            var circleEvent = _circleEventCalculationService.DetermineCircleEvent(arcs);
             return circleEvent;
         }
 
@@ -146,52 +157,6 @@ namespace VoronoiEngine.Structures
             node.Edge.Add(nodeEdgeStart);
             node.Left.Parent = node;
             newLeaf.Parent = node;
-        }
-
-        private static CircleEvent DetermineCircleEvent(ICollection<INode> arcs)
-        {
-            var leaves = arcs.Cast<Leaf>().Select(l => l).OrderBy(s => s.Site.X).ToList();
-            var circumcenter = CheckConversion(leaves[0].Site, leaves[1].Site, leaves[2].Site);
-            if (circumcenter == null)
-                return null;
-
-            var circleEventPoint = CalculateCircle(circumcenter, leaves[0].Site);
-            var circleEvent = new CircleEvent
-            {
-                Point = circleEventPoint,
-                Vertex = circumcenter,
-                LeftArc = leaves[0],
-                CenterArc = leaves[1],
-                RightArc = leaves[2]
-            };
-            leaves[1].CircleEvent = circleEvent;
-            return circleEvent;
-        }
-
-        private static Point CheckConversion(Point a, Point b, Point c)
-        {
-            Point ba = b - a;
-            Point ca = c - a;
-            var baLength = Math.Pow(ba.X, 2) + Math.Pow(ba.Y, 2);
-            var caLength = Math.Pow(ca.X, 2) + Math.Pow(ca.Y, 2);
-            var denominator = 2 * (ba.X * ca.Y - ba.Y * ca.X);
-            //if (denominator <= 0)
-            if (denominator >= 0)
-                // Equals 0 for colinear points.  Less than zero if points are ccw and arc is diverging.
-                return null;  // Don't use this circle event!
-
-            var circumcenter = new Point()
-            {
-                X = (int)Math.Round(a.X + (ca.Y * baLength - ba.Y * caLength) / denominator),
-                Y = (int)Math.Round(a.Y + (ba.X * caLength - ca.X * baLength) / denominator)
-            };
-            return circumcenter;
-        }
-
-        private static Point CalculateCircle(Point circumcenter, Point a)
-        {
-            var radius = (int)(((circumcenter.X - a.X) * 2 + (circumcenter.Y - a.Y) * 2) * 0.5m);
-            return new Point { X = circumcenter.X, Y = circumcenter.Y - radius };
         }
     }
 }

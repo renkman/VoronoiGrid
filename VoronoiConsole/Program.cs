@@ -9,7 +9,7 @@ namespace VoronoiConsole
     {
         private static void Main(string[] args)
         {
-            var factory = VoronoiFactory.Instance;
+            var factory = new VoronoiFactory();
 
             //var sites = new List<Point>
             //{
@@ -18,20 +18,21 @@ namespace VoronoiConsole
             //    new Point { X = 60, Y = 40 }
             //};
 
-            //var sites = new List<Point>
-            //{
-            //   new Point { X = 130, Y = 160 },
-            //   new Point { X = 110, Y = 150 },
-            //   new Point { X = 170, Y = 140 }
-            //};
+            var sites = new List<Site>
+            {
+               new Site { Point = new  Point { X = 130, Y = 160 } },
+               new Site { Point = new Point { X = 110, Y = 150 } },
+               new Site { Point = new Point { X = 170, Y = 140 } }
+            };
 
-            var map = factory.CreateVoronoiMap(20, 20, 6);
+            var map = factory.CreateVoronoiMap(sites);
+            //var map = factory.CreateVoronoiMap(20, 20, 6);
 
             var mapArray = map.ToArray();
 
-            for (var i = 0; i < mapArray.GetLength(1); i++)
+            for (var i = mapArray.GetLength(1) - 1; i >= 0 ; i--)
             {
-                for (var j = 0; j < mapArray.GetLength(0); j++)
+                for (var j = mapArray.GetLength(0) - 1; j >= 0; j--)
                 {
                     var geo = mapArray[j, i];
                     if (geo == null)

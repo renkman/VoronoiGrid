@@ -137,8 +137,8 @@ namespace VoronoiTests
             beachLine.InsertSite(site2);
             beachLine.InsertSite(site3);
 
-            var expectedCricleEvent = new Point { X = 150, Y = 110 };
-            var expectedVertex = new Point { X = 150, Y = 95 };
+            var expectedCricleEvent = new Point { X = 136, Y = 83 };
+            var expectedVertex = new Point { X = 136, Y = 121 };
 
             var result = beachLine.GenerateCircleEvent(site3);
 

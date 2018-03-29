@@ -11,35 +11,36 @@ namespace VoronoiEngine
 {
     public class VoronoiFactory
     {
-        private static VoronoiFactory _instance;
 
-        public static VoronoiFactory Instance
-        {
-            get
-            {
-                return _instance ?? (_instance = new VoronoiFactory());
-            }
-        }
+        private BeachLine _beachLine;
+        private EventQueue _eventQueue;
 
-        private VoronoiFactory()
+        private readonly ISiteGenerator _siteGenerator;
+        private readonly IEventHandlerStrategy<SiteEvent, HalfEdge> _siteEventHandler;
+        private readonly IEventHandlerStrategy<CircleEvent, Vertex> _circleEventHandler;
+
+        public VoronoiFactory()
         {
             _siteGenerator = new SiteGenerator();
             _siteEventHandler = new SiteEventHandlerStrategy();
             _circleEventHandler = new CircleEventHandlerStrategy();
         }
 
-        private BeachLine _beachLine;
-        private EventQueue _eventQueue;
-        private SiteGenerator _siteGenerator;
-
-        private IEventHandlerStrategy<SiteEvent, HalfEdge> _siteEventHandler;
-        private IEventHandlerStrategy<CircleEvent, Vertex> _circleEventHandler;
-
+        public VoronoiFactory(
+            IEventHandlerStrategy<SiteEvent, HalfEdge> siteEventHandler,
+            IEventHandlerStrategy<CircleEvent, Vertex> circleEventHandler,
+            ISiteGenerator siteGenerator)
+        {
+            _siteGenerator = siteGenerator;
+            _siteEventHandler = siteEventHandler;
+            _circleEventHandler = circleEventHandler;
+        }
+        
         public VoronoiMap CreateVoronoiMap(int x, int y, int pointQuantity)
         {
             _eventQueue = new EventQueue();
             _beachLine = new BeachLine();
-            
+
             var sites = _siteGenerator.GenerateSites(x, y, pointQuantity);
             return CreateVoronoiMap(sites);
         }
@@ -50,7 +51,7 @@ namespace VoronoiEngine
             _beachLine = new BeachLine();
             var map = new VoronoiMap();
 
-            _eventQueue.Initialize(sites.Select(s=>s.Point));
+            _eventQueue.Initialize(sites.Select(s => s.Point));
             map.AddRange(sites.Cast<IGeometry>());
 
             while (_eventQueue.HasEvents)

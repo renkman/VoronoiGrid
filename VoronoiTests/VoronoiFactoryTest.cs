@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using VoronoiEngine;
 using VoronoiEngine.Elements;
+using VoronoiEngine.EventHandler;
+using VoronoiEngine.Utilities;
 
 namespace VoronoiTests
 {
@@ -12,7 +14,10 @@ namespace VoronoiTests
         [Test]
         public void TestCreateVoronoiMap()
         {
-            var factory = VoronoiFactory.Instance;
+            var factory = new VoronoiFactory(
+                new SiteEventHandlerStrategy(),
+                new CircleEventHandlerStrategy(),
+                new SiteGenerator());
 
             var sites = new List<Site>
             {
@@ -31,7 +36,10 @@ namespace VoronoiTests
         [Test]
         public void TestCreateVoronoiMapGenerate()
         {
-            var factory = VoronoiFactory.Instance;
+            var factory = new VoronoiFactory(
+                new SiteEventHandlerStrategy(),
+                new CircleEventHandlerStrategy(),
+                new SiteGenerator());
             var map = factory.CreateVoronoiMap(20, 20, 6);
 
             Assert.IsNotNull(map);
