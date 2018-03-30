@@ -10,9 +10,18 @@ namespace VoronoiEngine.Utilities
         public ICollection<Site> GenerateSites(int x, int y, int quantity)
         {
             var random = new Random();
+            var points = new List<Point>();
 
-            var result = Enumerable.Range(1, quantity).Select(n => new Site {
-                Point = new Point { X = random.Next(x), Y = random.Next(y) }
+            while (points.Count < quantity)
+            {
+                var point = new Point { X = random.Next(x), Y = random.Next(y) };
+                if(!points.Contains(point))
+                    points.Add(point);
+            }
+
+            var result = points.Select(p => new Site
+            {
+                Point = p
             });
             return result.ToList();
         }

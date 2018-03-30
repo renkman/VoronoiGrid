@@ -47,6 +47,12 @@ namespace VoronoiEngine
 
         public VoronoiMap CreateVoronoiMap(IEnumerable<Site> sites)
         {
+            if (sites == null)
+                throw new ArgumentNullException("sites");
+
+            if (sites.GroupBy(s => s.Point).Count() != sites.Count())
+                throw new ArgumentException("Multiple sites with the same coordinates passed!");
+
             _eventQueue = new EventQueue();
             _beachLine = new BeachLine();
             var map = new VoronoiMap();

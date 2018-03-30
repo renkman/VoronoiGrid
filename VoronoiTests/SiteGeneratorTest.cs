@@ -11,13 +11,14 @@ namespace VoronoiTests
         public void TestGenerate()
         {
             var generator = new SiteGenerator();
-            var result = generator.GenerateSites(20, 20, 6);
+            var result = generator.GenerateSites(200, 200, 20);
 
-            Assert.AreEqual(6, result.Count);
+            Assert.AreEqual(20, result.Count);
             Assert.IsTrue(result.Select(s => s.Point.X).Min() >= 0);
             Assert.IsTrue(result.Select(s => s.Point.Y).Min() >= 0);
-            Assert.IsTrue(result.Select(s => s.Point.X).Max() <= 20);
-            Assert.IsTrue(result.Select(s => s.Point.Y).Max() <= 20);
+            Assert.IsTrue(result.Select(s => s.Point.X).Max() <= 200);
+            Assert.IsTrue(result.Select(s => s.Point.Y).Max() <= 200);
+            Assert.AreEqual(20, result.GroupBy(s => s.Point).Count());
         }
     }
 }
