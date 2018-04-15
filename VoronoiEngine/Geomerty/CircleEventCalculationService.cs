@@ -10,19 +10,25 @@ namespace VoronoiEngine.Geomerty
     {
         public CircleEvent DetermineCircleEvent(ICollection<INode> arcs)
         {
-            var leaves = arcs.Cast<Leaf>().Select(l => l).OrderBy(s => s.Site.X).ToList();
-            var circumcenter = CalculateCircumcenter(leaves[0].Site, leaves[1].Site, leaves[2].Site);
+            var leaves = arcs.Cast<Leaf>().Select(l => l).ToList();
+            var sites = leaves.Select(l => l.Site).OrderBy(s => s.X).Distinct().ToList();
+
+            if (sites.Count != 3)
+                return null;
+
+            var circumcenter = CalculateCircumcenter(sites[0], sites[1], sites[2]);
             if (circumcenter == null)
                 return null;
 
-            var circleEventPoint = CalculateCircle(circumcenter, leaves[0].Site);
+            var circleEventPoint = CalculateCircle(circumcenter, sites[0]);
             var circleEvent = new CircleEvent
             {
                 Point = circleEventPoint,
                 Vertex = circumcenter,
                 LeftArc = leaves[0],
                 CenterArc = leaves[1],
-                RightArc = leaves[2]
+                RightArc = leaves[2],
+                Parent = (Node)leaves[1].Parent
             };
             leaves[1].CircleEvent = circleEvent;
             return circleEvent;

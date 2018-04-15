@@ -28,5 +28,23 @@ namespace VoronoiTests
             Assert.AreEqual(expectedCricleEvent, result.Point);
             Assert.AreEqual(expectedVertex, result.Vertex);
         }
+
+        //Found circle event for arcs: Leaf: Point: X: 11, Y: 19, CircleEvent: Point: X: -2147483648, Y: -766958430, Leaf: Point: X: 2, Y: 5, CircleEvent: , Leaf: Point: X: 11, Y: 19, CircleEvent:  at Point: Point: X: -2147483648, Y: -766958430 and Vertex: Point: X: -2147483648, Y: 1380525218
+        [Test]
+        public void TestDetermineCircleNonUnique()
+        {
+            var node1 = new Leaf(new Point { X = 11, Y = 19 });
+            var node2 = new Leaf(new Point { X = 2, Y = 5 });
+            var node3 = new Leaf(new Point { X = 11, Y = 19 });
+            var arcs = new INode[] { node1, node2, node3 };
+
+            //var expectedVertex = new Point { X = -2147483648, Y = 1380525218 };
+            //var expectedCricleEvent = new Point { X = -2147483648, Y = -766958430 };
+
+            var service = new CircleEventCalculationService();
+            var result = service.DetermineCircleEvent(arcs);
+
+            Assert.IsNull(result);
+        }
     }
 }

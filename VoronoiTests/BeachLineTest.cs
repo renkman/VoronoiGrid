@@ -120,9 +120,9 @@ namespace VoronoiTests
             Assert.AreEqual(1, result.Count);
             Assert.AreEqual(expectedCricleEvent, result.Single().Point);
             Assert.AreEqual(expectedVertex, result.Single().Vertex);
-            Assert.AreEqual(site2, result.Single().LeftArc.Site);
+            Assert.AreEqual(site3, result.Single().LeftArc.Site);
             Assert.AreEqual(site1, result.Single().CenterArc.Site);
-            Assert.AreEqual(site3, result.Single().RightArc.Site);
+            Assert.AreEqual(site2, result.Single().RightArc.Site);
         }
         
         [Test]
@@ -146,9 +146,9 @@ namespace VoronoiTests
             Assert.AreEqual(1, result.Count);
             Assert.AreEqual(expectedCricleEvent, result.Single().Point);
             Assert.AreEqual(expectedVertex, result.Single().Vertex);
-            Assert.AreEqual(site2, result.Single().LeftArc.Site);
+            Assert.AreEqual(site3, result.Single().LeftArc.Site);
             Assert.AreEqual(site1, result.Single().CenterArc.Site);
-            Assert.AreEqual(site3, result.Single().RightArc.Site);
+            Assert.AreEqual(site2, result.Single().RightArc.Site);
         }
 
         [Test]
@@ -170,7 +170,7 @@ namespace VoronoiTests
 
             var result = beachLine.FindCircleEventAbove(site4);
 
-            //Assert.IsNotNull(result);
+            Assert.IsNotNull(result);
             //Assert.AreEqual(circleEvents.First().Point, result.Point);
             //Assert.AreEqual(circleEvents.First().Vertex, result.Vertex);
         }
@@ -204,5 +204,26 @@ namespace VoronoiTests
             Assert.AreEqual(leafLeft.Site, site3);
             Assert.AreEqual(leafRight.Site, site1);
         }
+        
+        //[Test]
+        //public void TestRemoveLastLeaf()
+        //{
+        //    var beachLine = new BeachLine();
+        //    var site1 = new Point { X = 40, Y = 60 };
+        //    var site2 = new Point { X = 20, Y = 40 };
+
+        //    beachLine.InsertSite(site1);
+        //    beachLine.InsertSite(site2);
+        //    var root = beachLine.Root as Node;
+        //    var right = root.Left as Node;
+        //    beachLine.RemoveLeaf((Leaf)right.Left);
+
+        //    var rightLeaf = root.Right as Leaf;
+        //    beachLine.RemoveLeaf(rightLeaf);
+
+        //    Assert.IsNull(root.Right);
+        //    var left = root.Left as Leaf;
+        //    Assert.IsNotNull(left);
+        //}
     }
 }

@@ -46,5 +46,10 @@ namespace VoronoiEngine.Elements
         {
             return new Leaf(Site);
         }
+
+        public override string ToString()
+        {
+            return $"Leaf: {Site.ToString()}, CircleEvent: {CircleEvent?.Point.ToString()}";
+        }
     }
 }

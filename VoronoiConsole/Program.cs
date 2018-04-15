@@ -20,24 +20,25 @@ namespace VoronoiConsole
 
             var sites = new List<Site>
             {
-               new Site { Point = new  Point { X = 130, Y = 160 } },
-               new Site { Point = new Point { X = 110, Y = 150 } },
-               new Site { Point = new Point { X = 170, Y = 140 } }
+                new Site { Point = new  Point { X = 130, Y = 160 } },
+                new Site { Point = new Point { X = 110, Y = 150 } },
+                new Site { Point = new Point { X = 170, Y = 140 } },
+                new Site { Point = new Point {X = 95, Y = 75 } }
             };
 
             var map = factory.CreateVoronoiMap(sites);
-            //var map = factory.CreateVoronoiMap(20, 20, 6);
+            //var map = factory.CreateVoronoiMap(200, 200, 6);
 
             var mapArray = map.ToArray();
 
-            for (var i = mapArray.GetLength(1) - 1; i >= 0 ; i--)
+            for (var i = mapArray.GetLength(1) - 1; i >= 0; i--)
             {
-                for (var j = mapArray.GetLength(0) - 1; j >= 0; j--)
+                for (var j = 0; j < mapArray.GetLength(0); j++)
                 {
                     var geo = mapArray[j, i];
                     if (geo == null)
                     {
-                        Console.Write(" ");
+                        Console.Write(".");
                         continue;
                     }
                     if (geo is Site)

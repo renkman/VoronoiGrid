@@ -11,7 +11,6 @@ namespace VoronoiEngine
 {
     public class VoronoiFactory
     {
-
         private BeachLine _beachLine;
         private EventQueue _eventQueue;
 
@@ -19,11 +18,10 @@ namespace VoronoiEngine
         private readonly IEventHandlerStrategy<SiteEvent, HalfEdge> _siteEventHandler;
         private readonly IEventHandlerStrategy<CircleEvent, Vertex> _circleEventHandler;
 
-        public VoronoiFactory()
+        private readonly Logger _logger;
+
+        public VoronoiFactory() : this(new SiteEventHandlerStrategy(), new CircleEventHandlerStrategy(), new SiteGenerator())
         {
-            _siteGenerator = new SiteGenerator();
-            _siteEventHandler = new SiteEventHandlerStrategy();
-            _circleEventHandler = new CircleEventHandlerStrategy();
         }
 
         public VoronoiFactory(
@@ -34,8 +32,9 @@ namespace VoronoiEngine
             _siteGenerator = siteGenerator;
             _siteEventHandler = siteEventHandler;
             _circleEventHandler = circleEventHandler;
+            _logger = Logger.Instance;
         }
-        
+
         public VoronoiMap CreateVoronoiMap(int x, int y, int pointQuantity)
         {
             _eventQueue = new EventQueue();
@@ -53,6 +52,9 @@ namespace VoronoiEngine
             if (sites.GroupBy(s => s.Point).Count() != sites.Count())
                 throw new ArgumentException("Multiple sites with the same coordinates passed!");
 
+            var siteList = string.Join(", ", sites.Select(s => s.Point.ToString()).ToArray());
+            _logger.Log($"Create Voronoi map with sites: {siteList}");
+
             _eventQueue = new EventQueue();
             _beachLine = new BeachLine();
             var map = new VoronoiMap();
@@ -67,8 +69,9 @@ namespace VoronoiEngine
                 var siteEvent = sweepEvent as SiteEvent;
                 if (siteEvent != null)
                 {
-                    var halfEdges = _siteEventHandler.HandleEvent(siteEvent, _eventQueue, _beachLine);
-                    map.AddRange(halfEdges);
+                    _logger.Log($"Sweepline SiteEvent: {siteEvent.Point.ToString()}");
+                    _siteEventHandler.HandleEvent(siteEvent, _eventQueue, _beachLine);
+                    _logger.Log(_beachLine.ToString());
                     continue;
                 }
 
@@ -76,9 +79,13 @@ namespace VoronoiEngine
                 if (circleEvent == null)
                     throw new InvalidOperationException("SweepEvent is neither SiteEvent nor CircleEvent");
 
+                _logger.Log($"Sweepline CircleEvent: {circleEvent.Point.ToString()}");
                 var vertices = _circleEventHandler.HandleEvent(circleEvent, _eventQueue, _beachLine);
                 map.AddRange(vertices);
+                _logger.Log(_beachLine.ToString());
             }
+
+            _logger.Log("Finished Voronoi map creation");
 
             return map;
         }

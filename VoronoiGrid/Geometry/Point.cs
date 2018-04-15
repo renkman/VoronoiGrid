@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace VoronoiEngine.Elements
+namespace VoronoiGrid.Geometry
 {
     public class Point : IComparable<Point>, IEquatable<Point>
     {
@@ -37,11 +37,6 @@ namespace VoronoiEngine.Elements
         public bool Equals(Point other)
         {
             return X == other.X && Y == other.Y;
-        }
-
-        public override string ToString()
-        {
-            return $"{nameof(Point)}: X: {X}, Y: {Y}";
         }
     }
 }

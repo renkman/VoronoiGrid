@@ -1,17 +1,22 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using VoronoiEngine.Elements;
 using VoronoiEngine.Events;
 using VoronoiEngine.Geomerty;
+using VoronoiEngine.Utilities;
 
 namespace VoronoiEngine.Structures
 {
     public class BeachLine
     {
         private readonly ICircleEventCalculationService _circleEventCalculationService;
+        private readonly Logger _logger;
 
         public BeachLine()
         {
             _circleEventCalculationService = new CircleEventCalculationService();
+            _logger = Logger.Instance;
         }
 
         public BeachLine(ICircleEventCalculationService circleEventCalculationService)
@@ -27,13 +32,13 @@ namespace VoronoiEngine.Structures
                 return null;
 
             var arc = Root.Find(site) as Leaf;
-            if (arc.CircleEvent == null)
+            if (arc?.CircleEvent == null)
                 return null;
 
             return arc.CircleEvent;
         }
 
-        public ICollection<HalfEdge> InsertSite(Point point)
+        public void InsertSite(Point point)
         {
             var leaf = new Leaf(point);
 
@@ -41,7 +46,8 @@ namespace VoronoiEngine.Structures
             if (Root == null)
             {
                 Root = leaf;
-                return new List<HalfEdge>();
+                _logger.Log($"Add {leaf.Site.ToString()} as Root");
+                return;                
             }
 
             // Add site to existing tree
@@ -49,14 +55,14 @@ namespace VoronoiEngine.Structures
             if (rootNode != null)
             {
                 rootNode.Insert(point, ReplaceLeaf);
-                return new List<HalfEdge>();
+                return;
             }
 
             var rootLeaf = Root as Leaf;
             var node = new Node(null);
             Root = node;
+            node.Edges.Right = new HalfEdge(rootLeaf.Site);
             ReplaceLeaf(node, leaf, rootLeaf);
-            return new List<HalfEdge> { node.Edge };
         }
 
         public ICollection<CircleEvent> GenerateCircleEvent(Point site)
@@ -76,7 +82,11 @@ namespace VoronoiEngine.Structures
             {
                 var leftEvent = _circleEventCalculationService.DetermineCircleEvent(leftArcs);
                 if (leftEvent != null)
+                {
+                    var leftArcsString = string.Join(", ", leftArcs.Select(a=>a.ToString()).ToArray());
+                    _logger.Log($"Found circle event for arcs: {leftArcsString} at Point: {leftEvent.Point.ToString()} and Vertex: {leftEvent.Vertex.ToString()}");
                     circleEvents.Add(leftEvent);
+                }
             }
 
             // ... and where it is the right arc.
@@ -88,7 +98,11 @@ namespace VoronoiEngine.Structures
 
             var rightEvent = _circleEventCalculationService.DetermineCircleEvent(rightArcs);
             if (rightEvent != null)
+            {
+                var rightArcsString = string.Join(", ", rightArcs.Select(a => a.ToString()).ToArray());
+                _logger.Log($"Found circle event for arcs: {rightArcsString} at Point: {rightEvent.Point.ToString()} and Vertex: {rightEvent.Vertex.ToString()}");
                 circleEvents.Add(rightEvent);
+            }
             return circleEvents;
         }
 
@@ -108,7 +122,13 @@ namespace VoronoiEngine.Structures
                 return null;
 
             var arcs = new List<INode> { leftArc, arc, rightArc };
+            if (arcs.Cast<Leaf>().Select(a=>a.Site).Distinct().Count() != 3)
+                return null;
+
             var circleEvent = _circleEventCalculationService.DetermineCircleEvent(arcs);
+
+            var arcsString = string.Join(", ", arcs.Select(a => a.ToString()).ToArray());
+            _logger.Log($"Found circle event for arcs: {arcsString} at Point: {circleEvent.Point.ToString()} and Vertex: {circleEvent.Vertex.ToString()}");
             return circleEvent;
         }
 
@@ -116,47 +136,90 @@ namespace VoronoiEngine.Structures
         {
             var parent = leaf.Parent as Node;
             var parentParent = parent.Parent as Node;
-            if (parent.Left == leaf)
+            leaf.Parent = null;
+            parent.Parent = null;
+
+            RemoveLeaf(leaf, parent, parentParent, parent.Left == leaf);
+
+            parentParent?.UpdateBreaktpoints();         
+        }
+
+        public override string ToString()
+        {
+            var output = "";
+            BuildStringFromTree(Root, output, 0);
+            return output;
+        }
+
+        private void RemoveLeaf(Leaf leaf, Node parent,  Node parentParent, bool isLeft)
+        {
+            if (parentParent == null)
             {
-                parent.Left = null;
-                var right = parent.Right;
-                if (parentParent.Left == parent)
-                    parentParent.Left = right;
-                else
-                    parentParent.Right = right;
+                Root = isLeft ? parent.Right : parent.Left;
                 return;
             }
 
-            parent.Right = null;
-            var left = parent.Left;
-            if (parentParent.Left == parent)
-                parentParent.Left = left;
+            if (isLeft)
+                parent.Left = null;
             else
-                parentParent.Right = left;
+                parent.Right = null;
+            
+            var sibling = isLeft ? parent.Right : parent.Left;
+            sibling.Parent = parentParent;
+
+            if (isLeft)
+                parent.Right = null;
+            else
+                parent.Left = null;
+
+            if (parentParent.Left == parent)
+                parentParent.Left = sibling;
+            else
+                parentParent.Right = sibling;
         }
 
-        private static void ReplaceLeaf(Node subRoot, Leaf newLeaf, Leaf arc)
+        private void ReplaceLeaf(Node subRoot, Leaf newLeaf, Leaf arc)
         {
+            _logger.Log($"Replace leaf {arc.ToString()} with leaf {newLeaf.ToString()}");
+            
+            // Create new half edge
+            var newLeafHalfEdge = new HalfEdge(newLeaf.Site);
+            
             // Build subtree
             var node = new Node(subRoot);
-
+            
             subRoot.Left = node;
             subRoot.Right = arc;
-            subRoot.Breakpoint = new Tuple { Left = newLeaf.Site, Right = arc.Site };
-            var subRootEdgeStart = subRoot.CalculateBreakpoint(newLeaf.Site.Y);
-            subRoot.Edge = subRoot.Edge ?? new HalfEdge(subRootEdgeStart);
-            subRoot.Edge.Add(subRootEdgeStart);
-
+            subRoot.Breakpoint.Left = newLeaf.Site;
+            subRoot.Breakpoint.Right = arc.Site;
             arc.Parent = subRoot;
+            subRoot.Edges.Left = newLeafHalfEdge;
 
-            node.Left = arc.Clone();
+            var arcClone = arc.Clone();
+            node.Left = arcClone;
             node.Right = newLeaf;
-            node.Breakpoint = new Tuple { Left = arc.Site, Right = newLeaf.Site };
-            var nodeEdgeStart = node.CalculateBreakpoint(newLeaf.Site.Y);
-            node.Edge = new HalfEdge(nodeEdgeStart);
-            node.Edge.Add(nodeEdgeStart);
+            node.Breakpoint.Left = arcClone.Site;
+            node.Breakpoint.Right = newLeaf.Site;
             node.Left.Parent = node;
             newLeaf.Parent = node;
+            node.Edges.Left = subRoot.Edges.Right;
+            node.Edges.Right = newLeafHalfEdge;
+        }
+
+        private void BuildStringFromTree(INode node, string output, int level)
+        {
+            if (node == null)
+                return;
+
+            var tabs = string.Join("", Enumerable.Range(0, level).Select(n => "\t").ToArray());
+            output += $"{tabs}{node.ToString()}{Environment.NewLine}";
+            if (node.IsLeaf)
+                return;
+            
+            var innerNode = node as Node;
+            BuildStringFromTree(innerNode.Left, output, ++level);
+            BuildStringFromTree(innerNode.Right, output, level);
+            level--;
         }
     }
 }

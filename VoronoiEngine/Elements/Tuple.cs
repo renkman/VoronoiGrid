@@ -1,8 +1,8 @@
 ﻿namespace VoronoiEngine.Elements
 {
-    public class Tuple
+    public class Tuple<T> where T : class
     {
-        public Point Left { get; set; }
-        public Point Right { get; set; }
+        public T Left { get; set; }
+        public T Right { get; set; }
     }
 }

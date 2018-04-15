@@ -4,15 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{960FEC25-17C7-4964-9EA4-F3BD3FC57052}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{2B2A76A6-D9D3-4184-837F-4EC8C965B411}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>VoronoiEngine</RootNamespace>
-    <AssemblyName>VoronoiEngine</AssemblyName>
+    <RootNamespace>VoronoiViewer</RootNamespace>
+    <AssemblyName>VoronoiViewer</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +23,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -35,38 +37,49 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Elements\HalfEdge.cs" />
-    <Compile Include="Elements\IGeometry.cs" />
-    <Compile Include="Elements\Site.cs" />
-    <Compile Include="Elements\TraverseDirection.cs" />
-    <Compile Include="Elements\Tuple.cs" />
-    <Compile Include="EventHandler\CircleEventHandlerStrategy.cs" />
-    <Compile Include="EventHandler\IEventHandlerStrategy.cs" />
-    <Compile Include="EventHandler\SiteEventHandlerStrategy.cs" />
-    <Compile Include="Geomerty\CircleEventCalculationService.cs" />
-    <Compile Include="Geomerty\ICircleEventCalculationService.cs" />
-    <Compile Include="Structures\EventQueue.cs" />
-    <Compile Include="Elements\INode.cs" />
-    <Compile Include="Elements\Leaf.cs" />
-    <Compile Include="Elements\Node.cs" />
-    <Compile Include="Elements\Point.cs" />
-    <Compile Include="Structures\BeachLine.cs" />
-    <Compile Include="Events\CircleEvent.cs" />
-    <Compile Include="Events\IEvent.cs" />
-    <Compile Include="Events\SiteEvent.cs" />
+    <Compile Include="FormVoronoiViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormVoronoiViewer.Designer.cs">
+      <DependentUpon>FormVoronoiViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Elements\Vertex.cs" />
-    <Compile Include="Structures\VoronoiMap.cs" />
-    <Compile Include="Utilities\ISiteGenerator.cs" />
-    <Compile Include="Utilities\Logger.cs" />
-    <Compile Include="Utilities\SiteGenerator.cs" />
-    <Compile Include="VoronoiFactory.cs" />
+    <Compile Include="Session.cs" />
+    <Compile Include="VoronoiService.cs" />
+    <EmbeddedResource Include="FormVoronoiViewer.resx">
+      <DependentUpon>FormVoronoiViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Map\" />
+    <ProjectReference Include="..\VoronoiEngine\VoronoiEngine.csproj">
+      <Project>{960fec25-17c7-4964-9ea4-f3bd3fc57052}</Project>
+      <Name>VoronoiEngine</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

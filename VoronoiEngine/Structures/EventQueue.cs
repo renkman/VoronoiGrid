@@ -66,10 +66,10 @@ namespace VoronoiEngine.Structures
             if (_events.Contains(circleEvent))
                 _events.Remove(circleEvent);
 
-            // And remove circle events containing the current circle event center arc
-            var relatedEvents = _events.Where(e => e is CircleEvent).Cast<CircleEvent>().Where(c => c.LeftArc == circleEvent.CenterArc || c.RightArc == circleEvent.CenterArc);
-            foreach (var relatedEvent in relatedEvents)
-                _events.Remove(relatedEvent);
+            //// And remove circle events containing the current circle event center arc
+            //var relatedEvents = _events.Where(e => e is CircleEvent).Cast<CircleEvent>().Where(c => c.LeftArc == circleEvent.CenterArc || c.RightArc == circleEvent.CenterArc);
+            //foreach (var relatedEvent in relatedEvents)
+            //    _events.Remove(relatedEvent);
         }
     }
 }

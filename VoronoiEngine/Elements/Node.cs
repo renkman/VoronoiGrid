@@ -13,18 +13,21 @@ namespace VoronoiEngine.Elements
         public INode Left { get; set; }
         public INode Right { get; set; }
 
-        public Tuple Breakpoint { get; set; }
-        public HalfEdge Edge { get; set; }
+        public Tuple<Point> Breakpoint { get; }
+        public Tuple<HalfEdge> Edges { get; }
 
         public Node(Node parent)
         {
             Parent = parent;
+            Breakpoint = new Tuple<Point>();
+            Edges = new Tuple<HalfEdge>();
         }
 
         public Point CalculateBreakpoint(int y)
         {
             if (Breakpoint.Left.Y == Breakpoint.Right.Y)
-                return new Point { X = (int)(Breakpoint.Right.X * 0.5m), Y = y };
+                return new Point { X = (int)(Breakpoint.Right.X / 2m + Breakpoint.Left.X / 2m), Y = y };
+            //    return new Point { X = (int)(Breakpoint.Right.X * 0.5m), Y = y };
 
             if (Breakpoint.Left.Y == y)
                 return new Elements.Point { X = Breakpoint.Left.X, Y = y };
@@ -32,7 +35,7 @@ namespace VoronoiEngine.Elements
             if (Breakpoint.Right.Y == y)
                 return new Elements.Point { X = Breakpoint.Right.X, Y = y };
 
-            // x = (ay*by - Sqrt(ay*by((ay-by)²+b²))) / (ay-by)
+            // x = (ay * by - Sqrt(ay * by((ay - by)²+b²))) / (ay - by)
             var x = (int)Math.Round((Breakpoint.Left.Y * Breakpoint.Right.X - Math.Sqrt(Breakpoint.Left.Y * Breakpoint.Right.Y * (Math.Pow(Breakpoint.Left.Y - Breakpoint.Right.Y, 2) + Math.Pow(Breakpoint.Right.X, 2)))) / (Breakpoint.Left.Y - Breakpoint.Right.Y));
 
             return new Point { X = x, Y = y };
@@ -49,7 +52,9 @@ namespace VoronoiEngine.Elements
             }
             if (Right != null)
                 return Right.Find(site);
-            throw new InvalidOperationException("Nodes without leaves must not exist!");
+
+            return null;
+            //throw new InvalidOperationException("Nodes without leaves must not exist!");
         }
 
         public void GetDescendants(Point start, TraverseDirection direction, ICollection<INode> descendants, int count)
@@ -128,13 +133,14 @@ namespace VoronoiEngine.Elements
             {
                 var leaf = currentNode.GetNeighbor(start, direction);
                 if (leaf == start || consecutives.Any())
-                    consecutives.Add(leaf);                
+                    consecutives.Add(leaf);
             }
         }
 
         public void Insert(Point site, Action<Node, Leaf, Leaf> replace)
         {
             var breakpoint = CalculateBreakpoint(site.Y);
+
             if (site.CompareTo(breakpoint) < 0)
             {
                 if (Left != null)
@@ -178,6 +184,26 @@ namespace VoronoiEngine.Elements
 
             var leaf = new Leaf(site);
             replace(node, leaf, arc);
+        }
+
+        public void UpdateBreaktpoints()
+        {
+            var left = Left.IsLeaf ? ((Leaf)Left).Site : ((Node)Left).Breakpoint.Right;
+            var right = Right.IsLeaf ? ((Leaf)Right).Site : ((Node)Right).Breakpoint.Left;
+
+            Breakpoint.Left = left;
+            Breakpoint.Right = right;
+
+            if (Parent != null)
+            {
+                var parent = (Node)Parent;
+                parent.UpdateBreaktpoints();
+            }
+        }
+
+        public override string ToString()
+        {
+            return $"Node Left: {Breakpoint?.Left?.ToString()}, Right: {Breakpoint?.Right?.ToString()}, Edges: Left: {Edges?.Left?.ToString()}, Right: {Edges?.Right?.ToString()}";
         }
     }
 }
