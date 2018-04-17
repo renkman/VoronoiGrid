@@ -46,7 +46,9 @@
     <Compile Include="EventHandler\CircleEventHandlerStrategy.cs" />
     <Compile Include="EventHandler\IEventHandlerStrategy.cs" />
     <Compile Include="EventHandler\SiteEventHandlerStrategy.cs" />
+    <Compile Include="Geomerty\BreakpointCalculationService.cs" />
     <Compile Include="Geomerty\CircleEventCalculationService.cs" />
+    <Compile Include="Geomerty\IBreakpointCalculationService.cs" />
     <Compile Include="Geomerty\ICircleEventCalculationService.cs" />
     <Compile Include="Structures\EventQueue.cs" />
     <Compile Include="Elements\INode.cs" />

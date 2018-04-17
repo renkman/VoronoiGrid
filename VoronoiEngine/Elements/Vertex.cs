@@ -6,11 +6,11 @@ namespace VoronoiEngine.Elements
     {
         public Vertex()
         {
-            Edges = new List<HalfEdge>();
+            HalfEdges = new HashSet<HalfEdge>();
         }
 
         public Point Point { get; set; }
 
-        public ICollection<HalfEdge> Edges {get;}
+        public ICollection<HalfEdge> HalfEdges {get;}
     }
 }

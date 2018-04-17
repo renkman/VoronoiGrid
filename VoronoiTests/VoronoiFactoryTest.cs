@@ -55,9 +55,24 @@ namespace VoronoiTests
 
             Assert.IsNotNull(map);
             Assert.AreEqual(2, map.Count(g => g is Vertex));
-            var vertices = map.Where(g => g is Vertex).ToList();
+            var vertices = map.Where(g => g is Vertex).Cast<Vertex>().ToList();
             Assert.AreEqual(new Point { X = 136, Y = 121 }, vertices[0].Point);
+
+            var edgePoints = vertices[0].HalfEdges.Select(e => e.Point).OrderByDescending(p => p.Y).ToList();
+            Assert.AreEqual(3, edgePoints.Count);
+
+            Assert.AreEqual(new Point { X = 70, Y = 149 }, edgePoints[0]);
+            Assert.AreEqual(new Point { X = 82, Y = 139 }, edgePoints[1]);
+            Assert.AreEqual(new Point { X = 74, Y = 139 }, edgePoints[2]);
+
             Assert.AreEqual(new Point { X = 146, Y = 104 }, vertices[1].Point);
+
+            edgePoints = vertices[1].HalfEdges.Select(e => e.Point).OrderByDescending(p => p.Y).ToList();
+            Assert.AreEqual(3, edgePoints.Count);
+
+            Assert.AreEqual(new Point { X = 49, Y = 149 }, edgePoints[0]);
+            Assert.AreEqual(new Point { X = 19, Y = 74 }, edgePoints[1]);
+            Assert.AreEqual(new Point { X = 15, Y = 74 }, edgePoints[2]);
         }
 
         [Test]

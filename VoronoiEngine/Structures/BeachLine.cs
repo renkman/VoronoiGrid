@@ -61,7 +61,6 @@ namespace VoronoiEngine.Structures
             var rootLeaf = Root as Leaf;
             var node = new Node(null);
             Root = node;
-            node.Edges.Right = new HalfEdge(rootLeaf.Site);
             ReplaceLeaf(node, leaf, rootLeaf);
         }
 
@@ -141,7 +140,7 @@ namespace VoronoiEngine.Structures
 
             RemoveLeaf(leaf, parent, parentParent, parent.Left == leaf);
 
-            parentParent?.UpdateBreaktpoints();         
+            parentParent?.UpdateBreakpoints();         
         }
 
         public override string ToString()
@@ -159,18 +158,18 @@ namespace VoronoiEngine.Structures
                 return;
             }
 
-            if (isLeft)
-                parent.Left = null;
-            else
-                parent.Right = null;
+            //if (isLeft)
+            //    parent.Left = null;
+            //else
+            //    parent.Right = null;
             
             var sibling = isLeft ? parent.Right : parent.Left;
             sibling.Parent = parentParent;
 
-            if (isLeft)
-                parent.Right = null;
-            else
-                parent.Left = null;
+            //if (isLeft)
+            //    parent.Right = null;
+            //else
+            //    parent.Left = null;
 
             if (parentParent.Left == parent)
                 parentParent.Left = sibling;
@@ -182,8 +181,9 @@ namespace VoronoiEngine.Structures
         {
             _logger.Log($"Replace leaf {arc.ToString()} with leaf {newLeaf.ToString()}");
             
-            // Create new half edge
+            // Create new half edges
             var newLeafHalfEdge = new HalfEdge(newLeaf.Site);
+            var arcHalfEdge = new HalfEdge(arc.Site);
             
             // Build subtree
             var node = new Node(subRoot);
@@ -192,8 +192,9 @@ namespace VoronoiEngine.Structures
             subRoot.Right = arc;
             subRoot.Breakpoint.Left = newLeaf.Site;
             subRoot.Breakpoint.Right = arc.Site;
+            //subRoot.HalfEdges.Left = newLeafHalfEdge;
+            //subRoot.HalfEdges.Right = arcHalfEdge;
             arc.Parent = subRoot;
-            subRoot.Edges.Left = newLeafHalfEdge;
 
             var arcClone = arc.Clone();
             node.Left = arcClone;
@@ -202,8 +203,8 @@ namespace VoronoiEngine.Structures
             node.Breakpoint.Right = newLeaf.Site;
             node.Left.Parent = node;
             newLeaf.Parent = node;
-            node.Edges.Left = subRoot.Edges.Right;
-            node.Edges.Right = newLeafHalfEdge;
+            //node.HalfEdges.Left = arcHalfEdge;
+            //node.HalfEdges.Right = newLeafHalfEdge;
         }
 
         private void BuildStringFromTree(INode node, string output, int level)

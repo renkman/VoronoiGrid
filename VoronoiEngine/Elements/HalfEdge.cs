@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace VoronoiEngine.Elements
+﻿namespace VoronoiEngine.Elements
 {
     public class HalfEdge : IGeometry
     {
@@ -11,6 +9,8 @@ namespace VoronoiEngine.Elements
 
         public Point Point { get; set; }
 
-        public ICollection<Vertex> Vertices { get; set; }
+        public Vertex Start { get; set; }
+
+        public Vertex End { get; set; }
     }
 }

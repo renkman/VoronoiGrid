@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using VoronoiEngine.Geomerty;
 
 namespace VoronoiEngine.Elements
 {
     public class Node : INode
     {
+        private readonly IBreakpointCalculationService _breakpointCalculationService;
+
         public INode Parent { get; set; }
 
         public bool IsLeaf { get { return false; } }
@@ -14,31 +17,17 @@ namespace VoronoiEngine.Elements
         public INode Right { get; set; }
 
         public Tuple<Point> Breakpoint { get; }
-        public Tuple<HalfEdge> Edges { get; }
-
+        
         public Node(Node parent)
         {
             Parent = parent;
             Breakpoint = new Tuple<Point>();
-            Edges = new Tuple<HalfEdge>();
+            _breakpointCalculationService = new BreakpointCalculationService();
         }
 
         public Point CalculateBreakpoint(int y)
         {
-            if (Breakpoint.Left.Y == Breakpoint.Right.Y)
-                return new Point { X = (int)(Breakpoint.Right.X / 2m + Breakpoint.Left.X / 2m), Y = y };
-            //    return new Point { X = (int)(Breakpoint.Right.X * 0.5m), Y = y };
-
-            if (Breakpoint.Left.Y == y)
-                return new Elements.Point { X = Breakpoint.Left.X, Y = y };
-
-            if (Breakpoint.Right.Y == y)
-                return new Elements.Point { X = Breakpoint.Right.X, Y = y };
-
-            // x = (ay * by - Sqrt(ay * by((ay - by)²+b²))) / (ay - by)
-            var x = (int)Math.Round((Breakpoint.Left.Y * Breakpoint.Right.X - Math.Sqrt(Breakpoint.Left.Y * Breakpoint.Right.Y * (Math.Pow(Breakpoint.Left.Y - Breakpoint.Right.Y, 2) + Math.Pow(Breakpoint.Right.X, 2)))) / (Breakpoint.Left.Y - Breakpoint.Right.Y));
-
-            return new Point { X = x, Y = y };
+            return _breakpointCalculationService.CalculateBreakpoint(Breakpoint.Left, Breakpoint.Right, y);            
         }
 
         public INode Find(Point site)
@@ -186,7 +175,7 @@ namespace VoronoiEngine.Elements
             replace(node, leaf, arc);
         }
 
-        public void UpdateBreaktpoints()
+        public void UpdateBreakpoints()
         {
             var left = Left.IsLeaf ? ((Leaf)Left).Site : ((Node)Left).Breakpoint.Right;
             var right = Right.IsLeaf ? ((Leaf)Right).Site : ((Node)Right).Breakpoint.Left;
@@ -197,13 +186,13 @@ namespace VoronoiEngine.Elements
             if (Parent != null)
             {
                 var parent = (Node)Parent;
-                parent.UpdateBreaktpoints();
+                parent.UpdateBreakpoints();
             }
         }
 
         public override string ToString()
         {
-            return $"Node Left: {Breakpoint?.Left?.ToString()}, Right: {Breakpoint?.Right?.ToString()}, Edges: Left: {Edges?.Left?.ToString()}, Right: {Edges?.Right?.ToString()}";
+            return $"Node Left: {Breakpoint?.Left?.ToString()}, Right: {Breakpoint?.Right?.ToString()}";
         }
     }
 }

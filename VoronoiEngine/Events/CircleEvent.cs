@@ -1,4 +1,5 @@
-﻿using VoronoiEngine.Elements;
+﻿using System.Collections.Generic;
+using VoronoiEngine.Elements;
 
 namespace VoronoiEngine.Events
 {
@@ -9,6 +10,6 @@ namespace VoronoiEngine.Events
         public Leaf LeftArc { get; set; }
         public Leaf CenterArc { get; set; }
         public Leaf RightArc { get; set; }
-        public Node Parent { get; set; }
+        public ICollection<Node> Parents { get; set; }
     }
 }
