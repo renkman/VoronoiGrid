@@ -16,6 +16,10 @@ namespace VoronoiEngine.Geomerty
             if (sites.Count != 3)
                 return null;
 
+            // Check if the breakpoints of the three consecutive arcs converge
+            if (!CheckConversion(sites[0], sites[1], sites[2]))
+                return null;
+
             var circumcenter = CalculateCircumcenter(sites[0], sites[1], sites[2]);
             if (circumcenter == null)
                 return null;
@@ -38,11 +42,11 @@ namespace VoronoiEngine.Geomerty
         {
             var midpointABX = (a.X + b.X) / 2d;
             var midpointABY = (a.Y + b.Y) / 2d;
-            var slopeAB = b.Y != a.Y ? - 1d / ((b.Y - a.Y) / (double)(b.X - a.X)) : 0;
+            var slopeAB = b.Y != a.Y ? -1d / ((b.Y - a.Y) / (double)(b.X - a.X)) : 0;
 
             var midpointACX = (a.X + c.X) / 2d;
             var midpointACY = (a.Y + c.Y) / 2d;
-            var slopeAC = c.Y != a.Y ? - 1d / ((c.Y - a.Y) / (double)(c.X - a.X)) : 0;
+            var slopeAC = c.Y != a.Y ? -1d / ((c.Y - a.Y) / (double)(c.X - a.X)) : 0;
 
             var ab = midpointABY - slopeAB * midpointABX;
             var ac = midpointACY - slopeAC * midpointACX;
@@ -63,6 +67,13 @@ namespace VoronoiEngine.Geomerty
             var b = point.X - circumcenter.X;
             var radius = (int)Math.Sqrt(Math.Pow(a, 2) + Math.Pow(b, 2));
             return new Point { X = circumcenter.X, Y = circumcenter.Y - radius };
+        }
+
+        private static bool CheckConversion(Point a, Point b, Point c)
+        {
+            if ((b.X - a.X) * (c.Y - a.Y) > (c.X - a.X) * (b.Y - a.Y))
+                return false;
+            return true;
         }
     }
 }

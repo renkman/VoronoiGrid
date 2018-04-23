@@ -125,6 +125,8 @@ namespace VoronoiEngine.Structures
                 return null;
 
             var circleEvent = _circleEventCalculationService.DetermineCircleEvent(arcs);
+            if (circleEvent == null)
+                return null;
 
             var arcsString = string.Join(", ", arcs.Select(a => a.ToString()).ToArray());
             _logger.Log($"Found circle event for arcs: {arcsString} at Point: {circleEvent.Point.ToString()} and Vertex: {circleEvent.Vertex.ToString()}");
@@ -182,8 +184,8 @@ namespace VoronoiEngine.Structures
             _logger.Log($"Replace leaf {arc.ToString()} with leaf {newLeaf.ToString()}");
             
             // Create new half edges
-            var newLeafHalfEdge = new HalfEdge(newLeaf.Site);
-            var arcHalfEdge = new HalfEdge(arc.Site);
+            //var newLeafHalfEdge = new HalfEdge(newLeaf.Site, );
+            //var arcHalfEdge = new HalfEdge(arc.Site);
             
             // Build subtree
             var node = new Node(subRoot);

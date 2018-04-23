@@ -11,7 +11,7 @@ namespace VoronoiEngine.EventHandler
 {
     public class SiteEventHandlerStrategy : IEventHandlerStrategy<SiteEvent, HalfEdge>
     {
-        public ICollection<HalfEdge> HandleEvent(SiteEvent sweepEvent, EventQueue eventQueue, BeachLine beachLine)
+        public HalfEdge HandleEvent(SiteEvent sweepEvent, EventQueue eventQueue, BeachLine beachLine)
         {
             var circleEvent = beachLine.FindCircleEventAbove(sweepEvent.Point);
             if (circleEvent != null)

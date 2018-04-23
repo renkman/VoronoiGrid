@@ -48,7 +48,7 @@ namespace VoronoiTests
                 new Site{ Point = new Point  { X = 40, Y = 60 } },
                 new Site { Point = new Point { X = 20, Y = 40 } },
                 new Site { Point = new Point { X = 60, Y = 40 } },
-                new HalfEdge(new Point { X = 20, Y = 40 } ),
+                new HalfEdge(new Point { X = 20, Y = 40 }, new Point { X = 20, Y = 40 }, new Point { X = 20, Y = 40 }  ),
                 new Vertex { Point = new Point { X = 40, Y = 40 } }
             };
 

@@ -61,6 +61,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="BeachLineTest.cs" />
+    <Compile Include="BoundingBoxServiceTest.cs" />
     <Compile Include="CircleEventCalculationServiceTest.cs" />
     <Compile Include="EventQueueTest.cs" />
     <Compile Include="PointTest.cs" />

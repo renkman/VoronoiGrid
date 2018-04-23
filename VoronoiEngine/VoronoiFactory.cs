@@ -80,9 +80,10 @@ namespace VoronoiEngine
                     throw new InvalidOperationException("SweepEvent is neither SiteEvent nor CircleEvent");
 
                 _logger.Log($"Sweepline CircleEvent: {circleEvent.Point.ToString()}");
-                var vertices = _circleEventHandler.HandleEvent(circleEvent, _eventQueue, _beachLine);
-                map.AddRange(vertices);
-                _logger.Log(_beachLine.ToString());
+                var vertex = _circleEventHandler.HandleEvent(circleEvent, _eventQueue, _beachLine);
+                var halfEdges = String.Join(", ", vertex.HalfEdges.Select(h => h.Point.ToString()).ToArray());
+                _logger.Log($"Add Vertex: {vertex.Point}, Half Edges: {halfEdges}");
+                map.Add(vertex);
             }
 
             _logger.Log("Finished Voronoi map creation");

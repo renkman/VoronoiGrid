@@ -17,7 +17,7 @@ namespace VoronoiEngine.EventHandler
             _breakpointCalculationService = new BreakpointCalculationService();
         }
 
-        public ICollection<Vertex> HandleEvent(CircleEvent sweepEvent, EventQueue eventQueue, BeachLine beachLine)
+        public Vertex HandleEvent(CircleEvent sweepEvent, EventQueue eventQueue, BeachLine beachLine)
         {
             beachLine.RemoveLeaf(sweepEvent.CenterArc);
 
@@ -42,14 +42,14 @@ namespace VoronoiEngine.EventHandler
             CreateHalfEdge(sweepEvent.CenterArc.Site, sweepEvent.RightArc.Site, vertex, (h, p) => h.End = p);
             CreateHalfEdge(sweepEvent.LeftArc.Site, sweepEvent.RightArc.Site, vertex, (h, p) => h.Start = p);
 
-            return new List<Vertex> { vertex };
+            return vertex;
         }
 
         private void CreateHalfEdge(Point left, Point right, Vertex vertex, Action<HalfEdge, Vertex> setPoint)
         {
             var lowerY = Math.Min(left.Y, right.Y);
             var point = _breakpointCalculationService.CalculateBreakpoint(left, right, lowerY - 1);
-            var halfEdge = new HalfEdge(point);
+            var halfEdge = new HalfEdge(point, left, right);
             setPoint(halfEdge, vertex);
             vertex.HalfEdges.Add(halfEdge);
         }
