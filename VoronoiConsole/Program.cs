@@ -26,7 +26,7 @@ namespace VoronoiConsole
                 new Site { Point = new Point {X = 95, Y = 75 } }
             };
 
-            var map = factory.CreateVoronoiMap(sites);
+            var map = factory.CreateVoronoiMap(200, 200, sites);
             //var map = factory.CreateVoronoiMap(200, 200, 6);
 
             var mapArray = map.ToArray();

@@ -16,9 +16,9 @@ namespace VoronoiEngine.Geomerty
             if (sites.Count != 3)
                 return null;
 
-            // Check if the breakpoints of the three consecutive arcs converge
-            if (!CheckConversion(sites[0], sites[1], sites[2]))
-                return null;
+            //// Check if the breakpoints of the three consecutive arcs converge
+            //if (!CheckConversion(sites[0], sites[1], sites[2]))
+            //    return null;
 
             var circumcenter = CalculateCircumcenter(sites[0], sites[1], sites[2]);
             if (circumcenter == null)

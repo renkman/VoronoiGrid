@@ -154,6 +154,7 @@
             // 
             // tabPageDiagram
             // 
+            this.tabPageDiagram.AutoScroll = true;
             this.tabPageDiagram.Location = new System.Drawing.Point(4, 22);
             this.tabPageDiagram.Name = "tabPageDiagram";
             this.tabPageDiagram.Padding = new System.Windows.Forms.Padding(3);

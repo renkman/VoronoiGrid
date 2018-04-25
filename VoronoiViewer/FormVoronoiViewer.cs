@@ -82,18 +82,21 @@ namespace VoronoiViewer
             
             try
             {
-                var map = _voronoiService.CreateDiagram(_session.Sites);
+                var map = _voronoiService.CreateDiagram(_canvas.Height / _factorY, _canvas.Width / _factorX, _session.Sites);
 
                 textBoxLog.Text = string.Join(Environment.NewLine, map.Select(g => $"{g.GetType().Name}:\tX: {g.Point.X}, Y: {g.Point.Y}").ToArray());
 
                 using (var graphics = Graphics.FromImage(_canvas))
                 {
-                    var brush = new SolidBrush(Color.FromArgb(255, 255, 0, 0));
-                    
+                    var halfEdgeBrush = new SolidBrush(Color.FromArgb(255, 0, 255, 0));
+                    var vertexBrush = new SolidBrush(Color.FromArgb(255, 255, 0, 0));
+
                     foreach (var geo in map)
                     {
                         if (geo is Vertex)
-                            graphics.FillRectangle(brush, geo.Point.X * _factorX, _canvas.Height - (geo.Point.Y * _factorY), _factorX, _factorY);
+                            graphics.FillRectangle(vertexBrush, geo.Point.X * _factorX, _canvas.Height - (geo.Point.Y * _factorY), _factorX, _factorY);
+                        if (geo is HalfEdge && geo.Point.X > 0 && geo.Point.X < _canvas.Width && geo.Point.X > 0 && geo.Point.X < _canvas.Height)
+                            graphics.FillRectangle(halfEdgeBrush, geo.Point.X * _factorX, _canvas.Height - (geo.Point.Y * _factorY), _factorX, _factorY);
                     }
                 }
             }

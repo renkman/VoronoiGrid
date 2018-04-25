@@ -4,6 +4,7 @@ using System.Linq;
 using VoronoiEngine.Elements;
 using VoronoiEngine.EventHandler;
 using VoronoiEngine.Events;
+using VoronoiEngine.Geomerty;
 using VoronoiEngine.Structures;
 using VoronoiEngine.Utilities;
 
@@ -17,34 +18,41 @@ namespace VoronoiEngine
         private readonly ISiteGenerator _siteGenerator;
         private readonly IEventHandlerStrategy<SiteEvent, HalfEdge> _siteEventHandler;
         private readonly IEventHandlerStrategy<CircleEvent, Vertex> _circleEventHandler;
+        private readonly IBoundingBoxService _boundingBoxService;
 
         private readonly Logger _logger;
 
-        public VoronoiFactory() : this(new SiteEventHandlerStrategy(), new CircleEventHandlerStrategy(), new SiteGenerator())
+        public VoronoiFactory() : this(
+            new SiteEventHandlerStrategy(), 
+            new CircleEventHandlerStrategy(), 
+            new SiteGenerator(), 
+            new BoundingBoxService())
         {
         }
 
         public VoronoiFactory(
             IEventHandlerStrategy<SiteEvent, HalfEdge> siteEventHandler,
             IEventHandlerStrategy<CircleEvent, Vertex> circleEventHandler,
-            ISiteGenerator siteGenerator)
+            ISiteGenerator siteGenerator,
+            IBoundingBoxService boundingBoxService)
         {
             _siteGenerator = siteGenerator;
             _siteEventHandler = siteEventHandler;
             _circleEventHandler = circleEventHandler;
+            _boundingBoxService = boundingBoxService;
             _logger = Logger.Instance;
         }
 
-        public VoronoiMap CreateVoronoiMap(int x, int y, int pointQuantity)
+        public VoronoiMap CreateVoronoiMap(int height, int width, int pointQuantity)
         {
             _eventQueue = new EventQueue();
             _beachLine = new BeachLine();
 
-            var sites = _siteGenerator.GenerateSites(x, y, pointQuantity);
-            return CreateVoronoiMap(sites);
+            var sites = _siteGenerator.GenerateSites(width, height, pointQuantity);
+            return CreateVoronoiMap(height, width, sites);
         }
 
-        public VoronoiMap CreateVoronoiMap(IEnumerable<Site> sites)
+        public VoronoiMap CreateVoronoiMap(int height, int width, IEnumerable<Site> sites)
         {
             if (sites == null)
                 throw new ArgumentNullException("sites");
@@ -84,6 +92,12 @@ namespace VoronoiEngine
                 var halfEdges = String.Join(", ", vertex.HalfEdges.Select(h => h.Point.ToString()).ToArray());
                 _logger.Log($"Add Vertex: {vertex.Point}, Half Edges: {halfEdges}");
                 map.Add(vertex);
+            }
+
+            var openEnds = map.Where(g => g is HalfEdge).Cast<HalfEdge>().ToList();
+            foreach(var halfEdge in openEnds)
+            {
+                _boundingBoxService.AttachHalfEdge(halfEdge, height, width);
             }
 
             _logger.Log("Finished Voronoi map creation");

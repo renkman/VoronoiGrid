@@ -15,10 +15,7 @@ namespace VoronoiTests
         [Test]
         public void TestCreateVoronoiMap()
         {
-            var factory = new VoronoiFactory(
-                new SiteEventHandlerStrategy(),
-                new CircleEventHandlerStrategy(),
-                new SiteGenerator());
+            var factory = new VoronoiFactory();
 
             var sites = new List<Site>
             {
@@ -27,7 +24,7 @@ namespace VoronoiTests
                 new Site { Point = new Point { X = 60, Y = 40 } }
             };
 
-            var map = factory.CreateVoronoiMap(sites);
+            var map = factory.CreateVoronoiMap(80, 80, sites);
 
             Assert.IsNotNull(map);
             var vertex = map.Single(g => g is Vertex);
@@ -41,10 +38,7 @@ namespace VoronoiTests
         [Test]
         public void TestCreateVoronoiMapWithThreeSites()
         {
-            var factory = new VoronoiFactory(
-                new SiteEventHandlerStrategy(),
-                new CircleEventHandlerStrategy(),
-                new SiteGenerator());
+            var factory = new VoronoiFactory();
 
             var sites = new List<Site>
             {
@@ -53,7 +47,7 @@ namespace VoronoiTests
                 new Site { Point = new Point {X = 170, Y = 140 } }
             };
 
-            var map = factory.CreateVoronoiMap(sites);
+            var map = factory.CreateVoronoiMap(200, 200, sites);
 
             Assert.IsNotNull(map);
             var vertex = map.Single(g => g is Vertex);
@@ -68,10 +62,7 @@ namespace VoronoiTests
         [Test]
         public void TestCreateVoronoiMapWithFourSites()
         {
-            var factory = new VoronoiFactory(
-                new SiteEventHandlerStrategy(),
-                new CircleEventHandlerStrategy(),
-                new SiteGenerator());
+            var factory = new VoronoiFactory();
 
             var sites = new List<Site>
             {
@@ -81,7 +72,7 @@ namespace VoronoiTests
                 new Site { Point = new Point {X = 95, Y = 75 } }
             };
 
-            var map = factory.CreateVoronoiMap(sites);
+            var map = factory.CreateVoronoiMap(200, 200, sites);
             //Logger.Instance.ToFile();
 
             Assert.IsNotNull(map);
@@ -109,10 +100,7 @@ namespace VoronoiTests
         [Test]
         public void TestCreateVoronoiMapWithFalseAlarm()
         {
-            var factory = new VoronoiFactory(
-                new SiteEventHandlerStrategy(),
-                new CircleEventHandlerStrategy(),
-                new SiteGenerator());
+            var factory = new VoronoiFactory();
 
             var sites = new List<Site>
             {
@@ -122,7 +110,7 @@ namespace VoronoiTests
                 new Site { Point = new Point {X = 130, Y = 120 } }
             };
 
-            var map = factory.CreateVoronoiMap(sites);
+            var map = factory.CreateVoronoiMap(200, 200, sites);
 
             Assert.IsNotNull(map);
             var vertex = map.First(g => g is Vertex);
@@ -133,10 +121,7 @@ namespace VoronoiTests
         //[Ignore("Runs too long!")]
         public void TestCreateVoronoiMapGenerate()
         {
-            var factory = new VoronoiFactory(
-                new SiteEventHandlerStrategy(),
-                new CircleEventHandlerStrategy(),
-                new SiteGenerator());
+            var factory = new VoronoiFactory();
             var map = factory.CreateVoronoiMap(200, 200, 6);
 
             Assert.IsNotNull(map);
@@ -147,10 +132,7 @@ namespace VoronoiTests
         [Test]
         public void TestCreateVoronoiMapArgumentException()
         {
-            var factory = new VoronoiFactory(
-                   new SiteEventHandlerStrategy(),
-                   new CircleEventHandlerStrategy(),
-                   new SiteGenerator());
+            var factory = new VoronoiFactory();
 
             var sites = new List<Site>
             {
@@ -159,16 +141,13 @@ namespace VoronoiTests
                 new Site { Point = new Point {X = 95, Y = 75 } }
             };
 
-            Assert.Throws<ArgumentException>(() => factory.CreateVoronoiMap(sites));
+            Assert.Throws<ArgumentException>(() => factory.CreateVoronoiMap(200, 200, sites));
         }
 
         [Test]
         public void TestCreateVoronoiMapTwoVertices()
         {
-            var factory = new VoronoiFactory(
-                   new SiteEventHandlerStrategy(),
-                   new CircleEventHandlerStrategy(),
-                   new SiteGenerator());
+            var factory = new VoronoiFactory();
 
             var sites = new List<Site>
             {
@@ -177,7 +156,7 @@ namespace VoronoiTests
                 new Site { Point = new Point {X = 7, Y = 10 } }
             };
 
-            var map = factory.CreateVoronoiMap(sites);
+            var map = factory.CreateVoronoiMap(50, 50, sites);
 
             var vertices = map.Where(g => g is Vertex).OrderBy(v => v.Point.X).ToList();
             //Assert.AreEqual(vertices[0].Point, new Point { X = 18, Y = 9 });
@@ -187,10 +166,7 @@ namespace VoronoiTests
         [Test]
         public void TestCreateVoronoiMapTwoVertexNegative()
         {
-            var factory = new VoronoiFactory(
-                   new SiteEventHandlerStrategy(),
-                   new CircleEventHandlerStrategy(),
-                   new SiteGenerator());
+            var factory = new VoronoiFactory();
 
             var sites = new List<Site>
             {
@@ -199,7 +175,7 @@ namespace VoronoiTests
                 new Site { Point = new Point {X = 12, Y = 7 } }
             };
 
-            var map = factory.CreateVoronoiMap(sites);
+            var map = factory.CreateVoronoiMap(30, 30, sites);
 
             var vertex = map.Single(g => g is Vertex);
             Assert.AreEqual(vertex.Point, new Point { X = -5, Y = 13 });
@@ -208,10 +184,7 @@ namespace VoronoiTests
         [Test]
         public void TestCreateVoronoiMapVertexOutOfBounds()
         {
-            var factory = new VoronoiFactory(
-                   new SiteEventHandlerStrategy(),
-                   new CircleEventHandlerStrategy(),
-                   new SiteGenerator());
+            var factory = new VoronoiFactory();
 
             var sites = new List<Site>
             {
@@ -220,7 +193,7 @@ namespace VoronoiTests
                 new Site { Point = new Point {X = 2, Y = 5 } }
             };
 
-            var map = factory.CreateVoronoiMap(sites);
+            var map = factory.CreateVoronoiMap(40, 40, sites);
             //Logger.Instance.ToFile();
 
             //var vertex = map.Single(g => g is Vertex);
@@ -230,10 +203,7 @@ namespace VoronoiTests
         [Test]
         public void TestCreateVoronoiMapVertexException()
         {
-            var factory = new VoronoiFactory(
-                   new SiteEventHandlerStrategy(),
-                   new CircleEventHandlerStrategy(),
-                   new SiteGenerator());
+            var factory = new VoronoiFactory();
 
             var sites = new List<Site>
             {
@@ -243,21 +213,18 @@ namespace VoronoiTests
                 new Site { Point = new Point {X = 53, Y = 66 } }
             };
 
-            var map = factory.CreateVoronoiMap(sites);
+            var map = factory.CreateVoronoiMap(200, 200, sites);
             //Logger.Instance.ToFile();
 
             var vertices = map.Where(g => g is Vertex).OrderBy(v => v.Point.X).ToList();
-            Assert.AreEqual(new Point { X = 79, Y = 130 }, vertices[0].Point);
+            Assert.AreEqual(new Point { X = 79, Y = 130 }, vertices[1].Point);
             //Assert.AreEqual(new Point { X = -122, Y = 172 }, vertices[0].Point);
         }
-        
+
         [Test]
         public void TestCreateVoronoiMapInfiniteProcessing()
         {
-            var factory = new VoronoiFactory(
-                   new SiteEventHandlerStrategy(),
-                   new CircleEventHandlerStrategy(),
-                   new SiteGenerator());
+            var factory = new VoronoiFactory();
 
             var sites = new List<Site>
             {
@@ -267,7 +234,7 @@ namespace VoronoiTests
                 new Site { Point = new Point {X = 56, Y = 113 } }
             };
 
-            var map = factory.CreateVoronoiMap(sites);
+            var map = factory.CreateVoronoiMap(200, 200, sites);
             //Logger.Instance.ToFile();
 
             //var vertices = map.Where(g => g is Vertex).ToList();

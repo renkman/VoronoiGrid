@@ -23,9 +23,9 @@ namespace VoronoiViewer
             return sites;
         }
 
-        public VoronoiMap CreateDiagram(ICollection<Site> sites)
+        public VoronoiMap CreateDiagram(int width, int height, ICollection<Site> sites)
         {
-            var diagram = _voronoiFactory.CreateVoronoiMap(sites);
+            var diagram = _voronoiFactory.CreateVoronoiMap(width, height, sites);
             return diagram;
         }
     }
