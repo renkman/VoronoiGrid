@@ -91,24 +91,31 @@ namespace VoronoiTests
             Assert.AreEqual(3, map.Count(g => g is HalfEdge));
 
             // Found circle event for arcs: 
-            // Leaf: Point: X: 110, Y: 150, CircleEvent: Point: X: 136, Y: 83, 
-            // Leaf: Point: X: 95, Y: 75, CircleEvent: Point: X: 146, Y: 46, 
-            // Leaf: Point: X: 130, Y: 160, CircleEvent:  at Point: Point: X: 146, Y: 46 and Vertex: Point: X: 146, Y: 104
+            // Leaf: Point: X: 95, Y: 75, CircleEvent: , 
+            // Leaf: Point: X: 130, Y: 160, CircleEvent: Point: X: 146, Y: 46, 
+            // Leaf: Point: X: 110, Y: 150, CircleEvent: Point: X: 136, Y: 83 
+            // at Point: Point: X: 146, Y: 46 and Vertex: Point: X: 146, Y: 104
             // Add Vertex: Point: X: 146, Y: 104, Half Edges: Point: X: 85, Y: 74, Point: X: 49, Y: 149, Point: X: 78, Y: 74
 
-            var left2 = new HalfEdge(new Point { X = 74, Y = 139 }, new Point { X = 110, Y = 150 }, new Point { X = 95, Y = 75 });
-            var center2 = new HalfEdge(new Point { X = 61, Y = 139 }, new Point { X = 170, Y = 140 }, new Point { X = 110, Y = 150 });
+            var left2 = new HalfEdge(new Point { X = 85, Y = 74 }, new Point { X = 95, Y = 75 }, new Point { X = 130, Y = 160 });
+            var center2 = new HalfEdge(new Point { X = 78, Y = 74 }, new Point { X = 95, Y = 75 }, new Point { X = 110, Y = 150 });
             var right2 = new HalfEdge(new Point { X = 49, Y = 149 }, new Point { X = 130, Y = 160 }, new Point { X = 110, Y = 150 });
             var vertex2 = new Vertex
             {
                 Point = new Point { X = 146, Y = 104 },
             };
-            vertex2.HalfEdges.Add(left);
-            left2.End = vertex;
-            vertex2.HalfEdges.Add(center);
-            center2.Start = vertex;
-            vertex2.HalfEdges.Add(right);
-            right2.End = vertex;
+            vertex2.HalfEdges.Add(left2);
+            left2.End = vertex2;
+            vertex2.HalfEdges.Add(center2);
+            center2.Start = vertex2;
+            vertex2.HalfEdges.Add(right2);
+            right2.End = vertex2;
+
+            map.Add(vertex2);
+
+            Assert.AreEqual(7, map.Count());
+            Assert.AreEqual(2, map.Count(g => g is Vertex));
+            Assert.AreEqual(5, map.Count(g => g is HalfEdge));
         }
     }
 }
