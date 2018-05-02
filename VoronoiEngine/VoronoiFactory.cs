@@ -94,11 +94,11 @@ namespace VoronoiEngine
                 map.Add(vertex);
             }
 
-            var openEnds = map.Where(g => g is HalfEdge).Cast<HalfEdge>().ToList();
-            foreach(var halfEdge in openEnds)
-            {
-                _boundingBoxService.AttachHalfEdge(halfEdge, height, width);
-            }
+            //var openEnds = map.Where(g => g is HalfEdge).Cast<HalfEdge>().ToList();
+            //foreach(var halfEdge in openEnds)
+            //{
+            //    _boundingBoxService.AttachHalfEdge(halfEdge, height, width);
+            //}
 
             _logger.Log("Finished Voronoi map creation");
 

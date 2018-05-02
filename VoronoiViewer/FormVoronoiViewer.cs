@@ -90,13 +90,30 @@ namespace VoronoiViewer
                 {
                     var halfEdgeBrush = new SolidBrush(Color.FromArgb(255, 0, 255, 0));
                     var vertexBrush = new SolidBrush(Color.FromArgb(255, 255, 0, 0));
+                    var pen = new Pen(halfEdgeBrush);
 
                     foreach (var geo in map)
                     {
-                        if (geo is Vertex)
+                        if(geo is Vertex)
                             graphics.FillRectangle(vertexBrush, geo.Point.X * _factorX, _canvas.Height - (geo.Point.Y * _factorY), _factorX, _factorY);
-                        if (geo is HalfEdge && geo.Point.X > 0 && geo.Point.X < _canvas.Width && geo.Point.X > 0 && geo.Point.X < _canvas.Height)
-                            graphics.FillRectangle(halfEdgeBrush, geo.Point.X * _factorX, _canvas.Height - (geo.Point.Y * _factorY), _factorX, _factorY);
+
+                            var halfEdge = geo as HalfEdge;
+
+                        if (halfEdge == null)
+                            continue;
+
+                        var startX = (halfEdge.Start != null ? halfEdge.Start.Point.X : halfEdge.Point.X) * _factorX;
+                        var startY = _canvas.Height - (halfEdge.Start != null ? halfEdge.Start.Point.Y : halfEdge.Point.Y) * _factorY;
+                        var endX = (halfEdge.End !=null ? halfEdge.End.Point.X : halfEdge.Point.X) * _factorX;
+                        var endY = _canvas.Height - (halfEdge.End != null ? halfEdge.End.Point.Y : halfEdge.Point.Y) * _factorY;
+
+                        //if (startX > 0 || startX < _canvas.Width || startY > 0 || startY < _canvas.Height || endX > 0 || endX < _canvas.Width || endY > 0 || endY < _canvas.Height)
+                            graphics.DrawLine(pen, new PointF(startX, startY), new PointF(endX, endY));
+
+                        //graphics.FillRectangle(vertexBrush, geo.Point.X * _factorX, _canvas.Height - (geo.Point.Y * _factorY), _factorX, _factorY);
+
+                        //if (geo is HalfEdge && geo.Point.X > 0 && geo.Point.X < _canvas.Width && geo.Point.X > 0 && geo.Point.X < _canvas.Height)
+                        //    graphics.FillRectangle(halfEdgeBrush, geo.Point.X * _factorX, _canvas.Height - (geo.Point.Y * _factorY), _factorX, _factorY);
                     }
                 }
             }

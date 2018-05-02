@@ -24,10 +24,12 @@ namespace VoronoiEngine.EventHandler
             if (sweepEvent.LeftArc.CircleEvent != null)
             {
                 eventQueue.Remove(sweepEvent.LeftArc.CircleEvent);
+                sweepEvent.LeftArc.CircleEvent = null;
             }
             if (sweepEvent.RightArc.CircleEvent != null)
             {
                 eventQueue.Remove(sweepEvent.RightArc.CircleEvent);
+                sweepEvent.RightArc.CircleEvent = null;
             }
 
             var leftCircleEvent = beachLine.GenerateSingleCircleEvent(sweepEvent.LeftArc);
