@@ -11,12 +11,12 @@ namespace VoronoiEngine.Geomerty
         public CircleEvent DetermineCircleEvent(ICollection<INode> arcs)
         {
             var leaves = arcs.Cast<Leaf>().Select(l => l).ToList();
-            var sites = leaves.Select(l => l.Site).OrderBy(s => s.X).Distinct().ToList();
+            var sites = leaves.Select(l => l.Site).ToList(); //.OrderBy(s => s.X).Distinct().ToList();
 
             if (sites.Count != 3)
                 return null;
 
-            //// Check if the breakpoints of the three consecutive arcs converge
+            // Check if the breakpoints of the three consecutive arcs converge
             //if (!CheckConversion(sites[0], sites[1], sites[2]))
             //    return null;
 
@@ -60,7 +60,7 @@ namespace VoronoiEngine.Geomerty
             circumcenter.Y = (int)Math.Round((slopeAC * circumcenter.X) + ac);
             return circumcenter;
         }
-
+        
         private static Point CalculateCircle(Point circumcenter, Point point)
         {
             var a = point.Y - circumcenter.Y;
@@ -71,9 +71,7 @@ namespace VoronoiEngine.Geomerty
 
         private static bool CheckConversion(Point a, Point b, Point c)
         {
-            if ((b.X - a.X) * (c.Y - a.Y) > (c.X - a.X) * (b.Y - a.Y))
-                return false;
-            return true;
+            return ((b.X - a.X) * (c.Y - a.Y) > (c.X - a.X) * (b.Y - a.Y));
         }
     }
 }

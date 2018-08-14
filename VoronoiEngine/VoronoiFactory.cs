@@ -23,9 +23,9 @@ namespace VoronoiEngine
         private readonly Logger _logger;
 
         public VoronoiFactory() : this(
-            new SiteEventHandlerStrategy(), 
-            new CircleEventHandlerStrategy(), 
-            new SiteGenerator(), 
+            new SiteEventHandlerStrategy(),
+            new CircleEventHandlerStrategy(),
+            new SiteGenerator(),
             new BoundingBoxService())
         {
         }
@@ -95,8 +95,10 @@ namespace VoronoiEngine
                 var vertex = _circleEventHandler.HandleEvent(circleEvent, _eventQueue, _beachLine);
                 var halfEdges = String.Join(", ", vertex.HalfEdges.Select(h => h.Point.ToString()).ToArray());
                 _logger.Log($"Add Vertex: {vertex.Point}, Half Edges: {halfEdges}");
+                
+                // Add vertex and new half edge
                 map.Add(vertex);
-                map.AddRange(vertex.HalfEdges);
+                map.Add(vertex.HalfEdges.Single(e => e.Start == vertex));
             }
 
             //var openEnds = map.Where(g => g is HalfEdge).Cast<HalfEdge>().ToList();

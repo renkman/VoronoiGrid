@@ -23,8 +23,8 @@ namespace VoronoiTests
             node3.Parent = parentDummy;
             var arcs = new INode[] { node1, node2, node3 };
 
-            var expectedVertex = new Point { X = 136, Y = 121 };
-            var expectedCricleEvent = new Point { X = 136, Y = 83 };
+            var expectedVertex = new Point { X = 136, Y = 122 };
+            var expectedCricleEvent = new Point { X = 136, Y = 84 };
 
             var service = new CircleEventCalculationService();
             var result = service.DetermineCircleEvent(arcs);
