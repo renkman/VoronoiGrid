@@ -23,6 +23,14 @@ namespace VoronoiEngine.Structures
             }
         }
 
+        public int Count
+        {
+            get
+            {
+                return _events.Count;
+            }
+        }
+
         public void Initialize(IEnumerable<Point> sites)
         {
             if (sites == null)

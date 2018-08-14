@@ -78,7 +78,11 @@ namespace VoronoiEngine
                 if (siteEvent != null)
                 {
                     _logger.Log($"Sweepline SiteEvent: {siteEvent.Point.ToString()}");
-                    _siteEventHandler.HandleEvent(siteEvent, _eventQueue, _beachLine);
+                    var halfEdge = _siteEventHandler.HandleEvent(siteEvent, _eventQueue, _beachLine);
+                    if (halfEdge == null)
+                        continue;
+                    _logger.Log($"Add Halfedge: {halfEdge.ToString()}");
+                    map.Add(halfEdge);
                     _logger.Log(_beachLine.ToString());
                     continue;
                 }
@@ -92,6 +96,7 @@ namespace VoronoiEngine
                 var halfEdges = String.Join(", ", vertex.HalfEdges.Select(h => h.Point.ToString()).ToArray());
                 _logger.Log($"Add Vertex: {vertex.Point}, Half Edges: {halfEdges}");
                 map.Add(vertex);
+                map.AddRange(vertex.HalfEdges);
             }
 
             //var openEnds = map.Where(g => g is HalfEdge).Cast<HalfEdge>().ToList();

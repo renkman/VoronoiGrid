@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using System.Collections.Generic;
 using System.Linq;
 using VoronoiEngine.Elements;
 using VoronoiEngine.EventHandler;
@@ -14,20 +15,23 @@ namespace VoronoiTests
         public void TestHandleEvent()
         {
             var beachLine = new BeachLine();
-            beachLine.InsertSite(new Point { X = 130, Y = 160 });
-            beachLine.InsertSite(new Point { X = 110, Y = 150 });
-            beachLine.InsertSite(new Point { X = 170, Y = 140 });
+            beachLine.InsertSite(new Point(4, 6));
+            var halfEdgeLeft = beachLine.InsertSite(new Point(6, 4));
+            var halfEdgeRight = beachLine.InsertSite(new Point(2, 3));
 
-            var centerLeaf = beachLine.Root.Find(new Point { X = 130, Y = 160 });
+            var centerLeaf = ((Node)((Node)((Node)beachLine.Root).Left).Left).Right;
 
             var sweepEvent = new CircleEvent
             {
-                LeftArc = new Leaf(new Point { X = 170, Y = 140 }),
+                LeftArc = new Leaf(new Point(2, 3)),
                 CenterArc = (Leaf)centerLeaf,
-                RightArc = new Leaf(new Point { X = 110, Y = 150 }),
-                Parents = null,
-                Point = new Point { X = 136, Y = 83 },
-                Vertex = new Point { X = 136, Y = 121 }
+                RightArc = new Leaf(new Point(6, 4)),
+                Edges = new List<HalfEdge> {
+                    halfEdgeLeft,
+                    halfEdgeRight
+                },
+                Point = new Point(4, 2),
+                Vertex = new Point(4, 4)
             };
             var eventQueue = new EventQueue();
 
@@ -40,24 +44,13 @@ namespace VoronoiTests
 
             var start = result.HalfEdges.Single(h => h.Start != null);
             Assert.IsNull(start.End);
-            Assert.AreEqual(new Point { X = 170, Y = 140 }, start.Left);
-            Assert.AreEqual(new Point { X = 110, Y = 150 }, start.Right);
-            Assert.AreEqual(new Point { X = 61, Y = 139 }, start.Point);
+            Assert.AreEqual(new Point(2, 3), start.Left);
+            Assert.AreEqual(new Point(6, 4), start.Right);
 
             var ends = result.HalfEdges.Where(h => h.End != null);
             Assert.AreEqual(2, ends.Count());
             Assert.IsTrue(!ends.Contains(start));
             Assert.IsTrue(ends.All(h => h.Start == null));
-
-            var left = ends.Single(h => h.Point.Equals(new Point { X = 74, Y = 139 }));
-            Assert.AreEqual(new Point { X = 170, Y = 140 }, left.Left);
-            Assert.AreEqual(new Point { X = 130, Y = 160 }, left.Right);
-            Assert.AreEqual(new Point { X = 74, Y = 139 }, left.Point);
-
-            var right = ends.Single(h => h.Point.Equals(new Point { X = 49, Y = 149 }));
-            Assert.AreEqual(new Point { X = 130, Y = 160 }, right.Left);
-            Assert.AreEqual(new Point { X = 110, Y = 150 }, right.Right);
-            Assert.AreEqual(new Point { X = 49, Y = 149 }, right.Point);
         }
     }
 }

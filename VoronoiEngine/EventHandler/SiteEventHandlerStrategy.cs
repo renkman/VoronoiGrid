@@ -21,11 +21,11 @@ namespace VoronoiEngine.EventHandler
             }
 
             Logger.Instance.Log($"SiteEvent: {sweepEvent.Point.ToString()}: Insert site into beach line");
-            beachLine.InsertSite(sweepEvent.Point);
+            var halfEdge = beachLine.InsertSite(sweepEvent.Point);
 
             var circleEvents = beachLine.GenerateCircleEvent(sweepEvent.Point);
             eventQueue.Insert(circleEvents);
-            return null;
+            return halfEdge;
         }
     }
 }

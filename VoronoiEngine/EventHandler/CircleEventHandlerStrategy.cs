@@ -19,7 +19,7 @@ namespace VoronoiEngine.EventHandler
 
         public Vertex HandleEvent(CircleEvent sweepEvent, EventQueue eventQueue, BeachLine beachLine)
         {
-            beachLine.RemoveLeaf(sweepEvent.CenterArc);
+            var parentNode = beachLine.RemoveLeaf(sweepEvent.CenterArc);
 
             if (sweepEvent.LeftArc.CircleEvent != null)
             {
@@ -31,7 +31,7 @@ namespace VoronoiEngine.EventHandler
                 eventQueue.Remove(sweepEvent.RightArc.CircleEvent);
                 sweepEvent.RightArc.CircleEvent = null;
             }
-
+                        
             var leftCircleEvent = beachLine.GenerateSingleCircleEvent(sweepEvent.LeftArc);
             var rightCircleEvent = beachLine.GenerateSingleCircleEvent(sweepEvent.RightArc);
 
@@ -39,12 +39,22 @@ namespace VoronoiEngine.EventHandler
             eventQueue.Insert(rightCircleEvent);
 
             var vertex = new Vertex { Point = sweepEvent.Vertex };
+            foreach(var edge in sweepEvent.Edges)
+                ConnectHalfEdgeWithVertex(edge, vertex, (e, v) => e.End = v);
 
-            CreateHalfEdge(sweepEvent.LeftArc.Site, sweepEvent.CenterArc.Site, vertex, (h, p) => h.End = p);
-            CreateHalfEdge(sweepEvent.CenterArc.Site, sweepEvent.RightArc.Site, vertex, (h, p) => h.End = p);
-            CreateHalfEdge(sweepEvent.LeftArc.Site, sweepEvent.RightArc.Site, vertex, (h, p) => h.Start = p);
-
+            // Add third half edge
+            var breakpoint = parentNode.CalculateBreakpoint(sweepEvent.Vertex.Y - 1);
+            var halfEdge = new HalfEdge(breakpoint, sweepEvent.LeftArc.Site, sweepEvent.RightArc.Site);
+            ConnectHalfEdgeWithVertex(halfEdge, vertex, (e, v) => e.Start = v);
+            parentNode.HalfEdge = halfEdge;
+            
             return vertex;
+        }
+
+        private void ConnectHalfEdgeWithVertex(HalfEdge edge, Vertex vertex, Action<HalfEdge, Vertex> setPoint)
+        {
+            setPoint(edge, vertex);
+            vertex.HalfEdges.Add(edge);
         }
 
         private void CreateHalfEdge(Point left, Point right, Vertex vertex, Action<HalfEdge, Vertex> setPoint)

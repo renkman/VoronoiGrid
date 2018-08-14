@@ -15,11 +15,17 @@ namespace VoronoiEngine.Elements
 
         public ICollection<HalfEdge> HalfEdges { get; }
 
+        public void AddHalfEdges(IEnumerable<HalfEdge> edges)
+        {
+            foreach (var edge in edges)
+                HalfEdges.Add(edge);
+        }
+
         public void Replace(IEnumerable<HalfEdge> halfEdges)
         {
             foreach (var halfEdge in halfEdges)
             {
-                var replacement = HalfEdges.SingleOrDefault(h => h == halfEdge);
+                var replacement = HalfEdges.SingleOrDefault(h => h.Equals(halfEdge));
                 if (replacement == null)
                     continue;
 

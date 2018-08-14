@@ -38,6 +38,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Elements\Cell.cs" />
     <Compile Include="Elements\HalfEdge.cs" />
     <Compile Include="Elements\IGeometry.cs" />
     <Compile Include="Elements\Site.cs" />

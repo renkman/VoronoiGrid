@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using VoronoiEngine.Elements;
 using VoronoiEngine.Utilities;
@@ -64,7 +61,6 @@ namespace VoronoiViewer
 
                 var brush = new SolidBrush(Color.FromArgb(255, 0, 0, 0));
 
-
                 _factorX = _canvas.Width / width;
                 _factorY = _canvas.Height / height;
                 foreach (var site in _session.Sites)
@@ -79,7 +75,7 @@ namespace VoronoiViewer
         {
             if (_session.Sites == null)
                 return;
-            
+
             try
             {
                 var map = _voronoiService.CreateDiagram(_canvas.Height / _factorY, _canvas.Width / _factorX, _session.Sites);
@@ -94,21 +90,21 @@ namespace VoronoiViewer
 
                     foreach (var geo in map)
                     {
-                        if(geo is Vertex)
+                        if (geo is Vertex)
                             graphics.FillRectangle(vertexBrush, geo.Point.X * _factorX, _canvas.Height - (geo.Point.Y * _factorY), _factorX, _factorY);
 
-                            var halfEdge = geo as HalfEdge;
+                        var halfEdge = geo as HalfEdge;
 
                         if (halfEdge == null)
                             continue;
 
                         var startX = (halfEdge.Start != null ? halfEdge.Start.Point.X : halfEdge.Point.X) * _factorX;
                         var startY = _canvas.Height - (halfEdge.Start != null ? halfEdge.Start.Point.Y : halfEdge.Point.Y) * _factorY;
-                        var endX = (halfEdge.End !=null ? halfEdge.End.Point.X : halfEdge.Point.X) * _factorX;
+                        var endX = (halfEdge.End != null ? halfEdge.End.Point.X : halfEdge.Point.X) * _factorX;
                         var endY = _canvas.Height - (halfEdge.End != null ? halfEdge.End.Point.Y : halfEdge.Point.Y) * _factorY;
 
                         //if (startX > 0 || startX < _canvas.Width || startY > 0 || startY < _canvas.Height || endX > 0 || endX < _canvas.Width || endY > 0 || endY < _canvas.Height)
-                            graphics.DrawLine(pen, new PointF(startX, startY), new PointF(endX, endY));
+                        graphics.DrawLine(pen, new PointF(startX, startY), new PointF(endX, endY));
 
                         //graphics.FillRectangle(vertexBrush, geo.Point.X * _factorX, _canvas.Height - (geo.Point.Y * _factorY), _factorX, _factorY);
 
@@ -117,7 +113,7 @@ namespace VoronoiViewer
                     }
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 textBoxLog.Text += $"{Environment.NewLine}{exception.Message}{Environment.NewLine}{Environment.NewLine}{exception.Source}{Environment.NewLine}{Environment.NewLine}{exception.TargetSite}{Environment.NewLine}{exception.StackTrace}{Environment.NewLine}";
                 Logger.Instance.ToFile();

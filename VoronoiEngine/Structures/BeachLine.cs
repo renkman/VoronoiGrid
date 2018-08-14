@@ -38,7 +38,7 @@ namespace VoronoiEngine.Structures
             return arc.CircleEvent;
         }
 
-        public void InsertSite(Point point)
+        public HalfEdge InsertSite(Point point)
         {
             var leaf = new Leaf(point);
 
@@ -47,21 +47,33 @@ namespace VoronoiEngine.Structures
             {
                 Root = leaf;
                 _logger.Log($"Add {leaf.Site.ToString()} as Root");
-                return;                
+                return null;                
             }
 
             // Add site to existing tree
             var rootNode = Root as Node;
             if (rootNode != null)
             {
-                rootNode.Insert(point, ReplaceLeaf);
-                return;
+                var halfEdge = rootNode.Insert(point, ReplaceLeaf);
+                return halfEdge;
             }
 
             var rootLeaf = Root as Leaf;
             var node = new Node(null);
-            Root = node;
-            ReplaceLeaf(node, leaf, rootLeaf);
+            Root = node;           
+            ReplaceLeaf(node, leaf, rootLeaf, null);
+
+            // Create half edges and add them to the new nodes
+            var breakpoint = node.CalculateBreakpoint(point.Y);
+            var pointXPos = point.CompareTo(breakpoint);
+            var left = pointXPos < 0 ? leaf.Site : rootLeaf.Site;
+            var right = pointXPos >= 0 ? leaf.Site : rootLeaf.Site;
+            var edge = new HalfEdge(breakpoint, left, right);
+
+            node.HalfEdge = edge;
+            ((Node)node.Left).HalfEdge = edge;
+
+            return edge;
         }
 
         public ICollection<CircleEvent> GenerateCircleEvent(Point site)
@@ -133,7 +145,7 @@ namespace VoronoiEngine.Structures
             return circleEvent;
         }
 
-        public void RemoveLeaf(Leaf leaf)
+        public Node RemoveLeaf(Leaf leaf)
         {
             var parent = leaf.Parent as Node;
             var parentParent = parent.Parent as Node;
@@ -141,8 +153,11 @@ namespace VoronoiEngine.Structures
             parent.Parent = null;
 
             RemoveLeaf(leaf, parent, parentParent, parent.Left == leaf);
+            if (parentParent == null)
+                return null;
 
-            parentParent?.UpdateBreakpoints();         
+            parentParent.UpdateBreakpoints();
+            return parentParent;
         }
 
         public override string ToString()
@@ -179,7 +194,7 @@ namespace VoronoiEngine.Structures
                 parentParent.Right = sibling;
         }
 
-        private void ReplaceLeaf(Node subRoot, Leaf newLeaf, Leaf arc)
+        private void ReplaceLeaf(Node subRoot, Leaf newLeaf, Leaf arc, HalfEdge edge)
         {
             _logger.Log($"Replace leaf {arc.ToString()} with leaf {newLeaf.ToString()}");
             
@@ -194,6 +209,7 @@ namespace VoronoiEngine.Structures
             subRoot.Right = arc;
             subRoot.Breakpoint.Left = newLeaf.Site;
             subRoot.Breakpoint.Right = arc.Site;
+            subRoot.HalfEdge = edge;
             //subRoot.HalfEdges.Left = newLeafHalfEdge;
             //subRoot.HalfEdges.Right = arcHalfEdge;
             arc.Parent = subRoot;
@@ -203,6 +219,7 @@ namespace VoronoiEngine.Structures
             node.Right = newLeaf;
             node.Breakpoint.Left = arcClone.Site;
             node.Breakpoint.Right = newLeaf.Site;
+            node.HalfEdge = edge;
             node.Left.Parent = node;
             newLeaf.Parent = node;
             //node.HalfEdges.Left = arcHalfEdge;

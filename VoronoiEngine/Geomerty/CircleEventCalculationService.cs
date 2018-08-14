@@ -32,7 +32,7 @@ namespace VoronoiEngine.Geomerty
                 LeftArc = leaves[0],
                 CenterArc = leaves[1],
                 RightArc = leaves[2],
-                Parents = leaves.Select(l => l.Parent).Cast<Node>().ToList()
+                Edges = leaves.Select(l => l.Parent).Cast<Node>().Select(n => n.HalfEdge).Distinct().ToList()
             };
             leaves[1].CircleEvent = circleEvent;
             return circleEvent;

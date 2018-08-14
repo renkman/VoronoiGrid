@@ -68,6 +68,7 @@ namespace VoronoiTests
         }
         
         [Test]
+        [Ignore("Obsolete test case")]
         public void TestAddVertex()
         {
             var left = new HalfEdge(new Point { X = 74, Y = 139 }, new Point { X = 170, Y = 140 }, new Point { X = 130, Y = 160 });

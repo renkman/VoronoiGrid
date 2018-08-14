@@ -17,6 +17,8 @@ namespace VoronoiEngine.Elements
         public INode Right { get; set; }
 
         public Tuple<Point> Breakpoint { get; }
+
+        public HalfEdge HalfEdge { get; set; }
         
         public Node(Node parent)
         {
@@ -126,9 +128,10 @@ namespace VoronoiEngine.Elements
             }
         }
 
-        public void Insert(Point site, Action<Node, Leaf, Leaf> replace)
+        public HalfEdge Insert(Point site, Action<Node, Leaf, Leaf, HalfEdge> replace)
         {
             var breakpoint = CalculateBreakpoint(site.Y);
+            HalfEdge edge = null;
 
             if (site.CompareTo(breakpoint) < 0)
             {
@@ -136,16 +139,17 @@ namespace VoronoiEngine.Elements
                 {
                     var leftNode = Left as Node;
                     if (leftNode != null)
-                        leftNode.Insert(site, replace);
+                        edge = leftNode.Insert(site, replace);
                     else
                     {
                         var leftLeaf = Left as Leaf;
-                        ReplaceLeaf(site, leftLeaf, true, replace);
+                        edge = new HalfEdge(breakpoint, site, leftLeaf.Site);
+                        ReplaceLeaf(site, leftLeaf, true, edge, replace);
                         //if (Breakpoint.Left.CompareTo(site) == -1)
-                        //    Breakpoint.Left = site;
+                        //    Breakpoint.Left = site;                        
                     }
                 }
-                return;
+                return edge;
             }
 
             if (Right == null)
@@ -153,17 +157,19 @@ namespace VoronoiEngine.Elements
 
             var rightNode = Right as Node;
             if (rightNode != null)
-                rightNode.Insert(site, replace);
+                edge = rightNode.Insert(site, replace);
             else
             {
                 var rightLeaf = Right as Leaf;
-                ReplaceLeaf(site, rightLeaf, false, replace);
+                edge = new HalfEdge(breakpoint, rightLeaf.Site, site);
+                ReplaceLeaf(site, rightLeaf, false, edge, replace);
                 //if (Breakpoint.Right.CompareTo(site) == -1)
                 //    Breakpoint.Right = site;
             }
+            return edge;
         }
 
-        private void ReplaceLeaf(Point site, Leaf arc, bool isLeft, Action<Node, Leaf, Leaf> replace)
+        private void ReplaceLeaf(Point site, Leaf arc, bool isLeft, HalfEdge edge, Action<Node, Leaf, Leaf, HalfEdge> replace)
         {
             var node = new Node(this);
             if (isLeft)
@@ -172,7 +178,7 @@ namespace VoronoiEngine.Elements
                 Right = node;
 
             var leaf = new Leaf(site);
-            replace(node, leaf, arc);
+            replace(node, leaf, arc, edge);
         }
 
         public void UpdateBreakpoints()

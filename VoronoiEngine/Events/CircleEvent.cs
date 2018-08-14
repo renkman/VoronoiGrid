@@ -10,6 +10,6 @@ namespace VoronoiEngine.Events
         public Leaf LeftArc { get; set; }
         public Leaf CenterArc { get; set; }
         public Leaf RightArc { get; set; }
-        public ICollection<Node> Parents { get; set; }
+        public ICollection<HalfEdge> Edges { get; set; }
     }
 }

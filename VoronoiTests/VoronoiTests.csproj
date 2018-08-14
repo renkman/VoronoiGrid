@@ -62,13 +62,16 @@
   <ItemGroup>
     <Compile Include="BeachLineTest.cs" />
     <Compile Include="BoundingBoxServiceTest.cs" />
+    <Compile Include="BreakpointCalculationServiceTest.cs" />
     <Compile Include="CircleEventCalculationServiceTest.cs" />
     <Compile Include="CircleEventHandlerStrategyTest.cs" />
     <Compile Include="EventQueueTest.cs" />
     <Compile Include="PointTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="NodeTest.cs" />
+    <Compile Include="SiteEventHandlerStrategyTest.cs" />
     <Compile Include="SiteGeneratorTest.cs" />
+    <Compile Include="VertexTest.cs" />
     <Compile Include="VoronoiFactoryTest.cs" />
     <Compile Include="VoronoiMapTest.cs" />
   </ItemGroup>
