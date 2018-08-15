@@ -11,7 +11,7 @@ namespace VoronoiEngine.Geomerty
         public CircleEvent DetermineCircleEvent(ICollection<INode> arcs)
         {
             var leaves = arcs.Cast<Leaf>().Select(l => l).ToList();
-            var sites = leaves.Select(l => l.Site).ToList(); //.OrderBy(s => s.X).Distinct().ToList();
+            var sites = leaves.Select(l => l.Site).Distinct().ToList(); //.OrderBy(s => s.X).Distinct().ToList();
 
             if (sites.Count != 3)
                 return null;
@@ -57,7 +57,7 @@ namespace VoronoiEngine.Geomerty
 
             var circumcenter = new Point();
             circumcenter.X = (int)Math.Round(-x);
-            circumcenter.Y = (int)Math.Round((slopeAC * circumcenter.X) + ac);
+            circumcenter.Y = (int)Math.Round(slopeAC * circumcenter.X + ac);
             return circumcenter;
         }
         
@@ -71,7 +71,7 @@ namespace VoronoiEngine.Geomerty
 
         private static bool CheckConversion(Point a, Point b, Point c)
         {
-            return ((b.X - a.X) * (c.Y - a.Y) > (c.X - a.X) * (b.Y - a.Y));
+            return ((b.X - a.X) * (c.Y - a.Y) - (c.X - a.X) * (b.Y - a.Y) > 0);
         }
     }
 }

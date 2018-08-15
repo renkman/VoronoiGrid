@@ -133,8 +133,12 @@ namespace VoronoiEngine.Structures
                 return null;
 
             var arcs = new List<INode> { leftArc, arc, rightArc };
-            if (arcs.Cast<Leaf>().Select(a=>a.Site).Distinct().Count() != 3)
+            var sites = arcs.Cast<Leaf>().Select(a=>a.Site).Distinct().ToList();
+            if (sites.Count != 3)
                 return null;
+
+            //if (!(sites[0].X < sites[1].X && sites[1].X < sites[2].X))
+            //    return null;
 
             var circleEvent = _circleEventCalculationService.DetermineCircleEvent(arcs);
             if (circleEvent == null)
