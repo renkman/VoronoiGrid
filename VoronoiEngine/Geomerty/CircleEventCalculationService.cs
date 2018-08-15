@@ -56,6 +56,8 @@ namespace VoronoiEngine.Geomerty
             var x = ad / slope;
 
             var circumcenter = new Point();
+            circumcenter.PrecisionX = -x;
+            circumcenter.PrecisionY = slopeAC * circumcenter.PrecisionX + ac;
             circumcenter.X = (int)Math.Round(-x);
             circumcenter.Y = (int)Math.Round(slopeAC * circumcenter.X + ac);
             return circumcenter;
@@ -63,10 +65,15 @@ namespace VoronoiEngine.Geomerty
         
         private static Point CalculateCircle(Point circumcenter, Point point)
         {
-            var a = point.Y - circumcenter.Y;
-            var b = point.X - circumcenter.X;
-            var radius = (int)Math.Sqrt(Math.Pow(a, 2) + Math.Pow(b, 2));
-            return new Point { X = circumcenter.X, Y = circumcenter.Y - radius };
+            var a = point.Y - circumcenter.PrecisionY;
+            var b = point.X - circumcenter.PrecisionX;
+            var radius = Math.Sqrt(Math.Pow(a, 2) + Math.Pow(b, 2));
+            return new Point {
+                X = circumcenter.X,
+                PrecisionX = circumcenter.PrecisionX,
+                Y = (int)Math.Round(circumcenter.PrecisionY - radius),
+                PrecisionY = Math.Round(circumcenter.PrecisionY - radius)
+            };
         }
 
         private static bool CheckConversion(Point a, Point b, Point c)

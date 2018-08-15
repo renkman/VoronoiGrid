@@ -26,9 +26,9 @@ namespace VoronoiEngine.EventHandler
             var rightCircleEvent = beachLine.GenerateSingleCircleEvent(sweepEvent.RightArc);
 
             // Only add circle events, that will appear under the sweepline
-            //if (leftCircleEvent?.Point.Y < sweepEvent.Point.Y)
+            if (leftCircleEvent?.Point.Y < sweepEvent.Point.Y)
                 eventQueue.Insert(leftCircleEvent);
-            //if (rightCircleEvent?.Point.Y < sweepEvent.Point.Y)
+            if (rightCircleEvent?.Point.Y < sweepEvent.Point.Y)
                 eventQueue.Insert(rightCircleEvent);
 
             var vertex = new Vertex { Point = sweepEvent.Vertex };

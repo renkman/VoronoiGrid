@@ -11,5 +11,7 @@ namespace VoronoiEngine.Events
         public Leaf CenterArc { get; set; }
         public Leaf RightArc { get; set; }
         public ICollection<HalfEdge> Edges { get; set; }
+
+        public double PrecisionVertex { get; set; }
     }
 }
