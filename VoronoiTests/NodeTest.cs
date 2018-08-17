@@ -15,10 +15,10 @@ namespace VoronoiTests
             node.Breakpoint.Left = new Point { X = 2, Y = 10 };
             node.Breakpoint.Right = new Point { X = 20, Y = 12 };
 
-            var result = node.CalculateBreakpoint(40);
+            var result = node.CalculateBreakpoint(5);
             Assert.IsNotNull(result);
-            Assert.AreEqual(10, result.X);
-            Assert.AreEqual(40, result.Y);
+            Assert.AreEqual(11, result.X);
+            Assert.AreEqual(5, result.Y);
         }
 
         [Test]

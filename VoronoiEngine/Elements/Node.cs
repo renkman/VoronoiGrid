@@ -45,7 +45,6 @@ namespace VoronoiEngine.Elements
                 return Right.Find(site);
 
             return null;
-            //throw new InvalidOperationException("Nodes without leaves must not exist!");
         }
 
         public void GetDescendants(Point start, TraverseDirection direction, ICollection<INode> descendants, int count)

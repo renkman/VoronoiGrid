@@ -158,27 +158,26 @@ namespace VoronoiTests
         }
 
         [Test]
-        //[Ignore("False alarm test should be clarified!")]
         public void TestFindCircleEventAbove()
         {
             var beachLine = new BeachLine();
             var site1 = new Point { X = 130, Y = 160 };
             var site2 = new Point { X = 110, Y = 150 };
             var site3 = new Point { X = 170, Y = 140 };
-            var site4 = new Point { X = 130, Y = 120 };
+            var site4 = new Point { X = 140, Y = 120 };
 
             beachLine.InsertSite(site1);
-            var circleEvents1 = beachLine.GenerateCircleEvent(site1);
+            beachLine.GenerateCircleEvent(site1);
             beachLine.InsertSite(site2);
-            var circleEvents2 = beachLine.GenerateCircleEvent(site2);
+            beachLine.GenerateCircleEvent(site2);
             beachLine.InsertSite(site3);
-            var circleEvents3 = beachLine.GenerateCircleEvent(site3);
+            var circleEvents = beachLine.GenerateCircleEvent(site3);
 
             var result = beachLine.FindCircleEventAbove(site4);
 
             Assert.IsNotNull(result);
-            //Assert.AreEqual(circleEvents.First().Point, result.Point);
-            //Assert.AreEqual(circleEvents.First().Vertex, result.Vertex);
+            Assert.AreEqual(circleEvents.Single().Point, result.Point);
+            Assert.AreEqual(circleEvents.Single().Vertex, result.Vertex);
         }
 
         [Test]
