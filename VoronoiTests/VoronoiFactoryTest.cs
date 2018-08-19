@@ -32,7 +32,7 @@ namespace VoronoiTests
 
             //Logger.Instance.ToFile();
             var halfEges = map.Where(g => g is HalfEdge).ToList();
-            Assert.AreEqual(3, halfEges.Count());
+            Assert.AreEqual(5, halfEges.Count());
         }
 
         [Test]
@@ -56,7 +56,7 @@ namespace VoronoiTests
             //Logger.Instance.ToFile();
 
             var halfEges = map.Where(g => g is HalfEdge).ToList();
-            Assert.AreEqual(3, halfEges.Count());
+            Assert.AreEqual(5, halfEges.Count());
         }
 
         [Test]
@@ -69,7 +69,7 @@ namespace VoronoiTests
                 new Site { Point = new Point {X = 130, Y = 160 } },
                 new Site { Point = new Point {X = 110, Y = 150 } },
                 new Site { Point = new Point {X = 170, Y = 140 } },
-                new Site { Point = new Point {X = 95, Y = 75 } }
+                new Site { Point = new Point {X = 95, Y = 130 } }
             };
 
             var map = factory.CreateVoronoiMap(200, 200, sites);
@@ -164,6 +164,7 @@ namespace VoronoiTests
         }
 
         [Test]
+        //[Ignore("Probably wrong test setup")]
         public void TestCreateVoronoiMapTwoVertexNegative()
         {
             var factory = new VoronoiFactory();

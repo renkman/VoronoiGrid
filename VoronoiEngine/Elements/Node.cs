@@ -127,10 +127,10 @@ namespace VoronoiEngine.Elements
             }
         }
 
-        public HalfEdge Insert(Point site, Action<Node, Leaf, Leaf, HalfEdge> replace)
+        public ICollection<HalfEdge> Insert(Point site, Func<Node, Leaf, Leaf, Point, ICollection<HalfEdge>> replace)
         {
             var breakpoint = CalculateBreakpoint(site.Y);
-            HalfEdge edge = null;
+            ICollection<HalfEdge> edges = null;
 
             if (site.CompareTo(breakpoint) < 0)
             {
@@ -138,17 +138,17 @@ namespace VoronoiEngine.Elements
                 {
                     var leftNode = Left as Node;
                     if (leftNode != null)
-                        edge = leftNode.Insert(site, replace);
+                        edges = leftNode.Insert(site, replace);
                     else
                     {
                         var leftLeaf = Left as Leaf;
-                        edge = new HalfEdge(breakpoint, site, leftLeaf.Site);
-                        ReplaceLeaf(site, leftLeaf, true, edge, replace);
+
+                        edges = ReplaceLeaf(site, leftLeaf, true, breakpoint, replace);
                         //if (Breakpoint.Left.CompareTo(site) == -1)
                         //    Breakpoint.Left = site;                        
                     }
                 }
-                return edge;
+                return edges;
             }
 
             if (Right == null)
@@ -156,28 +156,33 @@ namespace VoronoiEngine.Elements
 
             var rightNode = Right as Node;
             if (rightNode != null)
-                edge = rightNode.Insert(site, replace);
+                edges = rightNode.Insert(site, replace);
             else
             {
                 var rightLeaf = Right as Leaf;
-                edge = new HalfEdge(breakpoint, rightLeaf.Site, site);
-                ReplaceLeaf(site, rightLeaf, false, edge, replace);
+                edges = ReplaceLeaf(site, rightLeaf, false, breakpoint, replace);
                 //if (Breakpoint.Right.CompareTo(site) == -1)
                 //    Breakpoint.Right = site;
             }
-            return edge;
+            return edges;
         }
 
-        private void ReplaceLeaf(Point site, Leaf arc, bool isLeft, HalfEdge edge, Action<Node, Leaf, Leaf, HalfEdge> replace)
+        private ICollection<HalfEdge> ReplaceLeaf(Point site, Leaf arc, bool isLeft, Point breakpoint, Func<Node, Leaf, Leaf, Point, ICollection<HalfEdge>> replace)
         {
             var node = new Node(this);
             if (isLeft)
+            {
                 Left = node;
+                HalfEdge = new HalfEdge(breakpoint, site, arc.Site);
+            }
             else
+            {
                 Right = node;
+                HalfEdge = new HalfEdge(breakpoint, arc.Site, site);
+            }
 
             var leaf = new Leaf(site);
-            replace(node, leaf, arc, edge);
+            return replace(node, leaf, arc, breakpoint);
         }
 
         public void UpdateBreakpoints()

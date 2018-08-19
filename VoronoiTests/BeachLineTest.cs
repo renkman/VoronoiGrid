@@ -36,8 +36,8 @@ namespace VoronoiTests
             var root = beachLine.Root as Node;
             Assert.IsNotNull(root);
             Assert.IsNotNull(root.HalfEdge);
-            Assert.AreEqual(site1, root.HalfEdge.Left);
-            Assert.AreEqual(site2, root.HalfEdge.Right);
+            Assert.AreEqual(site1, root.HalfEdge.Right);
+            Assert.AreEqual(site2, root.HalfEdge.Left);
 
             var nodeLeft = root.Left as Node;
             Assert.IsNotNull(nodeLeft);

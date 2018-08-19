@@ -104,7 +104,8 @@ namespace VoronoiViewer
                         var endY = _canvas.Height - (halfEdge.End != null ? halfEdge.End.Point.Y : halfEdge.Point.Y) * _factorY;
 
                         //if (startX > 0 || startX < _canvas.Width || startY > 0 || startY < _canvas.Height || endX > 0 || endX < _canvas.Width || endY > 0 || endY < _canvas.Height)
-                        graphics.DrawLine(pen, new PointF(startX, startY), new PointF(endX, endY));
+                        if (startX > 0 && startY > 0)
+                            graphics.DrawLine(pen, new PointF(startX, startY), new PointF(endX, endY));
 
                         //graphics.FillRectangle(vertexBrush, geo.Point.X * _factorX, _canvas.Height - (geo.Point.Y * _factorY), _factorX, _factorY);
 

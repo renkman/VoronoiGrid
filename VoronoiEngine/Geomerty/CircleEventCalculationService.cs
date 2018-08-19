@@ -17,8 +17,8 @@ namespace VoronoiEngine.Geomerty
                 return null;
 
             // Check if the breakpoints of the three consecutive arcs converge
-            //if (!CheckConversion(sites[0], sites[1], sites[2]))
-            //    return null;
+            if (!CheckConversion(sites[0], sites[1], sites[2]))
+                return null;
 
             var circumcenter = CalculateCircumcenter(sites[0], sites[1], sites[2]);
             if (circumcenter == null)
@@ -78,7 +78,9 @@ namespace VoronoiEngine.Geomerty
 
         private static bool CheckConversion(Point a, Point b, Point c)
         {
-            return ((b.X - a.X) * (c.Y - a.Y) - (c.X - a.X) * (b.Y - a.Y) > 0);
+            //  (x2 − x1)(y2 + y1) + (x3 − x2)(y3 + y2) < 0 -> Counter clockwise
+            return (b.X - a.X) * (b.Y + a.Y) + (c.X - b.X) * (c.Y + b.Y) < 0;
+            //return ((b.X - a.X) * (c.Y - a.Y) - (c.X - a.X) * (b.Y - a.Y) > 0);
         }
     }
 }

@@ -16,8 +16,8 @@ namespace VoronoiTests
         {
             var beachLine = new BeachLine();
             beachLine.InsertSite(new Point(4, 6));
-            var halfEdgeLeft = beachLine.InsertSite(new Point(6, 4));
-            var halfEdgeRight = beachLine.InsertSite(new Point(2, 3));
+            var halfEdgesLeft = beachLine.InsertSite(new Point(6, 4)).ToList();
+            var halfEdgesRight = beachLine.InsertSite(new Point(2, 3)).ToList();
 
             var centerLeaf = ((Node)((Node)((Node)beachLine.Root).Left).Left).Right;
 
@@ -27,8 +27,8 @@ namespace VoronoiTests
                 CenterArc = (Leaf)centerLeaf,
                 RightArc = new Leaf(new Point(6, 4)),
                 Edges = new List<HalfEdge> {
-                    halfEdgeLeft,
-                    halfEdgeRight
+                    halfEdgesLeft[1],
+                    halfEdgesRight[1]
                 },
                 Point = new Point(4, 2),
                 Vertex = new Point(4, 4)
@@ -36,18 +36,18 @@ namespace VoronoiTests
             var eventQueue = new EventQueue();
 
             var strategy = new CircleEventHandlerStrategy();
-            var result = strategy.HandleEvent(sweepEvent, eventQueue, beachLine);
+            var result = strategy.HandleEvent(sweepEvent, eventQueue, beachLine).ToList();
 
             Assert.IsNotNull(result);
-            Assert.AreEqual(sweepEvent.Vertex, result.Point);
-            Assert.AreEqual(3, result.HalfEdges.Count);
+            Assert.AreEqual(sweepEvent.Vertex, result[0].Point);
+            Assert.AreEqual(3, result.Single().HalfEdges.Count);
 
-            var start = result.HalfEdges.Single(h => h.Start != null);
+            var start = result.Single().HalfEdges.Single(h => h.Start != null);
             Assert.IsNull(start.End);
             Assert.AreEqual(new Point(2, 3), start.Left);
             Assert.AreEqual(new Point(6, 4), start.Right);
 
-            var ends = result.HalfEdges.Where(h => h.End != null);
+            var ends = result.Single().HalfEdges.Where(h => h.End != null);
             Assert.AreEqual(2, ends.Count());
             Assert.IsTrue(!ends.Contains(start));
             Assert.IsTrue(ends.All(h => h.Start == null));

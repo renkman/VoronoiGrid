@@ -82,7 +82,7 @@ namespace VoronoiEngine
                     if (halfEdge == null)
                         continue;
                     _logger.Log($"Add Halfedge: {halfEdge.ToString()}");
-                    map.Add(halfEdge);
+                    map.AddRange(halfEdge);
                     _logger.Log(_beachLine.ToString());
                     continue;
                 }
@@ -92,7 +92,7 @@ namespace VoronoiEngine
                     throw new InvalidOperationException("SweepEvent is neither SiteEvent nor CircleEvent");
 
                 _logger.Log($"Sweepline CircleEvent: {circleEvent.Point.ToString()}");
-                var vertex = _circleEventHandler.HandleEvent(circleEvent, _eventQueue, _beachLine);
+                var vertex = _circleEventHandler.HandleEvent(circleEvent, _eventQueue, _beachLine).Single();
                 var halfEdges = String.Join(", ", vertex.HalfEdges.Select(h => h.Point.ToString()).ToArray());
                 _logger.Log($"Add Vertex: {vertex.Point}, Half Edges: {halfEdges}");
                 

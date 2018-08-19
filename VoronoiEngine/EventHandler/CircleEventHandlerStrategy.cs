@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using VoronoiEngine.Elements;
 using VoronoiEngine.Events;
 using VoronoiEngine.Structures;
@@ -7,7 +8,7 @@ namespace VoronoiEngine.EventHandler
 {
     public class CircleEventHandlerStrategy : IEventHandlerStrategy<CircleEvent, Vertex>
     {
-        public Vertex HandleEvent(CircleEvent sweepEvent, EventQueue eventQueue, BeachLine beachLine)
+        public ICollection<Vertex> HandleEvent(CircleEvent sweepEvent, EventQueue eventQueue, BeachLine beachLine)
         {
             var parentNode = beachLine.RemoveLeaf(sweepEvent.CenterArc);
 
@@ -26,9 +27,9 @@ namespace VoronoiEngine.EventHandler
             var rightCircleEvent = beachLine.GenerateSingleCircleEvent(sweepEvent.RightArc);
 
             // Only add circle events, that will appear under the sweepline
-            if (leftCircleEvent?.Point.Y < sweepEvent.Point.Y)
+            //if (leftCircleEvent?.Point.Y < sweepEvent.Point.Y)
                 eventQueue.Insert(leftCircleEvent);
-            if (rightCircleEvent?.Point.Y < sweepEvent.Point.Y)
+            //if (rightCircleEvent?.Point.Y < sweepEvent.Point.Y)
                 eventQueue.Insert(rightCircleEvent);
 
             var vertex = new Vertex { Point = sweepEvent.Vertex };
@@ -41,7 +42,7 @@ namespace VoronoiEngine.EventHandler
             ConnectHalfEdgeWithVertex(halfEdge, vertex, (e, v) => e.Start = v);
             parentNode.HalfEdge = halfEdge;
 
-            return vertex;
+            return new List<Vertex> { vertex };
         }
 
         private void ConnectHalfEdgeWithVertex(HalfEdge edge, Vertex vertex, Action<HalfEdge, Vertex> setPoint)

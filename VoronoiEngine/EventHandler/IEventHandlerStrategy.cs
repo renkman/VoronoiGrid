@@ -9,6 +9,6 @@ namespace VoronoiEngine.EventHandler
         where TEvent : IEvent
         where TGeometry : IGeometry
     {
-        TGeometry HandleEvent(TEvent sweepEvent, EventQueue eventQueue, BeachLine beachLine);
+        ICollection<TGeometry> HandleEvent(TEvent sweepEvent, EventQueue eventQueue, BeachLine beachLine);
     }
 }

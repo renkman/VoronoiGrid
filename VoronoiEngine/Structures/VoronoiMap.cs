@@ -20,6 +20,12 @@ namespace VoronoiEngine.Structures
             //_map[element.Point] = element;
         }
 
+        public void AddRange(IEnumerable<IGeometry> elements)
+        {
+            _map.AddRange(elements);
+            //_map[element.Point] = element;
+        }
+
         //public void Add(Vertex vertex)
         //{
         //    //if (_map.ContainsKey(vertex.Point))
