@@ -193,11 +193,11 @@ namespace VoronoiEngine.Elements
             Breakpoint.Left = left;
             Breakpoint.Right = right;
 
-            if (Parent != null)
-            {
-                var parent = (Node)Parent;
-                parent.UpdateBreakpoints();
-            }
+            //if (Parent != null)
+            //{
+            //    var parent = (Node)Parent;
+            //    parent.UpdateBreakpoints();
+            //}
         }
 
         public override string ToString()
