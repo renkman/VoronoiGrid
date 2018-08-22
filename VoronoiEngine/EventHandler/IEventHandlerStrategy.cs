@@ -5,10 +5,9 @@ using VoronoiEngine.Structures;
 
 namespace VoronoiEngine.EventHandler
 {
-    public interface IEventHandlerStrategy<TEvent, TGeometry>
+    public interface IEventHandlerStrategy<TEvent>
         where TEvent : IEvent
-        where TGeometry : IGeometry
     {
-        ICollection<TGeometry> HandleEvent(TEvent sweepEvent, EventQueue eventQueue, BeachLine beachLine);
+        ICollection<IGeometry> HandleEvent(TEvent sweepEvent, EventQueue eventQueue, BeachLine beachLine);
     }
 }

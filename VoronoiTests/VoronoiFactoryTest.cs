@@ -126,7 +126,7 @@ namespace VoronoiTests
 
             Assert.IsNotNull(map);
             Assert.AreEqual(6, map.Count(g => g is Site));
-            //Assert.AreEqual(6, map.Count(g => g is Vertex));
+            Assert.AreEqual(6, map.Count(g => g is Vertex));
         }
 
         [Test]
@@ -164,7 +164,7 @@ namespace VoronoiTests
         }
 
         [Test]
-        //[Ignore("Probably wrong test setup")]
+        [Ignore("Negative vertex is not allowed")]
         public void TestCreateVoronoiMapTwoVertexNegative()
         {
             var factory = new VoronoiFactory();
@@ -241,6 +241,25 @@ namespace VoronoiTests
             //var vertices = map.Where(g => g is Vertex).ToList();
             //Assert.AreEqual(vertices[0].Point, new Point { X = 97, Y = 153 });
             //Assert.AreEqual(vertices[1].Point, new Point { X = 103, Y = 118 });
+        }
+
+        [Test]
+        public void TestCreateVoroniMapTwiceUsageEdgeVertex()
+        {
+            var factory = new VoronoiFactory();
+            // Point: X: 137, Y: 44, Point: X: 28, Y: 56, Point: X: 120, Y: 180, Point: X: 115, Y: 108, Point: X: 133, Y: 29, Point: X: 109, Y: 52
+            var sites = new List<Site>
+            {
+                new Site { Point = new Point(137, 44) },
+                new Site { Point = new Point (28, 56) },
+                new Site { Point = new Point (120, 180 ) },
+                new Site { Point = new Point (115, 108 ) },
+                new Site { Point = new Point (133, 29 )},
+                new Site { Point = new Point (109, 52 ) }
+            };
+
+            var map = factory.CreateVoronoiMap(200, 200, sites);
+            Logger.Instance.ToFile();        
         }
     }
 }

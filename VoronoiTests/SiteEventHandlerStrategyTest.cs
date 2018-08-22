@@ -53,7 +53,7 @@ namespace VoronoiTests
             };
 
             _strategy.HandleEvent(siteEvents[0], _eventQueue, _beachLine);
-            var edges = _strategy.HandleEvent(siteEvents[1], _eventQueue, _beachLine).ToList();
+            var edges = _strategy.HandleEvent(siteEvents[1], _eventQueue, _beachLine).Cast<HalfEdge>().ToList();
 
             Assert.IsNotNull(edges);
             Assert.AreEqual(siteEvents[0].Point, edges[1].Left);

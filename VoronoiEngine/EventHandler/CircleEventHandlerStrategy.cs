@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using VoronoiEngine.Elements;
 using VoronoiEngine.Events;
 using VoronoiEngine.Structures;
+using VoronoiEngine.Utilities;
 
 namespace VoronoiEngine.EventHandler
 {
-    public class CircleEventHandlerStrategy : IEventHandlerStrategy<CircleEvent, Vertex>
+    public class CircleEventHandlerStrategy : IEventHandlerStrategy<CircleEvent>
     {
-        public ICollection<Vertex> HandleEvent(CircleEvent sweepEvent, EventQueue eventQueue, BeachLine beachLine)
+        public ICollection<IGeometry> HandleEvent(CircleEvent sweepEvent, EventQueue eventQueue, BeachLine beachLine)
         {
             var parentNode = beachLine.RemoveLeaf(sweepEvent.CenterArc);
 
@@ -42,13 +43,20 @@ namespace VoronoiEngine.EventHandler
             ConnectHalfEdgeWithVertex(halfEdge, vertex, (e, v) => e.Start = v);
             parentNode.HalfEdge = halfEdge;
 
-            return new List<Vertex> { vertex };
+            if (vertex.HalfEdges.Count != 3)
+            {
+                var message = $"Halfedge {halfEdge} is already connected to Vertex {vertex}";
+                Logger.Instance.Log(message);
+                Logger.Instance.ToFile();
+                throw new InvalidOperationException(message);
+            }
+            return new List<IGeometry> { vertex, halfEdge };
         }
 
         private void ConnectHalfEdgeWithVertex(HalfEdge edge, Vertex vertex, Action<HalfEdge, Vertex> setPoint)
         {
             setPoint(edge, vertex);
-            vertex.HalfEdges.Add(edge);
+            vertex.HalfEdges.Add(edge);            
         }
     }
 }

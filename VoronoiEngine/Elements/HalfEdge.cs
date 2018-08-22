@@ -54,5 +54,10 @@ namespace VoronoiEngine.Elements
         //        return false;
         //    return !a.Equals(b);
         //}
+
+        public override string ToString()
+        {
+            return $"HalfEdge at Point: {Point}, Left: {Left}, Right: {Right}";
+        }
     }
 }

@@ -20,33 +20,10 @@ namespace VoronoiEngine.Elements
             foreach (var edge in edges)
                 HalfEdges.Add(edge);
         }
-
-        public void Replace(IEnumerable<HalfEdge> halfEdges)
+        
+        public override string ToString()
         {
-            foreach (var halfEdge in halfEdges)
-            {
-                var replacement = HalfEdges.SingleOrDefault(h => h.Equals(halfEdge));
-                if (replacement == null)
-                    continue;
-
-                var start = replacement.Start;
-                var end = replacement.End;
-
-                if (start != null && halfEdge.End == null)
-                    throw new InvalidOperationException("Only HalfEdges with End set must replace HalfEdges with Start set.");
-
-                if (end != null && halfEdge.Start == null)
-                    throw new InvalidOperationException("Only HalfEdges with Start set must replace HalfEdges with End set.");
-
-                HalfEdges.Remove(replacement);
-                HalfEdges.Add(halfEdge);
-
-                if (start != null)
-                    halfEdge.Start = start;
-
-                if (end != null)
-                    halfEdge.End = end;
-            }
+            return $"Vertex at Point: {Point}, HalfEdges: {string.Join(", ", HalfEdges.Select(h => h.ToString()).ToArray())}";
         }
     }
 }

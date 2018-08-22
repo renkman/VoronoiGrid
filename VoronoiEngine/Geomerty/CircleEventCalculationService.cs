@@ -21,10 +21,10 @@ namespace VoronoiEngine.Geomerty
                 return null;
 
             var circumcenter = CalculateCircumcenter(sites[0], sites[1], sites[2]);
-            if (circumcenter == null)
+            var circleEventPoint = CalculateCircle(circumcenter, sites[0]);
+            if (circleEventPoint.X < 0 || circleEventPoint.Y < 0)
                 return null;
 
-            var circleEventPoint = CalculateCircle(circumcenter, sites[0]);
             var circleEvent = new CircleEvent
             {
                 Point = circleEventPoint,

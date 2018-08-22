@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using VoronoiEngine.Elements;
 using VoronoiEngine.Events;
 using VoronoiEngine.Structures;
@@ -6,9 +7,9 @@ using VoronoiEngine.Utilities;
 
 namespace VoronoiEngine.EventHandler
 {
-    public class SiteEventHandlerStrategy : IEventHandlerStrategy<SiteEvent, HalfEdge>
+    public class SiteEventHandlerStrategy : IEventHandlerStrategy<SiteEvent>
     {
-        public ICollection<HalfEdge> HandleEvent(SiteEvent sweepEvent, EventQueue eventQueue, BeachLine beachLine)
+        public ICollection<IGeometry> HandleEvent(SiteEvent sweepEvent, EventQueue eventQueue, BeachLine beachLine)
         {
             var circleEvent = beachLine.FindCircleEventAbove(sweepEvent.Point);
             if (circleEvent != null)
@@ -22,7 +23,7 @@ namespace VoronoiEngine.EventHandler
 
             var circleEvents = beachLine.GenerateCircleEvent(sweepEvent.Point);
             eventQueue.Insert(circleEvents);
-            return halfEdges;
+            return halfEdges?.Cast<IGeometry>().ToList();
         }
     }
 }

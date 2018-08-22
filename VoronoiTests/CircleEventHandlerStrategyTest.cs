@@ -39,15 +39,16 @@ namespace VoronoiTests
             var result = strategy.HandleEvent(sweepEvent, eventQueue, beachLine).ToList();
 
             Assert.IsNotNull(result);
-            Assert.AreEqual(sweepEvent.Vertex, result[0].Point);
-            Assert.AreEqual(3, result.Single().HalfEdges.Count);
+            var vertex = ((Vertex)result.Single(g => g is Vertex));
+            Assert.AreEqual(sweepEvent.Vertex, vertex.Point);
+            Assert.AreEqual(3, vertex.HalfEdges.Count);
 
-            var start = result.Single().HalfEdges.Single(h => h.Start != null);
+            var start = vertex.HalfEdges.Single(h => h.Start != null);
             Assert.IsNull(start.End);
             Assert.AreEqual(new Point(2, 3), start.Left);
             Assert.AreEqual(new Point(6, 4), start.Right);
 
-            var ends = result.Single().HalfEdges.Where(h => h.End != null);
+            var ends = vertex.HalfEdges.Where(h => h.End != null);
             Assert.AreEqual(2, ends.Count());
             Assert.IsTrue(!ends.Contains(start));
             Assert.IsTrue(ends.All(h => h.Start == null));

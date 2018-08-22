@@ -16,8 +16,8 @@ namespace VoronoiEngine
         private EventQueue _eventQueue;
 
         private readonly ISiteGenerator _siteGenerator;
-        private readonly IEventHandlerStrategy<SiteEvent, HalfEdge> _siteEventHandler;
-        private readonly IEventHandlerStrategy<CircleEvent, Vertex> _circleEventHandler;
+        private readonly IEventHandlerStrategy<SiteEvent> _siteEventHandler;
+        private readonly IEventHandlerStrategy<CircleEvent> _circleEventHandler;
         private readonly IBoundingBoxService _boundingBoxService;
 
         private readonly Logger _logger;
@@ -31,8 +31,8 @@ namespace VoronoiEngine
         }
 
         public VoronoiFactory(
-            IEventHandlerStrategy<SiteEvent, HalfEdge> siteEventHandler,
-            IEventHandlerStrategy<CircleEvent, Vertex> circleEventHandler,
+            IEventHandlerStrategy<SiteEvent> siteEventHandler,
+            IEventHandlerStrategy<CircleEvent> circleEventHandler,
             ISiteGenerator siteGenerator,
             IBoundingBoxService boundingBoxService)
         {
@@ -78,12 +78,14 @@ namespace VoronoiEngine
                 if (siteEvent != null)
                 {
                     _logger.Log($"Sweepline SiteEvent: {siteEvent.Point.ToString()}");
-                    var halfEdge = _siteEventHandler.HandleEvent(siteEvent, _eventQueue, _beachLine);
-                    if (halfEdge == null)
+                    var halfEdges = _siteEventHandler.HandleEvent(siteEvent, _eventQueue, _beachLine);
+                    if (halfEdges == null)
                         continue;
-                    _logger.Log($"Add Halfedge: {halfEdge.ToString()}");
-                    map.AddRange(halfEdge);
-                    _logger.Log(_beachLine.ToString());
+                    map.AddRange(halfEdges);
+
+                    foreach (var geo in halfEdges)
+                        _logger.Log($"Add {geo}");
+
                     continue;
                 }
 
@@ -92,20 +94,14 @@ namespace VoronoiEngine
                     throw new InvalidOperationException("SweepEvent is neither SiteEvent nor CircleEvent");
 
                 _logger.Log($"Sweepline CircleEvent: {circleEvent.Point.ToString()}");
-                var vertex = _circleEventHandler.HandleEvent(circleEvent, _eventQueue, _beachLine).Single();
-                var halfEdges = String.Join(", ", vertex.HalfEdges.Select(h => h.Point.ToString()).ToArray());
-                _logger.Log($"Add Vertex: {vertex.Point}, Half Edges: {halfEdges}");
+                var circleEventResult = _circleEventHandler.HandleEvent(circleEvent, _eventQueue, _beachLine);
+
+                foreach (var geo in circleEventResult)
+                    _logger.Log($"Add {geo}");
                 
                 // Add vertex and new half edge
-                map.Add(vertex);
-                map.Add(vertex.HalfEdges.Single(e => e.Start == vertex));
+                map.AddRange(circleEventResult);
             }
-
-            //var openEnds = map.Where(g => g is HalfEdge).Cast<HalfEdge>().ToList();
-            //foreach(var halfEdge in openEnds)
-            //{
-            //    _boundingBoxService.AttachHalfEdge(halfEdge, height, width);
-            //}
 
             _logger.Log("Finished Voronoi map creation");
 
