@@ -4,6 +4,7 @@ namespace VoronoiEngine.Geomerty
 {
     public interface IBreakpointCalculationService
     {
-        Point CalculateBreakpoint(Point lefta, Point right, int y);
+        Point CalculateBreakpoint(Point left, Point right, int y);
+        int GetY(Point p, Point newP);
     }
 }

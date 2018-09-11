@@ -11,17 +11,18 @@ namespace VoronoiEngine.Structures
     public class BeachLine
     {
         private readonly ICircleEventCalculationService _circleEventCalculationService;
+        private readonly IBreakpointCalculationService _breakpointCalculationService;
         private readonly Logger _logger;
 
-        public BeachLine()
+        public BeachLine() : this(new CircleEventCalculationService(), new BreakpointCalculationService())
         {
-            _circleEventCalculationService = new CircleEventCalculationService();
-            _logger = Logger.Instance;
         }
 
-        public BeachLine(ICircleEventCalculationService circleEventCalculationService)
+        public BeachLine(ICircleEventCalculationService circleEventCalculationService, IBreakpointCalculationService breakpointCalculationService)
         {
             _circleEventCalculationService = circleEventCalculationService;
+            _breakpointCalculationService = breakpointCalculationService;
+            _logger = Logger.Instance;
         }
 
         public INode Root { get; private set; }
@@ -65,6 +66,7 @@ namespace VoronoiEngine.Structures
 
             // Create half edges and add them to the new nodes
             var breakpoint = node.CalculateBreakpoint(point.Y);
+            breakpoint.Y = _breakpointCalculationService.GetY(rootLeaf.Site, leaf.Site);
             var pointXPos = point.CompareTo(breakpoint);
             //var left = pointXPos < 0 ? leaf.Site : rootLeaf.Site;
             //var right = pointXPos >= 0 ? leaf.Site : rootLeaf.Site;

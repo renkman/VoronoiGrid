@@ -169,6 +169,7 @@ namespace VoronoiEngine.Elements
 
         private ICollection<HalfEdge> ReplaceLeaf(Point site, Leaf arc, bool isLeft, Point breakpoint, Func<Node, Leaf, Leaf, Point, ICollection<HalfEdge>> replace)
         {
+            breakpoint.Y = _breakpointCalculationService.GetY(arc.Site, site);
             var node = new Node(this);
             if (isLeft)
             {

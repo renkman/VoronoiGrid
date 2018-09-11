@@ -9,6 +9,10 @@ namespace VoronoiEngine.Elements
             Point = point;
             Left = left;
             Right = right;
+
+            F = (Right.X - Left.X) / (Left.Y - Right.Y);
+            G = Point.Y - F * Point.X;
+            Direction = new Point(Right.Y - Left.Y, -(Right.X - Left.X));
         }
 
         public Point Point { get; set; }
@@ -20,6 +24,12 @@ namespace VoronoiEngine.Elements
         public Point Left { get; }
 
         public Point Right { get; }
+
+        public Point Direction { get; }
+
+        public double F { get; }
+
+        public double G { get; }
 
         public override int GetHashCode()
         {
@@ -58,6 +68,25 @@ namespace VoronoiEngine.Elements
         public override string ToString()
         {
             return $"HalfEdge at Point: {Point}, Left: {Left}, Right: {Right}";
+        }
+                
+        public Point Intersect(HalfEdge halfEdge)
+        {
+            double x = (halfEdge.G - G) / (F - halfEdge.F);
+            double y = F * x + G;
+
+            if ((x - Point.X) / Direction.X < 0)
+                return null;
+            if ((y - Point.Y) / Direction.Y < 0)
+                return null;
+
+            if ((x - halfEdge.Point.X) / halfEdge.Direction.X < 0)
+                return null;
+            if ((y - halfEdge.Point.Y) / halfEdge.Direction.Y < 0)
+                return null;
+
+            var p = new Point((int)x, (int)y);
+            return p;
         }
     }
 }

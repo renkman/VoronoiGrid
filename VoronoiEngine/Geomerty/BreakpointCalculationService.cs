@@ -42,5 +42,15 @@ namespace VoronoiEngine.Geomerty
 
             return new Point(x, y);
         }
+        
+        public int GetY(Point p, Point newP)
+        {
+            double dp = 2 * (p.Y - newP.Y);
+            double a1 = 1 / dp;
+            double b1 = -2 * p.X / dp;
+            double c1 = newP.Y + dp / 4 + p.X * p.X / dp;
+
+            return (int)Math.Round(a1 * newP.X * newP.X + b1 * newP.X + c1);
+        }
     }
 }
