@@ -28,11 +28,39 @@ namespace VoronoiTests
             node3.Parent = parentDummy;
             var arcs = new INode[] { node1, node2, node3 };
 
-            var expectedVertex = new Point { X = 136, Y = 121 };
-            var expectedCricleEvent = new Point { X = 136, Y = 84 };
+            var expectedVertex = new Point { X = 136.25, Y = 122.5 };
+            var expectedCricleEvent = new Point { X = 136.25, Y = 84 };
 
             var service = new CircleEventCalculationService();
-            var result = service.DetermineCircleEvent(arcs);
+            var result = service.DetermineCircleEvent(arcs, 140);
+
+            Assert.AreEqual(expectedCricleEvent, result.Point);
+            Assert.AreEqual(expectedVertex, result.Vertex);
+        }
+
+        [Test]
+        public void TestEdgeDetermineCircleEvent()
+        {
+            var parentLeft = new Node(null);
+            var parentRight= new Node(null);
+
+            var site1 = new Point { X = 130, Y = 160 };
+            var site2 = new Point { X = 110, Y = 150 };
+            var site3 = new Point { X = 170, Y = 140 };
+
+            var node1 = new Leaf(new Point { X = 170, Y = 140 });
+            var node2 = new Leaf(new Point { X = 130, Y = 160 });
+            var node3 = new Leaf(new Point { X = 110, Y = 150 });
+            node1.Parent = parentLeft;
+            node2.Parent = parentLeft;
+            node3.Parent = parentRight;
+            var arcs = new INode[] { node1, node2, node3 };
+
+            var expectedVertex = new Point { X = 136.25, Y = 122.5 };
+            var expectedCricleEvent = new Point { X = 136.25, Y = 84 };
+
+            var service = new CircleEventEdgeCalculationService();
+            var result = service.DetermineCircleEvent(arcs, 140);
 
             Assert.AreEqual(expectedCricleEvent, result.Point);
             Assert.AreEqual(expectedVertex, result.Vertex);
@@ -51,7 +79,7 @@ namespace VoronoiTests
             //var expectedCricleEvent = new Point { X = -2147483648, Y = -766958430 };
 
             var service = new CircleEventCalculationService();
-            var result = service.DetermineCircleEvent(arcs);
+            var result = service.DetermineCircleEvent(arcs, 5);
 
             Assert.IsNull(result);
         }

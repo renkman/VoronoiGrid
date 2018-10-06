@@ -8,7 +8,7 @@ namespace VoronoiEngine.Geomerty
 {
     public class CircleEventCalculationService : ICircleEventCalculationService
     {
-        public CircleEvent DetermineCircleEvent(ICollection<INode> arcs)
+        public CircleEvent DetermineCircleEvent(ICollection<INode> arcs, double y)
         {
             var leaves = arcs.Cast<Leaf>().Select(l => l).ToList();
             var sites = leaves.Select(l => l.Site).Distinct().ToList(); //.OrderBy(s => s.X).Distinct().ToList();
@@ -23,6 +23,9 @@ namespace VoronoiEngine.Geomerty
             var circumcenter = CalculateCircumcenter(sites[0], sites[1], sites[2]);
             var circleEventPoint = CalculateCircle(circumcenter, sites[0]);
             if (circleEventPoint.X < 0 || circleEventPoint.Y < 0)
+                return null;
+
+            if (circleEventPoint.Y >= y)
                 return null;
 
             var circleEvent = new CircleEvent
@@ -56,23 +59,19 @@ namespace VoronoiEngine.Geomerty
             var x = ad / slope;
 
             var circumcenter = new Point();
-            circumcenter.PrecisionX = -x;
-            circumcenter.PrecisionY = slopeAC * circumcenter.PrecisionX + ac;
-            circumcenter.X = (int)Math.Round(-x);
-            circumcenter.Y = (int)Math.Round(slopeAC * circumcenter.X + ac);
+            circumcenter.X = -x;
+            circumcenter.Y = slopeAC * circumcenter.X + ac;            
             return circumcenter;
         }
         
         private static Point CalculateCircle(Point circumcenter, Point point)
         {
-            var a = point.Y - circumcenter.PrecisionY;
-            var b = point.X - circumcenter.PrecisionX;
+            var a = point.Y - circumcenter.Y;
+            var b = point.X - circumcenter.X;
             var radius = Math.Sqrt(Math.Pow(a, 2) + Math.Pow(b, 2));
             return new Point {
                 X = circumcenter.X,
-                PrecisionX = circumcenter.PrecisionX,
-                Y = (int)Math.Round(circumcenter.PrecisionY - radius),
-                PrecisionY = Math.Round(circumcenter.PrecisionY - radius)
+                Y = Math.Round(circumcenter.Y - radius)
             };
         }
 

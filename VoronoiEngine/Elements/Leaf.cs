@@ -2,18 +2,22 @@
 using System.Collections.Generic;
 using System.Linq;
 using VoronoiEngine.Events;
+using VoronoiEngine.Geomerty;
+using VoronoiEngine.Utilities;
 
 namespace VoronoiEngine.Elements
 {
-    public class Leaf : INode
+    public class Leaf : BaseNode, INode
     {
-        public INode Parent { get; set; }
-
         public Leaf(Point site)
         {
             Site = site;
+            _logger = Logger.Instance;
+            _breakpointCalculationService = new BreakpointCalculationService();
         }
 
+        public INode Parent { get; set; }
+                
         public bool IsLeaf { get { return true; } }
 
         public Point Site { get; }
@@ -50,6 +54,22 @@ namespace VoronoiEngine.Elements
         public override string ToString()
         {
             return $"Leaf: {Site.ToString()}, CircleEvent: {CircleEvent?.Point.ToString()}";
+        }
+
+        public ICollection<HalfEdge> Insert(Point site)
+        {
+            var leaf = new Leaf(site);
+            var parent = Parent as Node;
+            var node = new Node(parent);
+            if(parent != null)
+            {
+                if (this == parent.Left)
+                    parent.Left = node;
+                else
+                    parent.Right = node;
+            }
+            var edges = ReplaceLeaf(node, leaf, this);
+            return edges;
         }
     }
 }

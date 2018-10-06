@@ -17,8 +17,8 @@ namespace VoronoiTests
 
             var result = node.CalculateBreakpoint(5);
             Assert.IsNotNull(result);
-            Assert.AreEqual(11, result.X);
-            Assert.AreEqual(5, result.Y);
+            Assert.AreEqual(11, result.XInt);
+            Assert.AreEqual(5, result.YInt);
         }
 
         [Test]
@@ -30,8 +30,8 @@ namespace VoronoiTests
 
             var result = node.CalculateBreakpoint(40);
             Assert.IsNotNull(result);
-            Assert.AreEqual(17, result.X);
-            Assert.AreEqual(40, result.Y);
+            Assert.AreEqual(18, result.XInt);
+            Assert.AreEqual(40, result.YInt);
         }
 
         [Test]

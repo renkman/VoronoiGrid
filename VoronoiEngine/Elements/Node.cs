@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using VoronoiEngine.Geomerty;
+using VoronoiEngine.Utilities;
 
 namespace VoronoiEngine.Elements
 {
-    public class Node : INode
+    public class Node : BaseNode, INode
     {
-        private readonly IBreakpointCalculationService _breakpointCalculationService;
-
+        //private readonly IBreakpointCalculationService _breakpointCalculationService;
         public INode Parent { get; set; }
 
         public bool IsLeaf { get { return false; } }
@@ -25,9 +25,10 @@ namespace VoronoiEngine.Elements
             Parent = parent;
             Breakpoint = new Tuple<Point>();
             _breakpointCalculationService = new BreakpointCalculationService();
+            _logger = Logger.Instance;
         }
 
-        public Point CalculateBreakpoint(int y)
+        public Point CalculateBreakpoint(double y)
         {
             return _breakpointCalculationService.CalculateBreakpoint(Breakpoint.Left, Breakpoint.Right, y);            
         }
@@ -127,7 +128,7 @@ namespace VoronoiEngine.Elements
             }
         }
 
-        public ICollection<HalfEdge> Insert(Point site, Func<Node, Leaf, Leaf, Point, ICollection<HalfEdge>> replace)
+        public ICollection<HalfEdge> Insert(Point site)
         {
             var breakpoint = CalculateBreakpoint(site.Y);
             ICollection<HalfEdge> edges = null;
@@ -136,17 +137,7 @@ namespace VoronoiEngine.Elements
             {
                 if (Left != null)
                 {
-                    var leftNode = Left as Node;
-                    if (leftNode != null)
-                        edges = leftNode.Insert(site, replace);
-                    else
-                    {
-                        var leftLeaf = Left as Leaf;
-
-                        edges = ReplaceLeaf(site, leftLeaf, true, breakpoint, replace);
-                        //if (Breakpoint.Left.CompareTo(site) == -1)
-                        //    Breakpoint.Left = site;                        
-                    }
+                    edges = Left.Insert(site);
                 }
                 return edges;
             }
@@ -154,38 +145,9 @@ namespace VoronoiEngine.Elements
             if (Right == null)
                 throw new InvalidOperationException("Nodes without leaves must not exist!");
 
-            var rightNode = Right as Node;
-            if (rightNode != null)
-                edges = rightNode.Insert(site, replace);
-            else
-            {
-                var rightLeaf = Right as Leaf;
-                edges = ReplaceLeaf(site, rightLeaf, false, breakpoint, replace);
-                //if (Breakpoint.Right.CompareTo(site) == -1)
-                //    Breakpoint.Right = site;
-            }
-            return edges;
+            return Right.Insert(site);
         }
-
-        private ICollection<HalfEdge> ReplaceLeaf(Point site, Leaf arc, bool isLeft, Point breakpoint, Func<Node, Leaf, Leaf, Point, ICollection<HalfEdge>> replace)
-        {
-            breakpoint.Y = _breakpointCalculationService.GetY(arc.Site, site);
-            var node = new Node(this);
-            if (isLeft)
-            {
-                Left = node;
-                HalfEdge = new HalfEdge(breakpoint, site, arc.Site);
-            }
-            else
-            {
-                Right = node;
-                HalfEdge = new HalfEdge(breakpoint, arc.Site, site);
-            }
-
-            var leaf = new Leaf(site);
-            return replace(node, leaf, arc, breakpoint);
-        }
-
+        
         public void UpdateBreakpoints()
         {
             var left = Left.IsLeaf ? ((Leaf)Left).Site : ((Node)Left).Breakpoint.Right;

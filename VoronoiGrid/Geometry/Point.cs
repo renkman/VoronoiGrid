@@ -4,8 +4,18 @@ namespace VoronoiGrid.Geometry
 {
     public class Point : IComparable<Point>, IEquatable<Point>
     {
-        public int X { get; set; }
-        public int Y { get; set; }
+        public Point()
+        {
+        }
+
+        public Point(int x, int y)
+        {
+            X = x;
+            Y = y;
+        }
+
+        public double X { get; set; }
+        public double Y { get; set; }
 
         public int CompareTo(Point other)
         {
@@ -31,12 +41,19 @@ namespace VoronoiGrid.Geometry
 
         public override int GetHashCode()
         {
-            return X ^ Y + Y;
+            return (int)((X * Y + X) * 100);
         }
 
         public bool Equals(Point other)
         {
+            if (other == null)
+                return false;
             return X == other.X && Y == other.Y;
+        }
+
+        public override string ToString()
+        {
+            return $"{nameof(Point)}: X: {X:#.00}, Y: {Y:#.00}";
         }
     }
 }

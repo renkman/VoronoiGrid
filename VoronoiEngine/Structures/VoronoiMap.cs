@@ -51,14 +51,14 @@ namespace VoronoiEngine.Structures
 
         public IGeometry[,] ToArray()
         {
-            var x = _map.Select(g => g.Point.X).Max() + 10;
-            var y = _map.Select(g => g.Point.Y).Max() + 10;
+            var x = _map.Select(g => g.Point.XInt).Max() + 10;
+            var y = _map.Select(g => g.Point.YInt).Max() + 10;
 
             var result = new IGeometry[x, y];
 
             foreach (var geometryItem in _map)
             {
-                result[geometryItem.Point.X + 5, geometryItem.Point.Y + 5] = geometryItem;
+                result[geometryItem.Point.XInt + 5, geometryItem.Point.YInt + 5] = geometryItem;
             }
 
             return result;

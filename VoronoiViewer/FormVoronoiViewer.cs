@@ -65,7 +65,7 @@ namespace VoronoiViewer
                 _factorY = _canvas.Height / height;
                 foreach (var site in _session.Sites)
                 {
-                    graphics.FillRectangle(brush, site.Point.X * _factorX, _canvas.Height - (site.Point.Y * _factorY), _factorX, _factorY);
+                    graphics.FillRectangle(brush, site.Point.XInt * _factorX, _canvas.Height - (site.Point.YInt * _factorY), _factorX, _factorY);
                 }
             }
             tabPageDiagram.Invalidate();
@@ -91,17 +91,17 @@ namespace VoronoiViewer
                     foreach (var geo in map)
                     {
                         if (geo is Vertex)
-                            graphics.FillRectangle(vertexBrush, geo.Point.X * _factorX, _canvas.Height - (geo.Point.Y * _factorY), _factorX, _factorY);
+                            graphics.FillRectangle(vertexBrush, geo.Point.XInt * _factorX, _canvas.Height - (geo.Point.YInt * _factorY), _factorX, _factorY);
 
                         var halfEdge = geo as HalfEdge;
 
                         if (halfEdge == null)
                             continue;
 
-                        var startX = (halfEdge.Start != null ? halfEdge.Start.Point.X : halfEdge.Point.X) * _factorX;
-                        var startY = _canvas.Height - (halfEdge.Start != null ? halfEdge.Start.Point.Y : halfEdge.Point.Y) * _factorY;
-                        var endX = (halfEdge.End != null ? halfEdge.End.Point.X : halfEdge.Point.X) * _factorX;
-                        var endY = _canvas.Height - (halfEdge.End != null ? halfEdge.End.Point.Y : halfEdge.Point.Y) * _factorY;
+                        var startX = (halfEdge.Start != null ? halfEdge.Start.Point.XInt : halfEdge.Point.XInt) * _factorX;
+                        var startY = _canvas.Height - (halfEdge.Start != null ? halfEdge.Start.Point.YInt : halfEdge.Point.YInt) * _factorY;
+                        var endX = (halfEdge.End != null ? halfEdge.End.Point.XInt : halfEdge.Point.XInt) * _factorX;
+                        var endY = _canvas.Height - (halfEdge.End != null ? halfEdge.End.Point.YInt : halfEdge.Point.YInt) * _factorY;
 
                         //if (startX > 0 || startX < _canvas.Width || startY > 0 || startY < _canvas.Height || endX > 0 || endX < _canvas.Width || endY > 0 || endY < _canvas.Height)
                         if (startX > 0 && startY > 0)

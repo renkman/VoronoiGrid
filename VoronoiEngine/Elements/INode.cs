@@ -13,5 +13,7 @@ namespace VoronoiEngine.Elements
         INode GetNeighbor(INode start, TraverseDirection direction);
         
         void GetDescendants(Point start, TraverseDirection direction, ICollection<INode> descendants, int count);
+
+        ICollection<HalfEdge> Insert(Point site);
     }
 }

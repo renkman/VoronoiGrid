@@ -31,6 +31,8 @@ namespace VoronoiEngine.Elements
 
         public double G { get; }
 
+        public HalfEdge Neighbor { get; set; }
+
         public override int GetHashCode()
         {
             return Left.GetHashCode() + Right.GetHashCode();
@@ -72,8 +74,8 @@ namespace VoronoiEngine.Elements
                 
         public Point Intersect(HalfEdge halfEdge)
         {
-            double x = (halfEdge.G - G) / (F - halfEdge.F);
-            double y = F * x + G;
+            var x = (halfEdge.G - G) / (F - halfEdge.F);
+            var y = F * x + G;
 
             if ((x - Point.X) / Direction.X < 0)
                 return null;
@@ -85,7 +87,7 @@ namespace VoronoiEngine.Elements
             if ((y - halfEdge.Point.Y) / halfEdge.Direction.Y < 0)
                 return null;
 
-            var p = new Point((int)x, (int)y);
+            var p = new Point(x, y);
             return p;
         }
     }

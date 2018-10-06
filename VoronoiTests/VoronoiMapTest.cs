@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using VoronoiEngine.Elements;
+using VoronoiEngine.Geomerty;
 using VoronoiEngine.Structures;
 
 namespace VoronoiTests
@@ -49,7 +50,7 @@ namespace VoronoiTests
                 new Site{ Point = new Point  { X = 40, Y = 60 } },
                 new Site { Point = new Point { X = 20, Y = 40 } },
                 new Site { Point = new Point { X = 60, Y = 40 } },
-                new HalfEdge(new Point { X = 20, Y = 40 }, new Point { X = 20, Y = 40 }, new Point { X = 20, Y = 40 }  ),
+                new HalfEdge(new Point { X = 30, Y = 50 }, new Point { X = 20, Y = 40 }, new Point { X = 40, Y = 60 }  ),
                 new Vertex { Point = new Point { X = 40, Y = 40 } }
             };
 

@@ -5,10 +5,10 @@ namespace VoronoiEngine.Geomerty
 {
     public class BreakpointCalculationService : IBreakpointCalculationService
     {
-        public Point CalculateBreakpoint(Point left, Point right, int y)
+        public Point CalculateBreakpoint(Point left, Point right, double y)
         {
             if (left.Y == right.Y)
-                return new Point((int) (right.X / 2m + left.X / 2m), y);
+                return new Point(right.X / 2d + left.X / 2d, y);
             //    return new Point { X = (int)(right.X * 0.5m), Y = y };
 
             if (left.Y == y)
@@ -38,19 +38,19 @@ namespace VoronoiEngine.Geomerty
             var x1 = (-b + Math.Sqrt(disc)) / (2*a);
             var x2 = (-b - Math.Sqrt(disc)) / (2*a);
 
-            var x = (int) Math.Round(left.Y < right.Y ? Math.Max(x1, x2) : Math.Min(x1, x2));
+            var x = left.Y < right.Y ? Math.Max(x1, x2) : Math.Min(x1, x2);
 
             return new Point(x, y);
         }
         
-        public int GetY(Point p, Point newP)
+        public double GetY(Point p, Point newP)
         {
             double dp = 2 * (p.Y - newP.Y);
             double a1 = 1 / dp;
             double b1 = -2 * p.X / dp;
             double c1 = newP.Y + dp / 4 + p.X * p.X / dp;
 
-            return (int)Math.Round(a1 * newP.X * newP.X + b1 * newP.X + c1);
+            return a1 * newP.X * newP.X + b1 * newP.X + c1;
         }
     }
 }

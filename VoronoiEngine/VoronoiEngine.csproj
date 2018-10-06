@@ -38,6 +38,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Elements\BaseNode.cs" />
     <Compile Include="Elements\Cell.cs" />
     <Compile Include="Elements\HalfEdge.cs" />
     <Compile Include="Elements\IGeometry.cs" />
@@ -50,6 +51,7 @@
     <Compile Include="Geomerty\BoundingBoxService.cs" />
     <Compile Include="Geomerty\BreakpointCalculationService.cs" />
     <Compile Include="Geomerty\CircleEventCalculationService.cs" />
+    <Compile Include="Geomerty\CircleEventEdgeCalculationService.cs" />
     <Compile Include="Geomerty\GeometryHelper.cs" />
     <Compile Include="Geomerty\IBreakpointCalculationService.cs" />
     <Compile Include="Geomerty\ICircleEventCalculationService.cs" />

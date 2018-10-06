@@ -6,6 +6,6 @@ namespace VoronoiEngine.Geomerty
 {
     public interface ICircleEventCalculationService
     {
-        CircleEvent DetermineCircleEvent(ICollection<INode> arcs);
+        CircleEvent DetermineCircleEvent(ICollection<INode> arcs, double y);
     }
 }
