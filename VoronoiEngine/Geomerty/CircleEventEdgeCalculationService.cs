@@ -29,7 +29,7 @@ namespace VoronoiEngine.Geomerty
             var x = sites[0].X - intersection.X;
             var dy = sites[0].Y - intersection.Y;
 
-            var d = Math.Sqrt(Math.Sqrt(x) + Math.Sqrt(dy));
+            var d = Math.Sqrt(Math.Pow(x, 2) + Math.Pow(dy, 2));
 
             var circleEventPoint = new Point(intersection.X, intersection.Y - d);
 

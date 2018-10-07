@@ -25,16 +25,12 @@ namespace VoronoiEngine.Elements
             
             subRoot.Left = node;
             subRoot.Right = arc;
-            subRoot.Breakpoint.Left = newLeaf.Site;
-            subRoot.Breakpoint.Right = arc.Site;
             subRoot.HalfEdge = new HalfEdge(start, newLeaf.Site, arc.Site);
             arc.Parent = subRoot;
 
             var arcClone = arc.Clone();
             node.Left = arcClone;
             node.Right = newLeaf;
-            node.Breakpoint.Left = arcClone.Site;
-            node.Breakpoint.Right = newLeaf.Site;
             node.HalfEdge = new HalfEdge(start, arc.Site, newLeaf.Site);
             node.HalfEdge.Neighbor = subRoot.HalfEdge;
             arcClone.Parent = node;

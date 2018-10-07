@@ -141,7 +141,6 @@ namespace VoronoiEngine.Structures
             if (parentParent == null)
                 return null;
 
-            parentParent.UpdateBreakpoints();
             return parentParent;
         }
 

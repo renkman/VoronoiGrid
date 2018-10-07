@@ -65,5 +65,49 @@ namespace VoronoiTests
 
             Assert.IsNotNull(result);
         }
+
+        [Test]
+        public void TestCalculateBreakpointStep5()
+        {
+            var breakpointCalculationService = new BreakpointCalculationService();
+            var result = breakpointCalculationService.CalculateBreakpoint(new Point(2, 10), new Point(20, 12), 5);
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(11, result.XInt);
+            Assert.AreEqual(5, result.YInt);
+        }
+
+        [Test]
+        public void TestCalculateBreakpointSameY()
+        {
+            var breakpointCalculationService = new BreakpointCalculationService();
+            var result = breakpointCalculationService.CalculateBreakpoint(new Point(15, 120), new Point(20, 120), 40);
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(18, result.XInt);
+            Assert.AreEqual(40, result.YInt);
+        }
+
+        [Test]
+        public void TestCalculateBreakpointLeftOnSweepline()
+        {
+            var breakpointCalculationService = new BreakpointCalculationService();
+            var result = breakpointCalculationService.CalculateBreakpoint(new Point(15, 120), new Point(20, 12), 120);
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(15, result.X);
+            Assert.AreEqual(120, result.Y);
+        }
+
+        [Test]
+        public void TestCalculateBreakpointRightOnSweepline()
+        {
+            var breakpointCalculationService = new BreakpointCalculationService();
+            var result = breakpointCalculationService.CalculateBreakpoint(new Point(15, 120), new Point(20, 40), 40);
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(20, result.X);
+            Assert.AreEqual(40, result.Y);
+        }
     }
 }

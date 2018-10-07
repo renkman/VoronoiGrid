@@ -16,14 +16,16 @@ namespace VoronoiEngine.Elements
         public INode Left { get; set; }
         public INode Right { get; set; }
 
-        public Tuple<Point> Breakpoint { get; }
+        public Tuple<Point> Breakpoint => new Tuple<Point> {
+            Left = GetBreakpoint(TraverseDirection.CounterClockwise),
+            Right = GetBreakpoint(TraverseDirection.Clockwise)
+        };
 
         public HalfEdge HalfEdge { get; set; }
         
         public Node(Node parent)
         {
             Parent = parent;
-            Breakpoint = new Tuple<Point>();
             _breakpointCalculationService = new BreakpointCalculationService();
             _logger = Logger.Instance;
         }
@@ -37,15 +39,28 @@ namespace VoronoiEngine.Elements
         {
             var breakpoint = CalculateBreakpoint(site.Y);
 
+            //if (breakpoint.X > site.X)
             if (site.CompareTo(breakpoint) < 0)
             {
                 if (Left != null)
                     return Left.Find(site);
             }
-            if (Right != null)
-                return Right.Find(site);
+            return Right != null ? Right.Find(site) : null;
+        }
 
-            return null;
+        public ICollection<HalfEdge> Insert(Point site)
+        {
+            var breakpoint = CalculateBreakpoint(site.Y);
+
+            if (site.CompareTo(breakpoint) < 0)
+            {
+                if (Left != null)
+                    return Left.Insert(site);
+            }
+            if (Right == null)
+                throw new InvalidOperationException("Nodes without leaves must not exist!");
+
+            return Right.Insert(site);
         }
 
         public void GetDescendants(Point start, TraverseDirection direction, ICollection<INode> descendants, int count)
@@ -128,39 +143,13 @@ namespace VoronoiEngine.Elements
             }
         }
 
-        public ICollection<HalfEdge> Insert(Point site)
+        private Point GetBreakpoint(TraverseDirection direction)
         {
-            var breakpoint = CalculateBreakpoint(site.Y);
-            ICollection<HalfEdge> edges = null;
-
-            if (site.CompareTo(breakpoint) < 0)
-            {
-                if (Left != null)
-                {
-                    edges = Left.Insert(site);
-                }
-                return edges;
-            }
-
-            if (Right == null)
-                throw new InvalidOperationException("Nodes without leaves must not exist!");
-
-            return Right.Insert(site);
-        }
-        
-        public void UpdateBreakpoints()
-        {
-            var left = Left.IsLeaf ? ((Leaf)Left).Site : ((Node)Left).Breakpoint.Right;
-            var right = Right.IsLeaf ? ((Leaf)Right).Site : ((Node)Right).Breakpoint.Left;
-
-            Breakpoint.Left = left;
-            Breakpoint.Right = right;
-
-            //if (Parent != null)
-            //{
-            //    var parent = (Node)Parent;
-            //    parent.UpdateBreakpoints();
-            //}
+            var left = direction == TraverseDirection.CounterClockwise;
+            var node = left ? Left : Right;
+            while (!node.IsLeaf)
+                node = left ? ((Node)node).Right : ((Node)node).Left;
+            return ((Leaf)node).Site;
         }
 
         public override string ToString()

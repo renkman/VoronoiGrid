@@ -51,7 +51,7 @@ namespace VoronoiTests
 
             Assert.IsNotNull(map);
             var vertex = map.Single(g => g is Vertex);
-            Assert.AreEqual(new Point { X = 136, Y = 121 }, vertex.Point);
+            Assert.AreEqual(new Point { X = 136.25, Y = 122.5 }, vertex.Point);
 
             //Logger.Instance.ToFile();
 
@@ -258,8 +258,16 @@ namespace VoronoiTests
                 new Site { Point = new Point (109, 52 ) }
             };
 
-            var map = factory.CreateVoronoiMap(200, 200, sites);
-            Logger.Instance.ToFile();        
+            try
+            {
+                var map = factory.CreateVoronoiMap(200, 200, sites);
+            }
+            catch(Exception e)
+            {
+                Logger.Instance.Log(e.Message);
+                Logger.Instance.Log(e.StackTrace);
+                Logger.Instance.ToFile();                
+            }
         }
     }
 }
