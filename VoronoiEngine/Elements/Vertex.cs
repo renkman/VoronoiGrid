@@ -8,7 +8,7 @@ namespace VoronoiEngine.Elements
     {
         public Vertex()
         {
-            HalfEdges = new HashSet<HalfEdge>();
+            HalfEdges = new List<HalfEdge>();
         }
 
         public Point Point { get; set; }

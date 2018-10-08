@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using VoronoiEngine.Geomerty;
+using VoronoiEngine.Models;
 using VoronoiEngine.Utilities;
 
 namespace VoronoiEngine.Elements
@@ -13,7 +14,7 @@ namespace VoronoiEngine.Elements
 
         protected Logger _logger;
 
-        protected ICollection<HalfEdge> ReplaceLeaf(Node subRoot, Leaf newLeaf, Leaf arc)
+        protected InsertSiteModel ReplaceLeaf(Node subRoot, Leaf newLeaf, Leaf arc)
         {
             _logger.Log($"Replace leaf {arc.ToString()} with leaf {newLeaf.ToString()}");
 
@@ -34,9 +35,13 @@ namespace VoronoiEngine.Elements
             node.HalfEdge = new HalfEdge(start, arc.Site, newLeaf.Site);
             node.HalfEdge.Neighbor = subRoot.HalfEdge;
             arcClone.Parent = node;
-            newLeaf.Parent = node;          
+            newLeaf.Parent = node;
 
-            return new List<HalfEdge> { subRoot.HalfEdge, node.HalfEdge };
+            return new InsertSiteModel
+            {
+                HalfEdges = new List<HalfEdge> { subRoot.HalfEdge, node.HalfEdge },
+                Leaves = new List<Leaf> { arcClone, arc }
+            };                
         }
     }
 }

@@ -16,8 +16,8 @@ namespace VoronoiTests
         {
             var beachLine = new BeachLine();
             beachLine.InsertSite(new Point(4, 6));
-            var halfEdgesLeft = beachLine.InsertSite(new Point(6, 4)).ToList();
-            var halfEdgesRight = beachLine.InsertSite(new Point(2, 3)).ToList();
+            var halfEdgesLeft = beachLine.InsertSite(new Point(6, 4)).HalfEdges.ToList();
+            var halfEdgesRight = beachLine.InsertSite(new Point(2, 3)).HalfEdges.ToList();
 
             var centerLeaf = ((Node)((Node)((Node)beachLine.Root).Left).Left).Right;
 

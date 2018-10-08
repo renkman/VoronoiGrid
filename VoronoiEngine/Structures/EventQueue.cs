@@ -36,8 +36,8 @@ namespace VoronoiEngine.Structures
             if (sites == null)
                 throw new ArgumentException(nameof(sites));
 
-            //_events = sites.OrderByDescending(s => s.Y).Select(s => new SiteEvent { Point = s }).Cast<IEvent>().ToList();
-            _events = sites.OrderBy(s => s.Y).Select(s => new SiteEvent { Point = s }).Cast<IEvent>().ToList();
+            _events = sites.OrderByDescending(s => s.Y).Select(s => new SiteEvent { Point = s }).Cast<IEvent>().ToList();
+            //_events = sites.OrderBy(s => s.Y).Select(s => new SiteEvent { Point = s }).Cast<IEvent>().ToList();
         }
 
         public IEvent GetNextEvent()

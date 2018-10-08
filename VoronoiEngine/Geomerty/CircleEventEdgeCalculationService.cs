@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using VoronoiEngine.Elements;
 using VoronoiEngine.Events;
 
@@ -12,22 +11,36 @@ namespace VoronoiEngine.Geomerty
         public CircleEvent DetermineCircleEvent(ICollection<INode> arcs, double y)
         {
             var leaves = arcs.Cast<Leaf>().Select(l => l).ToList();
-            var sites = leaves.Select(l => l.Site).Distinct().ToList(); //.OrderBy(s => s.X).Distinct().ToList();
+            //var sites = leaves.Select(l => l.Site).Distinct().ToList(); //.OrderBy(s => s.X).Distinct().ToList();
 
-            if (sites.Count != 3)
+            //if (sites.Count != 3)
+            //    return null;
+
+            //var edges = arcs.Select(a => a.Parent).Cast<Node>().Select(p => p.HalfEdge).Distinct().ToList();
+            //if (edges.Count != 2)
+            //    throw new InvalidOperationException($"Corrupt tree structure with {edges.Count} parent edges.");
+
+            var leftParent = leaves[0].GetParent(TraverseDirection.CounterClockwise);
+            var rightParent = leaves[0].GetParent(TraverseDirection.Clockwise);
+            var left = leftParent?.GetLeaf(TraverseDirection.CounterClockwise);
+            var right = rightParent?.GetLeaf(TraverseDirection.Clockwise);
+            
+            if (left == null || right == null || left == right)
                 return null;
 
-            var edges = arcs.Select(a => a.Parent).Cast<Node>().Select(p => p.HalfEdge).Distinct().ToList();
-            if (edges.Count != 2)
-                throw new InvalidOperationException($"Corrupt tree structure with {edges.Count} parent edges.");
+            var leftEdge = leftParent.HalfEdge;
+            var rightEdge = rightParent.HalfEdge;
 
             // Check conversion by edge intersection
-            var intersection = edges[0].Intersect(edges[1]);
+            var intersection = leftEdge.Intersect(rightEdge);
             if (intersection == null)
                 return null;
 
-            var x = sites[0].X - intersection.X;
-            var dy = sites[0].Y - intersection.Y;
+            var a = left.Site;
+            var c = right.Site;
+
+            var x = a.X - intersection.X;
+            var dy = a.Y - intersection.Y;
 
             var d = Math.Sqrt(Math.Pow(x, 2) + Math.Pow(dy, 2));
 
@@ -38,14 +51,14 @@ namespace VoronoiEngine.Geomerty
 
             var circleEvent = new CircleEvent
             {
-                LeftArc = leaves[0],
-                CenterArc = leaves[1],
-                RightArc = leaves[2],
-                Edges = edges,
+                LeftArc = left,
+                CenterArc = leaves[0],
+                RightArc = right,
+                Edges = new List<HalfEdge> { leftEdge, rightEdge },
                 Vertex = intersection,
                 Point = circleEventPoint
             };
-            leaves[1].CircleEvent = circleEvent;
+            leaves[0].CircleEvent = circleEvent;
             return circleEvent;
         }
     }

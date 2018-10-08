@@ -19,11 +19,11 @@ namespace VoronoiEngine.EventHandler
             }
 
             Logger.Instance.Log($"SiteEvent: {sweepEvent.Point.ToString()}: Insert site into beach line");
-            var halfEdges = beachLine.InsertSite(sweepEvent.Point);
+            var result = beachLine.InsertSite(sweepEvent.Point);
 
-            var circleEvents = beachLine.GenerateCircleEvent(sweepEvent.Point);
+            var circleEvents = beachLine.GenerateCircleEvent(result?.Leaves, sweepEvent.Point.Y);
             eventQueue.Insert(circleEvents);
-            return halfEdges?.Cast<IGeometry>().ToList();
+            return result?.HalfEdges?.Cast<IGeometry>().ToList();
         }
     }
 }

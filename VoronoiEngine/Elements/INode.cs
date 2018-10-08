@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using VoronoiEngine.Models;
 
 namespace VoronoiEngine.Elements
 {
@@ -14,6 +15,6 @@ namespace VoronoiEngine.Elements
         
         void GetDescendants(Point start, TraverseDirection direction, ICollection<INode> descendants, int count);
 
-        ICollection<HalfEdge> Insert(Point site);
+        InsertSiteModel Insert(Point site);
     }
 }

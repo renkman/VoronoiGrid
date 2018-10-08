@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using VoronoiEngine.Geomerty;
+using VoronoiEngine.Models;
 using VoronoiEngine.Utilities;
 
 namespace VoronoiEngine.Elements
@@ -17,8 +18,8 @@ namespace VoronoiEngine.Elements
         public INode Right { get; set; }
 
         public Tuple<Point> Breakpoint => new Tuple<Point> {
-            Left = GetBreakpoint(TraverseDirection.CounterClockwise),
-            Right = GetBreakpoint(TraverseDirection.Clockwise)
+            Left = GetLeaf(TraverseDirection.CounterClockwise).Site,
+            Right = GetLeaf(TraverseDirection.Clockwise).Site
         };
 
         public HalfEdge HalfEdge { get; set; }
@@ -48,7 +49,7 @@ namespace VoronoiEngine.Elements
             return Right != null ? Right.Find(site) : null;
         }
 
-        public ICollection<HalfEdge> Insert(Point site)
+        public InsertSiteModel Insert(Point site)
         {
             var breakpoint = CalculateBreakpoint(site.Y);
 
@@ -142,14 +143,14 @@ namespace VoronoiEngine.Elements
                     consecutives.Add(leaf);
             }
         }
-
-        private Point GetBreakpoint(TraverseDirection direction)
+                
+        public Leaf GetLeaf(TraverseDirection direction)
         {
             var left = direction == TraverseDirection.CounterClockwise;
             var node = left ? Left : Right;
             while (!node.IsLeaf)
                 node = left ? ((Node)node).Right : ((Node)node).Left;
-            return ((Leaf)node).Site;
+            return (Leaf)node;
         }
 
         public override string ToString()

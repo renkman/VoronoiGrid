@@ -1,9 +1,7 @@
 ﻿using NUnit.Framework;
-using System;
 using System.Linq;
 using VoronoiEngine.Elements;
 using VoronoiEngine.Structures;
-using VoronoiEngine.Utilities;
 
 namespace VoronoiTests
 {
@@ -132,7 +130,7 @@ namespace VoronoiTests
             Assert.AreEqual(site1, result.Single().CenterArc.Site);
             Assert.AreEqual(site2, result.Single().RightArc.Site);
         }
-        
+
         [Test]
         public void TestGenerateCircleEvent()
         {
@@ -171,27 +169,17 @@ namespace VoronoiTests
             var site4 = new Point { X = 130, Y = 160 };
 
             beachLine.InsertSite(site1);
-            beachLine.GenerateCircleEvent(site1);
+            //beachLine.GenerateCircleEvent(site1);
             beachLine.InsertSite(site2);
-            beachLine.GenerateCircleEvent(site2);
-            beachLine.InsertSite(site3);
+            //beachLine.GenerateCircleEvent(site2);
+            var insert = beachLine.InsertSite(site3);
 
-            try
-            {
-                var circleEvents = beachLine.GenerateCircleEvent(site3);
+            var circleEvents = beachLine.GenerateCircleEvent(insert.Leaves, site3.Y);
+            var result = beachLine.FindCircleEventAbove(site4);
 
-                var result = beachLine.FindCircleEventAbove(site4);
-
-                Assert.IsNotNull(result);
-                Assert.AreEqual(circleEvents.Single().Point, result.Point);
-                Assert.AreEqual(circleEvents.Single().Vertex, result.Vertex);
-            }
-            catch(Exception e)
-            {
-                Logger.Instance.Log(e.Message);
-                Logger.Instance.Log(e.StackTrace);
-                Logger.Instance.ToFile();
-            }
+            Assert.IsNotNull(result);
+            Assert.AreEqual(circleEvents.Single().Point, result.Point);
+            Assert.AreEqual(circleEvents.Single().Vertex, result.Vertex);
         }
 
         [Test]
@@ -223,7 +211,7 @@ namespace VoronoiTests
             Assert.AreEqual(leafLeft.Site, site3);
             Assert.AreEqual(leafRight.Site, site1);
         }
-        
+
         //[Test]
         //public void TestRemoveLastLeaf()
         //{

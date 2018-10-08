@@ -4,6 +4,7 @@ using System.Linq;
 using VoronoiEngine.Elements;
 using VoronoiEngine.Events;
 using VoronoiEngine.Geomerty;
+using VoronoiEngine.Models;
 using VoronoiEngine.Utilities;
 
 namespace VoronoiEngine.Structures
@@ -39,7 +40,7 @@ namespace VoronoiEngine.Structures
             return arc.CircleEvent;
         }
 
-        public ICollection<HalfEdge> InsertSite(Point point)
+        public InsertSiteModel InsertSite(Point point)
         {
             var leaf = new Leaf(point);
 
@@ -52,13 +53,20 @@ namespace VoronoiEngine.Structures
             }
 
             var root = Root;
-            var edges = root.Insert(point);
-            
+            var result = root.Insert(point);
+
             // Reset root if root was a leaf
-            if(root.IsLeaf)
+            if (root.IsLeaf)
                 Root = root.Parent;
-            return edges;
-         }
+            return result;
+        }
+
+        public ICollection<CircleEvent> GenerateCircleEvent(ICollection<Leaf> sites, double y)
+        {
+            if (sites == null)
+                return null;
+            return sites.Select(s => _circleEventCalculationService.DetermineCircleEvent(new[] { s }, y)).ToList();
+        }
 
         public ICollection<CircleEvent> GenerateCircleEvent(Point site)
         {
@@ -78,7 +86,7 @@ namespace VoronoiEngine.Structures
                 var leftEvent = _circleEventCalculationService.DetermineCircleEvent(leftArcs, site.Y);
                 if (leftEvent != null)
                 {
-                    var leftArcsString = string.Join(", ", leftArcs.Select(a=>a.ToString()).ToArray());
+                    var leftArcsString = string.Join(", ", leftArcs.Select(a => a.ToString()).ToArray());
                     _logger.Log($"Found circle event for arcs: {leftArcsString} at Point: {leftEvent.Point.ToString()} and Vertex: {leftEvent.Vertex.ToString()}");
                     circleEvents.Add(leftEvent);
                 }
@@ -117,10 +125,10 @@ namespace VoronoiEngine.Structures
                 return null;
 
             var arcs = new List<INode> { leftArc, arc, rightArc };
-            var sites = arcs.Cast<Leaf>().Select(a=>a.Site).Distinct().ToList();
+            var sites = arcs.Cast<Leaf>().Select(a => a.Site).Distinct().ToList();
             if (sites.Count != 3)
                 return null;
-            
+
             var circleEvent = _circleEventCalculationService.DetermineCircleEvent(arcs, y);
             if (circleEvent == null)
                 return null;
@@ -151,7 +159,7 @@ namespace VoronoiEngine.Structures
             return output;
         }
 
-        private void RemoveLeaf(Leaf leaf, Node parent,  Node parentParent, bool isLeft)
+        private void RemoveLeaf(Leaf leaf, Node parent, Node parentParent, bool isLeft)
         {
             if (parentParent == null)
             {
@@ -163,7 +171,7 @@ namespace VoronoiEngine.Structures
             //    parent.Left = null;
             //else
             //    parent.Right = null;
-            
+
             var sibling = isLeft ? parent.Right : parent.Left;
             sibling.Parent = parentParent;
 
@@ -178,43 +186,6 @@ namespace VoronoiEngine.Structures
                 parentParent.Right = sibling;
         }
 
-        //private ICollection<HalfEdge> ReplaceLeaf(Node subRoot, Leaf newLeaf, Leaf arc, Point breakpoint)
-        //{
-        //    _logger.Log($"Replace leaf {arc.ToString()} with leaf {newLeaf.ToString()}");
-            
-        //    // Create new half edges
-        //    //var newLeafHalfEdge = new HalfEdge(newLeaf.Site, );
-        //    //var arcHalfEdge = new HalfEdge(arc.Site);
-            
-        //    // Build subtree
-        //    var node = new Node(subRoot);
-            
-        //    subRoot.Left = node;
-        //    subRoot.Right = arc;
-        //    subRoot.Breakpoint.Left = newLeaf.Site;
-        //    subRoot.Breakpoint.Right = arc.Site;
-        //    if(breakpoint != null)
-        //        subRoot.HalfEdge = new HalfEdge(breakpoint, newLeaf.Site, arc.Site);
-        //    //subRoot.HalfEdges.Left = newLeafHalfEdge;
-        //    //subRoot.HalfEdges.Right = arcHalfEdge;
-        //    arc.Parent = subRoot;
-
-        //    var arcClone = arc.Clone();
-        //    node.Left = arcClone;
-        //    node.Right = newLeaf;
-        //    node.Breakpoint.Left = arcClone.Site;
-        //    node.Breakpoint.Right = newLeaf.Site;
-        //    subRoot.Breakpoint.Right = arc.Site;
-        //    if (breakpoint != null)
-        //        node.HalfEdge = new HalfEdge(breakpoint, arc.Site, newLeaf.Site);
-        //    node.Left.Parent = node;
-        //    newLeaf.Parent = node;
-
-        //    return new List<HalfEdge> { subRoot.HalfEdge, node.HalfEdge } ;
-        //    //node.HalfEdges.Left = arcHalfEdge;
-        //    //node.HalfEdges.Right = newLeafHalfEdge;
-        //}
-
         private void BuildStringFromTree(INode node, string output, int level)
         {
             if (node == null)
@@ -224,7 +195,7 @@ namespace VoronoiEngine.Structures
             output += $"{tabs}{node.ToString()}{Environment.NewLine}";
             if (node.IsLeaf)
                 return;
-            
+
             var innerNode = node as Node;
             BuildStringFromTree(innerNode.Left, output, ++level);
             BuildStringFromTree(innerNode.Right, output, level);

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using VoronoiEngine.Events;
 using VoronoiEngine.Geomerty;
+using VoronoiEngine.Models;
 using VoronoiEngine.Utilities;
 
 namespace VoronoiEngine.Elements
@@ -56,7 +57,7 @@ namespace VoronoiEngine.Elements
             return $"Leaf: {Site.ToString()}, CircleEvent: {CircleEvent?.Point.ToString()}";
         }
 
-        public ICollection<HalfEdge> Insert(Point site)
+        public InsertSiteModel Insert(Point site)
         {
             var leaf = new Leaf(site);
             var parent = Parent as Node;
@@ -68,8 +69,22 @@ namespace VoronoiEngine.Elements
                 else
                     parent.Right = node;
             }
-            var edges = ReplaceLeaf(node, leaf, this);
-            return edges;
+            var result = ReplaceLeaf(node, leaf, this);
+            return result;
+        }
+
+        public Node GetParent(TraverseDirection direction)
+        {
+            var parent = (Node)Parent;
+            INode node = this;
+            while ((direction == TraverseDirection.CounterClockwise ? parent.Left : parent.Right) == node)
+            {
+                if (parent.Parent == null)
+                    return null;
+                node = parent;
+                parent = (Node)parent.Parent;
+            }
+            return parent;
         }
     }
 }
