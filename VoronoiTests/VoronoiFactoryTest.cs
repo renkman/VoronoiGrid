@@ -75,15 +75,15 @@ namespace VoronoiTests
             //Logger.Instance.ToFile();
 
             Assert.IsNotNull(map);
-            Assert.AreEqual(2, map.Count(g => g is Vertex));
+            Assert.AreEqual(3, map.Count(g => g is Vertex));
             var vertices = map.Where(g => g is Vertex).Cast<Vertex>().ToList();
-            Assert.AreEqual(new Point { X = 136, Y = 121 }, vertices[0].Point);
+            Assert.AreEqual(new Point { X = 136.25, Y = 122.5 }, vertices[0].Point);
 
             var edgePoints = vertices[0].HalfEdges.Select(e => e.Point).OrderByDescending(p => p.Y).ToList();
             Assert.AreEqual(3, edgePoints.Count);
 
-            Assert.AreEqual(new Point { X = 49, Y = 149 }, edgePoints[0]);
-            Assert.AreEqual(new Point { X = 74, Y = 139 }, edgePoints[1]);
+            Assert.AreEqual(new Point { X = 170, Y = 190 }, edgePoints[0]);
+            Assert.AreEqual(new Point { X = 110, Y = 175 }, edgePoints[1]);
             Assert.AreEqual(new Point { X = 61, Y = 139 }, edgePoints[2]);
 
             Assert.AreEqual(new Point { X = 146, Y = 104 }, vertices[1].Point);
@@ -113,7 +113,8 @@ namespace VoronoiTests
 
             Assert.IsNotNull(map);
             var vertex = map.First(g => g is Vertex);
-            Assert.AreEqual(new Point { X = 136, Y = 121 }, vertex.Point);
+            Assert.AreEqual(136, vertex.Point.XInt);
+            Assert.AreEqual(122, vertex.Point.YInt);
         }
 
         [Test]
@@ -124,10 +125,10 @@ namespace VoronoiTests
             var map = factory.CreateVoronoiMap(200, 200, 20);
 
             Assert.IsNotNull(map);
-            Logger.Instance.ToFile();
+            //Logger.Instance.ToFile();
 
             Assert.AreEqual(20, map.Count(g => g is Site));
-            Assert.AreEqual(6, map.Count(g => g is Vertex));
+            Assert.IsTrue(map.Count(g => g is Vertex) >= 10);
         }
 
 

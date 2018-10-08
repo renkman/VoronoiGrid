@@ -65,7 +65,7 @@ namespace VoronoiEngine.Structures
         {
             if (sites == null)
                 return null;
-            return sites.Select(s => _circleEventCalculationService.DetermineCircleEvent(new[] { s }, y)).ToList();
+            return sites.Select(s => _circleEventCalculationService.DetermineCircleEvent(new[] { s }, y)).Where(e => e != null).ToList();
         }
 
         public ICollection<CircleEvent> GenerateCircleEvent(Point site)

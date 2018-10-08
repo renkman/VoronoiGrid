@@ -115,38 +115,38 @@ namespace VoronoiTests
 
             beachLine.InsertSite(site1);
             beachLine.InsertSite(site2);
-            beachLine.InsertSite(site3);
+            var insert = beachLine.InsertSite(site3);
 
             var expectedCricleEvent = new Point { X = 40, Y = 20 };
             var expectedVertex = new Point { X = 40, Y = 40 };
 
-            var result = beachLine.GenerateCircleEvent(site3);
+            var result = beachLine.GenerateCircleEvent(insert.Leaves, site3.Y);
 
             Assert.IsNotNull(result);
             Assert.AreEqual(1, result.Count);
             Assert.AreEqual(expectedCricleEvent, result.Single().Point);
             Assert.AreEqual(expectedVertex, result.Single().Vertex);
-            Assert.AreEqual(site3, result.Single().LeftArc.Site);
+            Assert.AreEqual(site2, result.Single().LeftArc.Site);
             Assert.AreEqual(site1, result.Single().CenterArc.Site);
-            Assert.AreEqual(site2, result.Single().RightArc.Site);
+            Assert.AreEqual(site3, result.Single().RightArc.Site);
         }
 
         [Test]
         public void TestGenerateCircleEvent()
         {
             var beachLine = new BeachLine();
-            var site1 = new Point { X = 170, Y = 140 };
+            var site1 = new Point { X = 130, Y = 160 };
             var site2 = new Point { X = 110, Y = 150 };
-            var site3 = new Point { X = 130, Y = 160 };
+            var site3 = new Point { X = 170, Y = 140 };
 
             beachLine.InsertSite(site1);
             beachLine.InsertSite(site2);
-            beachLine.InsertSite(site3);
+            var insert = beachLine.InsertSite(site3);
 
             var expectedCricleEvent = new Point { X = 136, Y = 84 };
             var expectedVertex = new Point { X = 136, Y = 122 };
 
-            var result = beachLine.GenerateCircleEvent(site3);
+            var result = beachLine.GenerateCircleEvent(insert.Leaves, site3.Y);
 
             Assert.IsNotNull(result);
             Assert.AreEqual(1, result.Count);
@@ -154,19 +154,20 @@ namespace VoronoiTests
             Assert.AreEqual(expectedCricleEvent.YInt, result.Single().Point.YInt);
             Assert.AreEqual(expectedVertex.XInt, result.Single().Vertex.XInt);
             Assert.AreEqual(expectedVertex.YInt, result.Single().Vertex.YInt);
-            Assert.AreEqual(site3, result.Single().LeftArc.Site);
+            Assert.AreEqual(site2, result.Single().LeftArc.Site);
             Assert.AreEqual(site1, result.Single().CenterArc.Site);
-            Assert.AreEqual(site2, result.Single().RightArc.Site);
+            Assert.AreEqual(site3, result.Single().RightArc.Site);
         }
 
         [Test]
         public void TestFindCircleEventAbove()
         {
             var beachLine = new BeachLine();
-            var site1 = new Point { X = 140, Y = 120 };
-            var site2 = new Point { X = 170, Y = 140 };
-            var site3 = new Point { X = 110, Y = 150 };
-            var site4 = new Point { X = 130, Y = 160 };
+            var site1 = new Point { X = 130, Y = 160 };
+            var site2 = new Point { X = 110, Y = 150 };
+            var site3 = new Point { X = 170, Y = 140 };
+            var site4 = new Point { X = 140, Y = 120 };
+            
 
             beachLine.InsertSite(site1);
             //beachLine.GenerateCircleEvent(site1);
@@ -192,9 +193,9 @@ namespace VoronoiTests
 
             beachLine.InsertSite(site1);
             beachLine.InsertSite(site2);
-            beachLine.InsertSite(site3);
+            var insert = beachLine.InsertSite(site3);
 
-            var circleEvents = beachLine.GenerateCircleEvent(site3);
+            var circleEvents = beachLine.GenerateCircleEvent(insert.Leaves, site3.Y);
             var circleEvent = circleEvents.Single();
 
             beachLine.RemoveLeaf(circleEvent.CenterArc);

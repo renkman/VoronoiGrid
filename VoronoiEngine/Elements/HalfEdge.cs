@@ -75,6 +75,10 @@ namespace VoronoiEngine.Elements
         public Point Intersect(HalfEdge halfEdge)
         {
             var x = (halfEdge.G - G) / (F - halfEdge.F);
+
+            if (double.IsNaN(x))
+                return null;
+
             var y = F * x + G;
 
             if ((x - Point.X) / Direction.X < 0)
