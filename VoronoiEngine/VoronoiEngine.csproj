@@ -51,7 +51,6 @@
     <Compile Include="Geomerty\BoundingBoxService.cs" />
     <Compile Include="Geomerty\BreakpointCalculationService.cs" />
     <Compile Include="Geomerty\CircleEventCalculationService.cs" />
-    <Compile Include="Geomerty\CircleEventEdgeCalculationService.cs" />
     <Compile Include="Geomerty\GeometryHelper.cs" />
     <Compile Include="Geomerty\IBreakpointCalculationService.cs" />
     <Compile Include="Geomerty\ICircleEventCalculationService.cs" />

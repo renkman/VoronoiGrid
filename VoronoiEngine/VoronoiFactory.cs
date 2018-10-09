@@ -48,8 +48,19 @@ namespace VoronoiEngine
             _eventQueue = new EventQueue();
             _beachLine = new BeachLine();
 
-            var sites = _siteGenerator.GenerateSites(width, height, pointQuantity);
-            return CreateVoronoiMap(height, width, sites);
+            try
+            {
+                var sites = _siteGenerator.GenerateSites(width, height, pointQuantity);
+                return CreateVoronoiMap(height, width, sites);
+            }
+            catch(Exception e)
+            {
+                _logger.Log(e.Message);
+                _logger.Log(e.StackTrace);
+                _logger.ToFile();
+
+                return null;
+            }
         }
 
         public VoronoiMap CreateVoronoiMap(int height, int width, IEnumerable<Site> sites)

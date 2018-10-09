@@ -29,24 +29,7 @@ namespace VoronoiEngine.Elements
         {
             return this;
         }
-
-        public void GetDescendants(Point start, TraverseDirection direction, ICollection<INode> descendants, int count)
-        {
-            if (Site == start)
-            {
-                descendants.Add(this);
-                return;
-            }
-
-            if (descendants.Any())
-                descendants.Add(this);
-        }
-
-        public INode GetNeighbor(INode start, TraverseDirection direction)
-        {
-            return this;
-        }
-
+        
         public Leaf Clone()
         {
             return new Leaf(Site);
@@ -85,6 +68,20 @@ namespace VoronoiEngine.Elements
                 parent = (Node)parent.Parent;
             }
             return parent;
+        }
+
+        public Node GetFirstParent(Node leftParent, Node rightParent)
+        {
+            INode par = this;
+            while (par.Parent != null)
+            {
+                par = par.Parent;
+                if (par == leftParent)
+                    return leftParent;
+                if (par == rightParent)
+                    return rightParent;
+            }
+            return null;
         }
     }
 }

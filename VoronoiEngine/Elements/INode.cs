@@ -10,11 +10,7 @@ namespace VoronoiEngine.Elements
         bool IsLeaf { get; }
 
         INode Find(Point point);
-
-        INode GetNeighbor(INode start, TraverseDirection direction);
         
-        void GetDescendants(Point start, TraverseDirection direction, ICollection<INode> descendants, int count);
-
         InsertSiteModel Insert(Point site);
     }
 }

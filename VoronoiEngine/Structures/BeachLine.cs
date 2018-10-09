@@ -15,7 +15,7 @@ namespace VoronoiEngine.Structures
         private readonly IBreakpointCalculationService _breakpointCalculationService;
         private readonly Logger _logger;
 
-        public BeachLine() : this(new CircleEventEdgeCalculationService(), new BreakpointCalculationService())
+        public BeachLine() : this(new CircleEventCalculationService(), new BreakpointCalculationService())
         {
         }
 
@@ -65,81 +65,23 @@ namespace VoronoiEngine.Structures
         {
             if (sites == null)
                 return null;
-            return sites.Select(s => _circleEventCalculationService.DetermineCircleEvent(new[] { s }, y)).Where(e => e != null).ToList();
+            return sites.Select(s => _circleEventCalculationService.DetermineCircleEvent(s, y)).Where(e => e != null).ToList();
         }
-
-        public ICollection<CircleEvent> GenerateCircleEvent(Point site)
-        {
-            var root = Root as Node;
-            if (root == null)
-                return null;
-
-            var circleEvents = new List<CircleEvent>();
-
-            // Find triple of consecutive arcs where the arc for the new site is
-            // the left arc...
-            var leftArcs = new List<INode>();
-            root.GetDescendants(site, TraverseDirection.Clockwise, leftArcs, 3);
-
-            if (leftArcs.Count == 3)
-            {
-                var leftEvent = _circleEventCalculationService.DetermineCircleEvent(leftArcs, site.Y);
-                if (leftEvent != null)
-                {
-                    var leftArcsString = string.Join(", ", leftArcs.Select(a => a.ToString()).ToArray());
-                    _logger.Log($"Found circle event for arcs: {leftArcsString} at Point: {leftEvent.Point.ToString()} and Vertex: {leftEvent.Vertex.ToString()}");
-                    circleEvents.Add(leftEvent);
-                }
-            }
-
-            // ... and where it is the right arc.
-            var rightArcs = new List<INode>();
-            root.GetDescendants(site, TraverseDirection.CounterClockwise, rightArcs, 3);
-
-            if (rightArcs.Count < 3)
-                return circleEvents;
-
-            var rightEvent = _circleEventCalculationService.DetermineCircleEvent(rightArcs, site.Y);
-            if (rightEvent != null)
-            {
-                var rightArcsString = string.Join(", ", rightArcs.Select(a => a.ToString()).ToArray());
-                _logger.Log($"Found circle event for arcs: {rightArcsString} at Point: {rightEvent.Point.ToString()} and Vertex: {rightEvent.Vertex.ToString()}");
-                circleEvents.Add(rightEvent);
-            }
-            return circleEvents;
-        }
-
-        public CircleEvent GenerateSingleCircleEvent(Leaf arc, double y)
-        {
-            var root = Root as Node;
-            if (root == null)
-                return null;
-
-            // Find triple of consecutive arcs where the passed arc is the middle arc
-            var leftArc = root.GetNeighbor(arc, TraverseDirection.Clockwise);
-            if (leftArc == null)
-                return null;
-
-            var rightArc = root.GetNeighbor(arc, TraverseDirection.CounterClockwise);
-            if (rightArc == null)
-                return null;
-
-            var arcs = new List<INode> { leftArc, arc, rightArc };
-            var sites = arcs.Cast<Leaf>().Select(a => a.Site).Distinct().ToList();
-            if (sites.Count != 3)
-                return null;
-
-            var circleEvent = _circleEventCalculationService.DetermineCircleEvent(arcs, y);
-            if (circleEvent == null)
-                return null;
-
-            var arcsString = string.Join(", ", arcs.Select(a => a.ToString()).ToArray());
-            _logger.Log($"Found circle event for arcs: {arcsString} at Point: {circleEvent.Point.ToString()} and Vertex: {circleEvent.Vertex.ToString()}");
-            return circleEvent;
-        }
-
+               
         public Node RemoveLeaf(Leaf leaf)
         {
+            //VParabola* gparent = p1->parent->parent;
+            //if (p1->parent->Left() == p1)
+            //{
+            //    if (gparent->Left() == p1->parent) gparent->SetLeft(p1->parent->Right());
+            //    if (gparent->Right() == p1->parent) gparent->SetRight(p1->parent->Right());
+            //}
+            //else
+            //{
+            //    if (gparent->Left() == p1->parent) gparent->SetLeft(p1->parent->Left());
+            //    if (gparent->Right() == p1->parent) gparent->SetRight(p1->parent->Left());
+            //}
+
             var parent = leaf.Parent as Node;
             var parentParent = parent.Parent as Node;
             leaf.Parent = null;
