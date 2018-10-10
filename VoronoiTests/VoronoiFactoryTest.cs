@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using VoronoiEngine;
 using VoronoiEngine.Elements;
+using VoronoiEngine.Utilities;
 
 namespace VoronoiTests
 {
@@ -127,6 +128,25 @@ namespace VoronoiTests
 
             Assert.AreEqual(20, map.Count(g => g is Site));
             Assert.IsTrue(map.Count(g => g is Vertex) >= 10);
+        }
+
+        
+        [Test]
+        public void TestCreateVoronoiMapGenerateWorld()
+        {
+            var majorCountriyRegions = 8 * 8;
+            var minorCountrieRegions = 8 * 4;
+            var seaRegions = 12;
+            var total = seaRegions + majorCountriyRegions + minorCountrieRegions;
+            
+            var factory = new VoronoiFactory();
+            var map = factory.CreateVoronoiMap(total * 8, total * 8, total);
+
+            Assert.IsNotNull(map);
+            //Logger.Instance.ToFile();
+
+            Assert.AreEqual(total, map.Count(g => g is Site));
+            Assert.IsTrue(map.Count(g => g is Vertex) >= total / 2);
         }
 
         [Test]
@@ -289,10 +309,18 @@ namespace VoronoiTests
                new Site{Point =new Point(82, 53)},
                new Site{Point =new Point(110, 48)}
             };
+            try
+            {
+                var map = factory.CreateVoronoiMap(200, 200, sites);
+            }
+            catch(Exception e)
+            {
+                Logger.Instance.Log(e.Message);
+                Logger.Instance.Log(e.StackTrace);
+                Logger.Instance.ToFile();
 
-            var map = factory.CreateVoronoiMap(200, 200, sites);
-
-            Assert.IsNotNull(map);
+                throw e;
+            }
         }
     }
 }

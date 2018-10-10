@@ -6,10 +6,11 @@ namespace VoronoiEngine.Events
     public class CircleEvent : IEvent
     {
         public Point Vertex { get; set; }
+        
         public Point Point { get; set; }
-        public Leaf LeftArc { get; set; }
-        public Leaf CenterArc { get; set; }
-        public Leaf RightArc { get; set; }
+        
+        public Leaf Arc { get; set; }
+        
         public ICollection<HalfEdge> Edges { get; set; }
 
         public double PrecisionVertex { get; set; }

@@ -14,7 +14,7 @@ namespace VoronoiEngine.EventHandler
             var circleEvent = beachLine.FindCircleEventAbove(sweepEvent.Point);
             if (circleEvent != null)
             {
-                Logger.Instance.Log($"SiteEvent: {sweepEvent.Point.ToString()}: Remove CircleEvent {circleEvent.Point.ToString()} from queue.");
+                Logger.Instance.Log($"SiteEvent: {sweepEvent.Point.ToString()}: Remove CircleEvent {circleEvent.Point} from queue.");
                 eventQueue.Remove(circleEvent);
             }
 
@@ -23,6 +23,7 @@ namespace VoronoiEngine.EventHandler
 
             var circleEvents = beachLine.GenerateCircleEvent(result?.Leaves, sweepEvent.Point.Y);
             eventQueue.Insert(circleEvents);
+            
             return result?.HalfEdges?.Cast<IGeometry>().ToList();
         }
     }

@@ -30,14 +30,8 @@ namespace VoronoiEngine.Structures
 
         public CircleEvent FindCircleEventAbove(Point site)
         {
-            if (Root == null)
-                return null;
-
-            var arc = Root.Find(site) as Leaf;
-            if (arc?.CircleEvent == null)
-                return null;
-
-            return arc.CircleEvent;
+            var arc = Root?.Find(site) as Leaf;
+            return arc?.CircleEvent;
         }
 
         public InsertSiteModel InsertSite(Point point)
@@ -63,9 +57,11 @@ namespace VoronoiEngine.Structures
 
         public ICollection<CircleEvent> GenerateCircleEvent(ICollection<Leaf> sites, double y)
         {
-            if (sites == null)
-                return null;
-            return sites.Select(s => _circleEventCalculationService.DetermineCircleEvent(s, y)).Where(e => e != null).ToList();
+            var circleEvents = sites?.Select(s => _circleEventCalculationService.DetermineCircleEvent(s, y)).Where(e => e != null).ToList();
+            if ((circleEvents?.Any()).GetValueOrDefault())
+                _logger.Log(
+                    $"Found circle events: {string.Join(", ", circleEvents.Select(c => $"{c.Point} and {c.Arc.Site}").ToArray())}");
+            return circleEvents;
         }
                
         public Node RemoveLeaf(Leaf leaf)
@@ -88,9 +84,6 @@ namespace VoronoiEngine.Structures
             parent.Parent = null;
 
             RemoveLeaf(leaf, parent, parentParent, parent.Left == leaf);
-            if (parentParent == null)
-                return null;
-
             return parentParent;
         }
 
@@ -103,6 +96,7 @@ namespace VoronoiEngine.Structures
 
         private void RemoveLeaf(Leaf leaf, Node parent, Node parentParent, bool isLeft)
         {
+            _logger.Log($"Remove leaf {leaf.Site}");
             if (parentParent == null)
             {
                 Root = isLeft ? parent.Right : parent.Left;
@@ -126,6 +120,9 @@ namespace VoronoiEngine.Structures
                 parentParent.Left = sibling;
             else
                 parentParent.Right = sibling;
+
+            if(sibling.Parent == null)
+                throw new InvalidOperationException($"Remove leaf {leaf.Site}: Parent of node {0} is null");
         }
 
         private void BuildStringFromTree(INode node, string output, int level)

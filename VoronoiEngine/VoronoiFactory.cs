@@ -88,7 +88,7 @@ namespace VoronoiEngine
                 var siteEvent = sweepEvent as SiteEvent;
                 if (siteEvent != null)
                 {
-                    _logger.Log($"Sweepline SiteEvent: {siteEvent.Point.ToString()}");
+                    _logger.Log($"Sweepline SiteEvent: {siteEvent.Point}");
                     var halfEdges = _siteEventHandler.HandleEvent(siteEvent, _eventQueue, _beachLine);
                     if (halfEdges == null)
                         continue;
@@ -104,7 +104,7 @@ namespace VoronoiEngine
                 if (circleEvent == null)
                     throw new InvalidOperationException("SweepEvent is neither SiteEvent nor CircleEvent");
 
-                _logger.Log($"Sweepline CircleEvent: {circleEvent.Point.ToString()}");
+                _logger.Log($"Sweepline CircleEvent: {circleEvent.Point} for arc {circleEvent.Arc.Site}");
                 var circleEventResult = _circleEventHandler.HandleEvent(circleEvent, _eventQueue, _beachLine);
 
                 foreach (var geo in circleEventResult)

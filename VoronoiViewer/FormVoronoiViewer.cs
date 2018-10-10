@@ -95,13 +95,13 @@ namespace VoronoiViewer
 
                         var halfEdge = geo as HalfEdge;
 
-                        if (halfEdge == null)
+                        if (halfEdge?.Start == null || halfEdge.End == null)
                             continue;
 
-                        var startX = (halfEdge.Start != null ? halfEdge.Start.Point.XInt : halfEdge.Point.XInt) * _factorX;
-                        var startY = _canvas.Height - (halfEdge.Start != null ? halfEdge.Start.Point.YInt : halfEdge.Point.YInt) * _factorY;
-                        var endX = (halfEdge.End != null ? halfEdge.End.Point.XInt : halfEdge.Point.XInt) * _factorX;
-                        var endY = _canvas.Height - (halfEdge.End != null ? halfEdge.End.Point.YInt : halfEdge.Point.YInt) * _factorY;
+                        var startX = halfEdge.Start.Point.XInt * _factorX;
+                        var startY = _canvas.Height - halfEdge.Start.Point.YInt * _factorY;
+                        var endX = halfEdge.End.Point.XInt * _factorX;
+                        var endY = _canvas.Height - halfEdge.End.Point.YInt * _factorY;
 
                         //if (startX > 0 || startX < _canvas.Width || startY > 0 || startY < _canvas.Height || endX > 0 || endX < _canvas.Width || endY > 0 || endY < _canvas.Height)
                         if (startX > 0 && startY > 0)

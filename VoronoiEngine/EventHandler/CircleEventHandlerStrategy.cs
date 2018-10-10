@@ -19,10 +19,29 @@ namespace VoronoiEngine.EventHandler
         
         public ICollection<IGeometry> HandleEvent(CircleEvent sweepEvent, EventQueue eventQueue, BeachLine beachLine)
         {
-            var leftParent = sweepEvent.CenterArc.GetParent(TraverseDirection.CounterClockwise);
-            var rightParent = sweepEvent.CenterArc.GetParent(TraverseDirection.Clockwise);                     
+            if(sweepEvent.Arc.Parent == null)
+                throw new InvalidOperationException($"CircleEvent: Arc {sweepEvent.Arc.Site}: Parent of node {0} is null");
 
-            var p = new Point(sweepEvent.Point.X, _calculationService.GetY(sweepEvent.CenterArc.Site, sweepEvent.Point));
+            var leftParent = sweepEvent.Arc.GetParent(TraverseDirection.CounterClockwise);
+            var rightParent = sweepEvent.Arc.GetParent(TraverseDirection.Clockwise);                     
+            var left = leftParent?.GetLeaf(TraverseDirection.CounterClockwise);
+            var right = rightParent?.GetLeaf(TraverseDirection.Clockwise);
+            
+            if(left == null || right == null)
+                throw new InvalidOperationException($"Neighbor of node {sweepEvent.Arc.Site} is null.");
+            
+            if (left.CircleEvent != null)
+            {
+                eventQueue.Remove(left.CircleEvent);
+                left.CircleEvent = null;
+            }
+            if (right.CircleEvent != null)
+            {
+                eventQueue.Remove(right.CircleEvent);
+                right.CircleEvent = null;
+            }
+
+            var p = new Point(sweepEvent.Point.X, _calculationService.GetY(sweepEvent.Arc.Site, sweepEvent.Point));
 
             //if (p.Equals(sweepEvent.Vertex))
             //    throw new InvalidOperationException($"Calculated Vertex {p} differs from vertex {sweepEvent.Vertex}");
@@ -32,10 +51,10 @@ namespace VoronoiEngine.EventHandler
                 ConnectHalfEdgeWithVertex(edge, vertex, (e, v) => e.End = v);
 
             // Add third half edge
-            var halfEdge = new HalfEdge(p, sweepEvent.LeftArc.Site, sweepEvent.RightArc.Site);
+            var halfEdge = new HalfEdge(p, left.Site, right.Site);
 
             ConnectHalfEdgeWithVertex(halfEdge, vertex, (e, v) => e.Start = v);
-            var higher = sweepEvent.CenterArc.GetFirstParent(leftParent, rightParent);
+            var higher = sweepEvent.Arc.GetFirstParent(leftParent, rightParent);
             higher.HalfEdge = halfEdge;
 
             if (vertex.HalfEdges.Count != 3)
@@ -46,20 +65,10 @@ namespace VoronoiEngine.EventHandler
                 throw new InvalidOperationException(message);
             }
 
-            var parentNode = beachLine.RemoveLeaf(sweepEvent.CenterArc);
-
-            if (sweepEvent.LeftArc.CircleEvent != null)
-            {
-                eventQueue.Remove(sweepEvent.LeftArc.CircleEvent);
-                sweepEvent.LeftArc.CircleEvent = null;
-            }
-            if (sweepEvent.RightArc.CircleEvent != null)
-            {
-                eventQueue.Remove(sweepEvent.RightArc.CircleEvent);
-                sweepEvent.RightArc.CircleEvent = null;
-            }
-
-            var circleEvents = beachLine.GenerateCircleEvent(new[] { sweepEvent.LeftArc, sweepEvent.RightArc }, sweepEvent.Point.Y);
+            Logger.Instance.Log($"CircleEvent: Remove Arc {sweepEvent.Arc.Site}");
+            beachLine.RemoveLeaf(sweepEvent.Arc);
+            
+            var circleEvents = beachLine.GenerateCircleEvent(new[] { left, right }, sweepEvent.Point.Y);
             eventQueue.Insert(circleEvents);
 
             return new List<IGeometry> { vertex, halfEdge };

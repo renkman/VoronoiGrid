@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Linq;
 using VoronoiEngine.Elements;
 using VoronoiEngine.Events;
@@ -27,7 +28,7 @@ namespace VoronoiEngine.Geomerty
                 return null;
 
             var a = left.Site;
-            var c = right.Site;
+            //var c = right.Site;
 
             var x = a.X - intersection.X;
             var dy = a.Y - intersection.Y;
@@ -41,13 +42,15 @@ namespace VoronoiEngine.Geomerty
 
             var circleEvent = new CircleEvent
             {
-                LeftArc = left,
-                CenterArc = arc,
-                RightArc = right,
+                Arc = arc,
                 Edges = new List<HalfEdge> { leftEdge, rightEdge },
                 Vertex = intersection,
                 Point = circleEventPoint
             };
+
+            //if (arc.CircleEvent != null)
+            //    throw new InvalidOperationException($"Circle event for leaf{arc.Site} already exists");
+
             arc.CircleEvent = circleEvent;
             return circleEvent;
         }
