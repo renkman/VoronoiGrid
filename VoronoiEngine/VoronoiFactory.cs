@@ -90,8 +90,6 @@ namespace VoronoiEngine
                 {
                     _logger.Log($"Sweepline SiteEvent: {siteEvent.Point}");
                     var halfEdges = _siteEventHandler.HandleEvent(siteEvent, _eventQueue, _beachLine);
-                    if (halfEdges == null)
-                        continue;
                     map.AddRange(halfEdges);
 
                     foreach (var geo in halfEdges)
@@ -115,6 +113,8 @@ namespace VoronoiEngine
             }
 
             _beachLine.FinishEdge(_beachLine.Root, width);
+
+            map.ConnectEdges();
 
             _logger.Log("Finished Voronoi map creation");
 

@@ -39,7 +39,7 @@ namespace VoronoiEngine.Elements
 
             return new InsertSiteModel
             {
-                HalfEdges = new List<HalfEdge> { subRoot.HalfEdge, node.HalfEdge },
+                HalfEdge = node.HalfEdge,
                 Leaves = new List<Leaf> { arcClone, arc }
             };                
         }

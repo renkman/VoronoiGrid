@@ -43,12 +43,19 @@ namespace VoronoiEngine.EventHandler
 
             var p = new Point(sweepEvent.Point.X, _calculationService.GetY(sweepEvent.Arc.Site, sweepEvent.Point));
             
+            leftParent.HalfEdge.EndPoint = p;
+            rightParent.HalfEdge.EndPoint = p;
+
             var vertex = new Vertex { Point = p };
-            foreach (var edge in sweepEvent.Edges)
-            {
-                edge.EndPoint = p;
-                ConnectHalfEdgeWithVertex(edge, vertex, (e, v) => e.End = v);
-            }
+
+            ConnectHalfEdgeWithVertex(leftParent.HalfEdge, vertex, (e, v) => e.End = v);
+            ConnectHalfEdgeWithVertex(rightParent.HalfEdge, vertex, (e, v) => e.End = v);
+
+            //foreach (var edge in sweepEvent.Edges)
+            //{
+            //    edge.EndPoint = p;
+            //    ConnectHalfEdgeWithVertex(edge, vertex, (e, v) => e.End = v);
+            //}
 
             // Add third half edge
             var halfEdge = new HalfEdge(p, left.Site, right.Site);

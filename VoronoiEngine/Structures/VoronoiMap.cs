@@ -35,7 +35,7 @@ namespace VoronoiEngine.Structures
 
         public void AddRange<TGeometry>(IEnumerable<TGeometry> elements) where TGeometry : IGeometry
         {
-            foreach (var element in elements)
+            foreach (var element in elements.Where(e => e != null))
                 Add(element);
         }
 
@@ -64,15 +64,10 @@ namespace VoronoiEngine.Structures
             return result;
         }
 
-        //private void ConnectEdges(Vertex vertex)
-        //{
-        //    var halfEdges = _map.Values.Where(g => g is HalfEdge).Cast<HalfEdge>()
-        //        .Where(h => vertex.HalfEdges.Contains(h)).ToList();
-
-        //    if (!halfEdges.Any())
-        //        return;
-
-        //    vertex.Replace(halfEdges);
-        //}
+        public void ConnectEdges()
+        {
+            foreach (var edge in _map.Where(g => g is HalfEdge).Cast<HalfEdge>().Where(e => e.Neighbor != null))
+                edge.Point = edge.Neighbor.EndPoint;
+        }
     }
 }

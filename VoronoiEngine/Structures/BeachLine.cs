@@ -74,6 +74,7 @@ namespace VoronoiEngine.Structures
             RemoveLeaf(leaf, parent, parentParent, parent.Left == leaf);
             return parentParent;
         }
+
         public void	FinishEdge(INode node, int width)
         {
             if (node.IsLeaf)

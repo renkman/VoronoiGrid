@@ -130,7 +130,6 @@ namespace VoronoiTests
             Assert.IsTrue(map.Count(g => g is Vertex) >= 10);
         }
 
-        
         [Test]
         public void TestCreateVoronoiMapGenerateWorld()
         {
@@ -138,7 +137,7 @@ namespace VoronoiTests
             var minorCountrieRegions = 8 * 4;
             var seaRegions = 12;
             var total = seaRegions + majorCountriyRegions + minorCountrieRegions;
-            
+
             var factory = new VoronoiFactory();
             var map = factory.CreateVoronoiMap(total * 8, total * 8, total);
 
@@ -313,7 +312,7 @@ namespace VoronoiTests
             {
                 var map = factory.CreateVoronoiMap(200, 200, sites);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Logger.Instance.Log(e.Message);
                 Logger.Instance.Log(e.StackTrace);
@@ -321,6 +320,26 @@ namespace VoronoiTests
 
                 throw e;
             }
+        }
+
+        [Test]
+        public void TestCreateVoroniMapCase5()
+        {
+            var factory = new VoronoiFactory();
+            var sites = new List<Site>
+            {
+                new Site { Point = new Point(38, 25) },
+                new Site { Point = new Point (3, 4 )},
+                new Site { Point = new Point (32, 9 ) },
+                new Site { Point = new Point (6, 18 ) }
+            };
+
+            var map = factory.CreateVoronoiMap(200, 200, sites);
+
+            Assert.IsNotNull(map);
+            Assert.AreEqual(2, map.Where(g => g is Vertex).Cast<Vertex>().Count());
+            Assert.IsTrue(map.Where(g => g is HalfEdge).Cast<HalfEdge>().All(v => v.Point != null), "HalfEdges without start point found");
+            Assert.IsTrue(map.Where(g => g is HalfEdge).Cast<HalfEdge>().All(v => v.EndPoint != null), "HalfEdges without end point found");
         }
     }
 }

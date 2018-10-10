@@ -23,8 +23,10 @@ namespace VoronoiEngine.EventHandler
 
             var circleEvents = beachLine.GenerateCircleEvent(result?.Leaves, sweepEvent.Point.Y);
             eventQueue.Insert(circleEvents);
-            
-            return result?.HalfEdges?.Cast<IGeometry>().ToList();
+
+            if (result != null)
+                return new List<IGeometry> { result.HalfEdge };
+            return new List<IGeometry>();
         }
     }
 }

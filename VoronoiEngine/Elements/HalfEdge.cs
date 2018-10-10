@@ -42,7 +42,8 @@ namespace VoronoiEngine.Elements
 
         public override bool Equals(object obj)
         {
-            if (!(obj is HalfEdge other))
+            var other = obj as HalfEdge;
+            if (other == null)
                 return false;
             return Equals(other);
         }
@@ -56,7 +57,7 @@ namespace VoronoiEngine.Elements
         
         public override string ToString()
         {
-            return $"HalfEdge at Point: {Point}, Left: {Left}, Right: {Right}";
+            return $"HalfEdge at Point: {Point}, EndPoint: {EndPoint}, Left: {Left}, Right: {Right}";
         }
                 
         public Point Intersect(HalfEdge halfEdge)
