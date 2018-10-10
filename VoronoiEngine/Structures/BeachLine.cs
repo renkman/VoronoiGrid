@@ -66,18 +66,6 @@ namespace VoronoiEngine.Structures
                
         public Node RemoveLeaf(Leaf leaf)
         {
-            //VParabola* gparent = p1->parent->parent;
-            //if (p1->parent->Left() == p1)
-            //{
-            //    if (gparent->Left() == p1->parent) gparent->SetLeft(p1->parent->Right());
-            //    if (gparent->Right() == p1->parent) gparent->SetRight(p1->parent->Right());
-            //}
-            //else
-            //{
-            //    if (gparent->Left() == p1->parent) gparent->SetLeft(p1->parent->Left());
-            //    if (gparent->Right() == p1->parent) gparent->SetRight(p1->parent->Left());
-            //}
-
             var parent = leaf.Parent as Node;
             var parentParent = parent.Parent as Node;
             leaf.Parent = null;
@@ -85,6 +73,23 @@ namespace VoronoiEngine.Structures
 
             RemoveLeaf(leaf, parent, parentParent, parent.Left == leaf);
             return parentParent;
+        }
+        public void	FinishEdge(INode node, int width)
+        {
+            if (node.IsLeaf)
+                return;
+
+            var innerNode = (Node)node;
+            var mx = innerNode.HalfEdge.Direction.X > 0.0
+                ? Math.Max(width, innerNode.HalfEdge.Point.X + 10)
+                : Math.Min(0.0, innerNode.HalfEdge.Point.X - 10);
+
+            var end = new Point(mx, mx * innerNode.HalfEdge.F + innerNode.HalfEdge.G);
+
+            innerNode.HalfEdge.EndPoint = end;
+            			
+            FinishEdge(innerNode.Left, width);
+            FinishEdge(innerNode.Right, width);
         }
 
         public override string ToString()
@@ -103,19 +108,9 @@ namespace VoronoiEngine.Structures
                 return;
             }
 
-            //if (isLeft)
-            //    parent.Left = null;
-            //else
-            //    parent.Right = null;
-
             var sibling = isLeft ? parent.Right : parent.Left;
             sibling.Parent = parentParent;
-
-            //if (isLeft)
-            //    parent.Right = null;
-            //else
-            //    parent.Left = null;
-
+            
             if (parentParent.Left == parent)
                 parentParent.Left = sibling;
             else

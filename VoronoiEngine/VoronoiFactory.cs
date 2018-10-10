@@ -114,6 +114,8 @@ namespace VoronoiEngine
                 map.AddRange(circleEventResult);
             }
 
+            _beachLine.FinishEdge(_beachLine.Root, width);
+
             _logger.Log("Finished Voronoi map creation");
 
             return map;

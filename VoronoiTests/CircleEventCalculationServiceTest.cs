@@ -29,14 +29,12 @@ namespace VoronoiTests
             node3.Parent = parentDummy;
             var arcs = new INode[] { node1, node2, node3 };
 
-            var expectedVertex = new Point { X = 136.25, Y = 122.5 };
             var expectedCricleEvent = new Point { X = 136.25, Y = 84 };
 
             var service = new CircleEventCalculationService();
             var result = service.DetermineCircleEvent(node3, 140);
 
             Assert.AreEqual(expectedCricleEvent, result.Point);
-            Assert.AreEqual(expectedVertex, result.Vertex);
-        }
+       }
     }
 }

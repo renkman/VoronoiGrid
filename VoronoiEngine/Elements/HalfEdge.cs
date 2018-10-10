@@ -17,9 +17,11 @@ namespace VoronoiEngine.Elements
 
         public Point Point { get; set; }
 
+        public Point EndPoint { get; set; }
+
         public Vertex Start { get; set; }
 
-        public Vertex End { get; set; }
+        public Vertex End { get; set; }      
 
         public Point Left { get; }
 
@@ -40,8 +42,7 @@ namespace VoronoiEngine.Elements
 
         public override bool Equals(object obj)
         {
-            var other = obj as HalfEdge;
-            if (other == null)
+            if (!(obj is HalfEdge other))
                 return false;
             return Equals(other);
         }
@@ -52,21 +53,7 @@ namespace VoronoiEngine.Elements
                 return false;
             return Left.Equals(other.Left) && Right.Equals(other.Right);
         }
-
-        //public static bool operator ==(HalfEdge a, HalfEdge b)
-        //{
-        //    if (a == null || b == null)
-        //        return false;
-        //    return a.Equals(b);
-        //}
-
-        //public static bool operator !=(HalfEdge a, HalfEdge b)
-        //{
-        //    if (a == null || b == null)
-        //        return false;
-        //    return !a.Equals(b);
-        //}
-
+        
         public override string ToString()
         {
             return $"HalfEdge at Point: {Point}, Left: {Left}, Right: {Right}";

@@ -42,13 +42,13 @@ namespace VoronoiEngine.EventHandler
             }
 
             var p = new Point(sweepEvent.Point.X, _calculationService.GetY(sweepEvent.Arc.Site, sweepEvent.Point));
-
-            //if (p.Equals(sweepEvent.Vertex))
-            //    throw new InvalidOperationException($"Calculated Vertex {p} differs from vertex {sweepEvent.Vertex}");
-
-            var vertex = new Vertex { Point = sweepEvent.Vertex };
+            
+            var vertex = new Vertex { Point = p };
             foreach (var edge in sweepEvent.Edges)
+            {
+                edge.EndPoint = p;
                 ConnectHalfEdgeWithVertex(edge, vertex, (e, v) => e.End = v);
+            }
 
             // Add third half edge
             var halfEdge = new HalfEdge(p, left.Site, right.Site);

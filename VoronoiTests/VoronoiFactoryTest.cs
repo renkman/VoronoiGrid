@@ -114,7 +114,7 @@ namespace VoronoiTests
             Assert.IsNotNull(map);
             var vertex = map.First(g => g is Vertex);
             Assert.AreEqual(136, vertex.Point.XInt);
-            Assert.AreEqual(122, vertex.Point.YInt);
+            Assert.AreEqual(123, vertex.Point.YInt);
         }
 
         [Test]

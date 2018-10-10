@@ -86,6 +86,7 @@ namespace VoronoiViewer
                 {
                     var halfEdgeBrush = new SolidBrush(Color.FromArgb(255, 0, 255, 0));
                     var vertexBrush = new SolidBrush(Color.FromArgb(255, 255, 0, 0));
+
                     var pen = new Pen(halfEdgeBrush);
 
                     foreach (var geo in map)
@@ -95,13 +96,13 @@ namespace VoronoiViewer
 
                         var halfEdge = geo as HalfEdge;
 
-                        if (halfEdge?.Start == null || halfEdge.End == null)
+                        if (halfEdge?.EndPoint == null)
                             continue;
 
-                        var startX = halfEdge.Start.Point.XInt * _factorX;
-                        var startY = _canvas.Height - halfEdge.Start.Point.YInt * _factorY;
-                        var endX = halfEdge.End.Point.XInt * _factorX;
-                        var endY = _canvas.Height - halfEdge.End.Point.YInt * _factorY;
+                        var startX = halfEdge.Point.XInt * _factorX;
+                        var startY = _canvas.Height - halfEdge.Point.YInt * _factorY;
+                        var endX = halfEdge.EndPoint.XInt * _factorX;
+                        var endY = _canvas.Height - halfEdge.EndPoint.YInt * _factorY;
 
                         //if (startX > 0 || startX < _canvas.Width || startY > 0 || startY < _canvas.Height || endX > 0 || endX < _canvas.Width || endY > 0 || endY < _canvas.Height)
                         if (startX > 0 && startY > 0)

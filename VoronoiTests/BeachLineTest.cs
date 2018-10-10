@@ -118,14 +118,12 @@ namespace VoronoiTests
             var insert = beachLine.InsertSite(site3);
 
             var expectedCricleEvent = new Point { X = 40, Y = 20 };
-            var expectedVertex = new Point { X = 40, Y = 40 };
 
             var result = beachLine.GenerateCircleEvent(insert.Leaves, site3.Y);
 
             Assert.IsNotNull(result);
             Assert.AreEqual(1, result.Count);
             Assert.AreEqual(expectedCricleEvent, result.Single().Point);
-            Assert.AreEqual(expectedVertex, result.Single().Vertex);
             //Assert.AreEqual(site2, result.Single().LeftArc.Site);
             Assert.AreEqual(site1, result.Single().Arc.Site);
             //Assert.AreEqual(site3, result.Single().RightArc.Site);
@@ -144,7 +142,6 @@ namespace VoronoiTests
             var insert = beachLine.InsertSite(site3);
 
             var expectedCricleEvent = new Point { X = 136, Y = 84 };
-            var expectedVertex = new Point { X = 136, Y = 122 };
 
             var result = beachLine.GenerateCircleEvent(insert.Leaves, site3.Y);
 
@@ -152,8 +149,6 @@ namespace VoronoiTests
             Assert.AreEqual(1, result.Count);
             Assert.AreEqual(expectedCricleEvent.XInt, result.Single().Point.XInt);
             Assert.AreEqual(expectedCricleEvent.YInt, result.Single().Point.YInt);
-            Assert.AreEqual(expectedVertex.XInt, result.Single().Vertex.XInt);
-            Assert.AreEqual(expectedVertex.YInt, result.Single().Vertex.YInt);
             //Assert.AreEqual(site2, result.Single().LeftArc.Site);
             Assert.AreEqual(site1, result.Single().Arc.Site);
             //Assert.AreEqual(site3, result.Single().RightArc.Site);
@@ -180,7 +175,6 @@ namespace VoronoiTests
 
             Assert.IsNotNull(result);
             Assert.AreEqual(circleEvents.Single().Point, result.Point);
-            Assert.AreEqual(circleEvents.Single().Vertex, result.Vertex);
         }
 
         [Test]

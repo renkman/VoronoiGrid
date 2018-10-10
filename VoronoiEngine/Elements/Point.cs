@@ -51,7 +51,7 @@ namespace VoronoiEngine.Elements
         {
             if (other == null)
                 return false;
-            return X == other.X && Y == other.Y;
+            return Math.Abs(X - other.X) < 0.0001 && Math.Abs(Y - other.Y) < 0.0001;
         }
 
         public override string ToString()
