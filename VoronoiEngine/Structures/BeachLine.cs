@@ -117,6 +117,9 @@ namespace VoronoiEngine.Structures
             else
                 parentParent.Right = sibling;
 
+            parent.Left = null;
+            parent.Right = null;
+
             if(sibling.Parent == null)
                 throw new InvalidOperationException($"Remove leaf {leaf.Site}: Parent of node {0} is null");
         }

@@ -31,7 +31,7 @@ namespace VoronoiTests
 
             //Logger.Instance.ToFile();
             var halfEges = map.Where(g => g is HalfEdge).ToList();
-            Assert.AreEqual(5, halfEges.Count());
+            Assert.AreEqual(3, halfEges.Count());
         }
 
         [Test]
@@ -55,7 +55,7 @@ namespace VoronoiTests
             //Logger.Instance.ToFile();
 
             var halfEges = map.Where(g => g is HalfEdge).ToList();
-            Assert.AreEqual(5, halfEges.Count());
+            Assert.AreEqual(3, halfEges.Count());
         }
 
         [Test]
@@ -337,7 +337,27 @@ namespace VoronoiTests
             var map = factory.CreateVoronoiMap(200, 200, sites);
 
             Assert.IsNotNull(map);
-            Assert.AreEqual(2, map.Where(g => g is Vertex).Cast<Vertex>().Count());
+            Assert.AreEqual(2, map.Where(g => g is Vertex).Count());
+            Assert.IsTrue(map.Where(g => g is HalfEdge).Cast<HalfEdge>().All(v => v.Point != null), "HalfEdges without start point found");
+            Assert.IsTrue(map.Where(g => g is HalfEdge).Cast<HalfEdge>().All(v => v.EndPoint != null), "HalfEdges without end point found");
+        }
+
+        [Test]
+        public void TestCreateVoroniMapCase7()
+        {
+            var factory = new VoronoiFactory();
+            var sites = new List<Site>
+            {
+                new Site { Point = new Point(10, 14) },
+                new Site { Point = new Point (77, 44 )},
+                new Site { Point = new Point (25, 78 )}
+            };
+
+            var map = factory.CreateVoronoiMap(200, 200, sites);
+
+            Assert.IsNotNull(map);
+            Assert.AreEqual(1, map.Where(g => g is Vertex).Count());
+            Assert.AreEqual(3, map.Where(g => g is HalfEdge).Count());
             Assert.IsTrue(map.Where(g => g is HalfEdge).Cast<HalfEdge>().All(v => v.Point != null), "HalfEdges without start point found");
             Assert.IsTrue(map.Where(g => g is HalfEdge).Cast<HalfEdge>().All(v => v.EndPoint != null), "HalfEdges without end point found");
         }

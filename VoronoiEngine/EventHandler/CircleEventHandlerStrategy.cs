@@ -50,13 +50,7 @@ namespace VoronoiEngine.EventHandler
 
             ConnectHalfEdgeWithVertex(leftParent.HalfEdge, vertex, (e, v) => e.End = v);
             ConnectHalfEdgeWithVertex(rightParent.HalfEdge, vertex, (e, v) => e.End = v);
-
-            //foreach (var edge in sweepEvent.Edges)
-            //{
-            //    edge.EndPoint = p;
-            //    ConnectHalfEdgeWithVertex(edge, vertex, (e, v) => e.End = v);
-            //}
-
+            
             // Add third half edge
             var halfEdge = new HalfEdge(p, left.Site, right.Site);
 

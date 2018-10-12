@@ -35,7 +35,7 @@ namespace VoronoiTests
 
             var edge = _strategy.HandleEvent(siteEvent, _eventQueue, _beachLine);
 
-            Assert.IsNull(edge);
+            Assert.IsEmpty(edge);
         }
 
         [Test]
@@ -56,8 +56,8 @@ namespace VoronoiTests
             var edges = _strategy.HandleEvent(siteEvents[1], _eventQueue, _beachLine).Cast<HalfEdge>().ToList();
 
             Assert.IsNotNull(edges);
-            Assert.AreEqual(siteEvents[0].Point, edges[1].Left);
-            Assert.AreEqual(siteEvents[1].Point, edges[1].Right);
+            Assert.AreEqual(siteEvents[0].Point, edges[0].Left);
+            Assert.AreEqual(siteEvents[1].Point, edges[0].Right);
         }
 
         //[Test]
