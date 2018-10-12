@@ -80,7 +80,8 @@ namespace VoronoiViewer
             {
                 var map = _voronoiService.CreateDiagram(_canvas.Height / _factorY, _canvas.Width / _factorX, _session.Sites);
 
-                textBoxLog.Text = string.Join(Environment.NewLine, map.Select(g => $"{g.GetType().Name}:\tX: {g.Point.X}, Y: {g.Point.Y}").ToArray());
+                //textBoxLog.Text = string.Join(Environment.NewLine, map.Select(g => $"{g.GetType().Name}:\t{g.Point}{(g is HalfEdge ? ",\t"+((HalfEdge)g).EndPoint : null)}").ToArray());
+                textBoxLog.Text = string.Join(Environment.NewLine, map.Select(g => $"{g}").ToArray());
 
                 using (var graphics = Graphics.FromImage(_canvas))
                 {

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using VoronoiEngine.Elements;
@@ -62,6 +63,20 @@ namespace VoronoiEngine.Structures
             }
 
             return result;
+        }
+
+        public void FinishEdges(int width)
+        {
+            foreach (var edge in _map.Where(g => g is HalfEdge).Cast<HalfEdge>().Where(e => e.EndPoint == null))
+            {
+                var mx = edge.Direction.X > 0.0
+                    ? Math.Max(width, edge.Point.X + 10)
+                    : Math.Min(0.0, edge.Point.X - 10);
+
+                var end = new Point(mx, mx * edge.F + edge.G);
+                
+                edge.EndPoint = end;
+            }
         }
 
         public void ConnectEdges()
