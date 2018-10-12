@@ -85,6 +85,8 @@ namespace VoronoiEngine.Structures
                 ? Math.Max(width, innerNode.HalfEdge.Point.X + 10)
                 : Math.Min(0.0, innerNode.HalfEdge.Point.X - 10);
 
+            //if(innerNode.HalfEdge.EndPoint != null)
+            //    throw new InvalidOperationException($"Endoint for {innerNode.HalfEdge} already set!");
             var end = new Point(mx, mx * innerNode.HalfEdge.F + innerNode.HalfEdge.G);
 
             innerNode.HalfEdge.EndPoint = end;

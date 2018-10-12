@@ -102,7 +102,7 @@ namespace VoronoiEngine
                 if (circleEvent == null)
                     throw new InvalidOperationException("SweepEvent is neither SiteEvent nor CircleEvent");
 
-                _logger.Log($"Sweepline CircleEvent: {circleEvent.Point} for arc {circleEvent.Arc.Site}");
+                //_logger.Log($"Sweepline CircleEvent: {circleEvent.Point} for arc {circleEvent.Arc.Site}");
                 var circleEventResult = _circleEventHandler.HandleEvent(circleEvent, _eventQueue, _beachLine);
 
                 foreach (var geo in circleEventResult)
@@ -113,6 +113,8 @@ namespace VoronoiEngine
             }
 
             _beachLine.FinishEdge(_beachLine.Root, width);
+
+            map.FinishEdges(width);
 
             map.ConnectEdges();
 
