@@ -356,6 +356,7 @@ namespace VoronoiTests
             var map = factory.CreateVoronoiMap(200, 200, sites);
 
             Assert.IsNotNull(map);
+            Assert.AreEqual(3, map.Where(g => g is Site).Count());
             Assert.AreEqual(1, map.Where(g => g is Vertex).Count());
             Assert.AreEqual(3, map.Where(g => g is HalfEdge).Count());
             Assert.IsTrue(map.Where(g => g is HalfEdge).Cast<HalfEdge>().All(v => v.Point != null), "HalfEdges without start point found");
