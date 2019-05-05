@@ -82,7 +82,10 @@ namespace VoronoiEngine.Structures
         public void ConnectEdges()
         {
             foreach (var edge in _map.Where(g => g is HalfEdge).Cast<HalfEdge>().Where(e => e.Neighbor != null))
+            {
                 edge.Point = edge.Neighbor.EndPoint;
+                edge.Neighbor = null;
+            }
         }
     }
 }

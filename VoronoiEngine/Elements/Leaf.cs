@@ -77,9 +77,9 @@ namespace VoronoiEngine.Elements
             {
                 par = par.Parent;
                 if (par == leftParent)
-                    return leftParent;
-                if (par == rightParent)
                     return rightParent;
+                if (par == rightParent)
+                    return leftParent;
             }
             return null;
         }

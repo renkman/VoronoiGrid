@@ -60,7 +60,7 @@ namespace VoronoiEngine.Structures
             var circleEvents = sites?.Select(s => _circleEventCalculationService.DetermineCircleEvent(s, y)).Where(e => e != null).ToList();
             if ((circleEvents?.Any()).GetValueOrDefault())
                 _logger.Log(
-                    $"Found circle events: {string.Join(", ", circleEvents.Select(c => $"{c.Point} and {c.Arc.Site}").ToArray())}");
+                    $"Found circle events: {string.Join(", ", circleEvents.Select(c => $"{c.Point} at Arc: {c.Arc.Site}").ToArray())}");
             return circleEvents;
         }
                
@@ -88,6 +88,8 @@ namespace VoronoiEngine.Structures
             //if(innerNode.HalfEdge.EndPoint != null)
             //    throw new InvalidOperationException($"Endoint for {innerNode.HalfEdge} already set!");
             var end = new Point(mx, mx * innerNode.HalfEdge.F + innerNode.HalfEdge.G);
+
+            _logger.Log($"{node} Set {innerNode.HalfEdge} Direction: {innerNode.HalfEdge.Direction} End: {end}");
 
             innerNode.HalfEdge.EndPoint = end;
             			

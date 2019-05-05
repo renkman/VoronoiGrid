@@ -55,7 +55,11 @@ namespace VoronoiEngine.EventHandler
             var halfEdge = new HalfEdge(p, left.Site, right.Site);
 
             ConnectHalfEdgeWithVertex(halfEdge, vertex, (e, v) => e.Start = v);
+            Logger.Instance.Log($"Left parent: {leftParent.HalfEdge}");
+            Logger.Instance.Log($"Right parent: {rightParent.HalfEdge}");
             var higher = sweepEvent.Arc.GetFirstParent(leftParent, rightParent);
+            Logger.Instance.Log($"Higher node: {higher}");
+            Logger.Instance.Log($"Higher edge old: {higher.HalfEdge}");
             higher.HalfEdge = halfEdge;
 
             if (vertex.HalfEdges.Count != 3)

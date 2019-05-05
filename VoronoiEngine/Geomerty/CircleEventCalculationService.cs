@@ -4,6 +4,7 @@ using System.Data.SqlTypes;
 using System.Linq;
 using VoronoiEngine.Elements;
 using VoronoiEngine.Events;
+using VoronoiEngine.Utilities;
 
 namespace VoronoiEngine.Geomerty
 {
@@ -47,6 +48,7 @@ namespace VoronoiEngine.Geomerty
             };
             
             arc.CircleEvent = circleEvent;
+            Logger.Instance.Log($"Circle event found A: {left}, B: {arc}, C: {right}");
             return circleEvent;
         }
     }

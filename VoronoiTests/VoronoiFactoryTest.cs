@@ -113,8 +113,8 @@ namespace VoronoiTests
 
             Assert.IsNotNull(map);
             var vertex = map.First(g => g is Vertex);
-            Assert.AreEqual(136, vertex.Point.XInt);
-            Assert.AreEqual(123, vertex.Point.YInt);
+            Assert.AreEqual(128, vertex.Point.XInt);
+            Assert.AreEqual(140, vertex.Point.YInt);
         }
 
         [Test]
@@ -361,6 +361,112 @@ namespace VoronoiTests
             Assert.AreEqual(3, map.Where(g => g is HalfEdge).Count());
             Assert.IsTrue(map.Where(g => g is HalfEdge).Cast<HalfEdge>().All(v => v.Point != null), "HalfEdges without start point found");
             Assert.IsTrue(map.Where(g => g is HalfEdge).Cast<HalfEdge>().All(v => v.EndPoint != null), "HalfEdges without end point found");
+        }
+
+        [Test]
+        public void TestCreateVoroniMapReference_4()
+        {
+            var factory = new VoronoiFactory();
+            var sites = new List<Site>
+            {
+                new Site { Point = new Point(3144.322031, 1178.930021)},
+                new Site { Point = new Point(3488.265633, 7350.077822)},
+                new Site { Point = new Point(2765.587329, 4289.376507)},
+                new Site { Point = new Point(5102.694784, 1361.430708)}
+            };
+
+            var map = factory.CreateVoronoiMap(10000, 10000, sites);
+            Logger.Instance.ToFile();
+            Assert.IsNotNull(map);
+            Assert.AreEqual(4, map.Where(g => g is Site).Count());
+            Assert.AreEqual(2, map.Where(g => g is Vertex).Count());
+
+            var edges = map.Where(g => g is HalfEdge).Cast<HalfEdge>().OrderBy(e => e.Point?.Y).ThenBy(e => e.Point?.X).ThenBy(e => e.EndPoint?.Y).ThenBy(e => e.EndPoint?.X).ToList();
+            Assert.AreEqual(5, edges.Count);
+
+            Assert.AreEqual(new Point(3975.500678, 2858.417155), edges[0].Point);
+            Assert.AreEqual(new Point(10000, -61789.094684), edges[0].EndPoint);
+            Assert.AreEqual(new Point(3975.500678, 2858.417155), edges[1].Point);
+            Assert.AreEqual(new Point(0, 2374.351581), edges[1].EndPoint);
+            Assert.AreEqual(new Point(6644.831322, 4989.096129), edges[2].Point);
+            Assert.AreEqual(new Point(3975.500678, 2858.417155), edges[2].EndPoint);
+            Assert.AreEqual(new Point(6644.831322, 4989.096129), edges[3].Point);
+            Assert.AreEqual(new Point(10000.000000, 5893.587914), edges[3].EndPoint);
+            Assert.AreEqual(new Point(6644.831322, 4989.096129), edges[4].Point);
+            Assert.AreEqual(new Point(0, 6558.042241), edges[4].EndPoint);
+        }
+
+        [Test]
+        public void TestCreateVoroniMapReference_10()
+        {
+            var factory = new VoronoiFactory();
+            var sites = new List<Site>
+            {
+                new Site { Point = new Point(3018.280587,5848.567156)},
+                new Site { Point = new Point(5414.288766,7961.058382)},
+                new Site { Point = new Point(2826.929533,3501.693777)},
+                new Site { Point = new Point(2722.861415,4667.806024)},
+                new Site { Point = new Point(3614.001892,8095.645009)},
+                new Site { Point = new Point(318.308054, 5330.668050)},
+                new Site { Point = new Point(5021.820734,5896.176031)},
+                new Site { Point = new Point(8200.628681,769.066439)},
+                new Site { Point = new Point(8472.243416,9083.223975)},
+                new Site { Point = new Point(5433.515427,5861.995300)}
+            };
+
+            var map = factory.CreateVoronoiMap(10000, 10000, sites);
+            Logger.Instance.ToFile();
+            Assert.IsNotNull(map);
+            Assert.AreEqual(10, map.Where(g => g is Site).Count());
+            Assert.AreEqual(13, map.Where(g => g is Vertex).Count());
+
+            var edges = map.Where(g => g is HalfEdge).Cast<HalfEdge>().OrderBy(e => e.Point?.Y).ThenBy(e => e.Point?.X).ThenBy(e => e.EndPoint?.Y).ThenBy(e => e.EndPoint?.X).ToList();
+            Assert.AreEqual(22, edges.Count);
+
+            Assert.AreEqual(new Point(5845.460792, 2787.630623), edges[0].Point);
+            Assert.AreEqual(new Point(0, -8707.441259), edges[0].EndPoint);
+            Assert.AreEqual(new Point(5044.444914, 3672.228064), edges[1].Point);
+            Assert.AreEqual(new Point(5845.460792, 2787.630623), edges[1].EndPoint);
+            Assert.AreEqual(new Point(1230.493526, 3946.921828), edges[2].Point);
+            Assert.AreEqual(new Point(0, 2259.176662), edges[2].EndPoint);
+            Assert.AreEqual(new Point(4432.981152, 4232.723525), edges[3].Point);
+            Assert.AreEqual(new Point(5044.444914, 3672.228064), edges[3].EndPoint);
+            Assert.AreEqual(new Point(4432.981152, 4232.723525), edges[4].Point);
+            Assert.AreEqual(new Point(1230.493526, 3946.921828), edges[4].EndPoint);
+            Assert.AreEqual(new Point(9699.48373, 4881.615881), edges[5].Point);
+            Assert.AreEqual(new Point(5845.460792, 2787.630623), edges[5].EndPoint);
+            Assert.AreEqual(new Point(9699.48373, 4881.615881), edges[6].Point);
+            Assert.AreEqual(new Point(10000, 4871.798332), edges[6].EndPoint);
+            Assert.AreEqual(new Point(4041.607201, 4965.200537), edges[7].Point);
+            Assert.AreEqual(new Point(4432.981152, 4232.723525), edges[7].EndPoint);
+            Assert.AreEqual(new Point(4041.607201, 4965.200537), edges[8].Point);
+            Assert.AreEqual(new Point(1674.465592, 5557.444806), edges[8].EndPoint);
+            Assert.AreEqual(new Point(1674.465592, 5557.444806), edges[9].Point);
+            Assert.AreEqual(new Point(1230.493526, 3946.921828), edges[9].EndPoint);
+            Assert.AreEqual(new Point(3998.215168, 6791.28192), edges[10].Point);
+            Assert.AreEqual(new Point(4041.607201, 4965.200537), edges[10].EndPoint);
+            Assert.AreEqual(new Point(3998.215168, 6791.28192), edges[11].Point);
+            Assert.AreEqual(new Point(1300.61617, 7506.440584), edges[11].EndPoint);
+            Assert.AreEqual(new Point(5313.301846, 6910.513783), edges[12].Point);
+            Assert.AreEqual(new Point(5044.444914, 3672.228064), edges[12].EndPoint);
+            Assert.AreEqual(new Point(5313.301846, 6910.513783), edges[13].Point);
+            Assert.AreEqual(new Point(4442.944585, 7075.940835), edges[13].EndPoint);
+            Assert.AreEqual(new Point(7527.23701, 6930.79263), edges[14].Point);
+            Assert.AreEqual(new Point(9699.48373, 4881.615881), edges[14].EndPoint);
+            Assert.AreEqual(new Point(7527.23701, 6930.79263), edges[15].Point);
+            Assert.AreEqual(new Point(5313.301846, 6910.513783), edges[15].EndPoint);
+            Assert.AreEqual(new Point(7527.23701, 6930.79263), edges[16].Point);
+            Assert.AreEqual(new Point(4955.922475, 13937.747117), edges[16].EndPoint);
+            Assert.AreEqual(new Point(4442.944585, 7075.940835), edges[17].Point);
+            Assert.AreEqual(new Point(3998.215168, 6791.28192), edges[17].EndPoint);
+            Assert.AreEqual(new Point(1300.61617, 7506.440584), edges[18].Point);
+            Assert.AreEqual(new Point(1674.465592, 5557.444806), edges[18].EndPoint);
+            Assert.AreEqual(new Point(1300.61617, 7506.440584), edges[19].Point);
+            Assert.AreEqual(new Point(0, 9056.700409), edges[19].EndPoint);
+            Assert.AreEqual(new Point(4955.922475, 13937.747117), edges[20].Point);
+            Assert.AreEqual(new Point(4442.944585, 7075.940835), edges[20].EndPoint);
+            Assert.AreEqual(new Point(4955.922475, 13937.747117), edges[21].Point);
+            Assert.AreEqual(new Point(0, 38317.638919), edges[21].EndPoint);
         }
     }
 }

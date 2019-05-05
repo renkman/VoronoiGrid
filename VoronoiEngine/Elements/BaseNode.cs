@@ -37,6 +37,9 @@ namespace VoronoiEngine.Elements
             arcClone.Parent = node;
             newLeaf.Parent = node;
 
+            _logger.Log($"Left edge = {node.HalfEdge}");
+            _logger.Log($"Right edge = {subRoot.HalfEdge}");
+
             return new InsertSiteModel
             {
                 HalfEdge = node.HalfEdge,

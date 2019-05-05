@@ -114,11 +114,16 @@ namespace VoronoiEngine
 
             _beachLine.FinishEdge(_beachLine.Root, width);
 
-            map.FinishEdges(width);
+            //map.FinishEdges(width);
 
             map.ConnectEdges();
 
             _logger.Log("Finished Voronoi map creation");
+
+            foreach(var edge in map.Where(g=>g is HalfEdge).Cast<HalfEdge>())
+            {
+                _logger.Log(edge.ToString());
+            }
 
             return map;
         }

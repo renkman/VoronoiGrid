@@ -57,7 +57,7 @@ namespace VoronoiEngine.Elements
         
         public override string ToString()
         {
-            return $"HalfEdge at Point: {Point}, EndPoint: {EndPoint}, Left: {Left}, Right: {Right}";
+            return $"HalfEdge at Point: {Point}, EndPoint: {EndPoint}, Left: {Left}, Right: {Right}, Neighbor: {Neighbor}";
         }
                 
         public Point Intersect(HalfEdge halfEdge)

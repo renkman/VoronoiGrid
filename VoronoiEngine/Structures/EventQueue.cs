@@ -54,9 +54,11 @@ namespace VoronoiEngine.Structures
             if (circleEvent == null)
                 return;
 
-            var successor = _events.FirstOrDefault(e => e.Point.Y < circleEvent.Point.Y);
-            var index = Math.Max(_events.IndexOf(successor), 0);
-            _events.Insert(index, circleEvent);
+            //var successor = _events.FirstOrDefault(e => e.Point.Y < circleEvent.Point.Y);
+            //var index = Math.Max(_events.IndexOf(successor), 0);
+            //_events.Insert(index, circleEvent);
+            _events.Add(circleEvent);
+            _events = _events.OrderByDescending(e => e.Point.Y).ToList();
         }
 
         public void Insert(IEnumerable<CircleEvent> circleEvents)
