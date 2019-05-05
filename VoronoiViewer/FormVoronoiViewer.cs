@@ -85,43 +85,14 @@ namespace VoronoiViewer
 
                 using (var graphics = Graphics.FromImage(_canvas))
                 {
-                    var halfEdgeBrush = new SolidBrush(Color.FromArgb(255, 0, 255, 0));
+                    var halfEdgeBrush = new SolidBrush(Color.FromArgb(255, 0, 0, 0));
                     var vertexBrush = new SolidBrush(Color.FromArgb(255, 255, 0, 0));
 
                     var pen = new Pen(halfEdgeBrush);
 
-                    foreach (var geo in map)
+                    foreach (var edge in map.Where(g=>g is HalfEdge).Cast<HalfEdge>())
                     {
-                        var vertex = geo as Vertex;
-                        if (vertex == null)
-                            continue;
-
-                        foreach(var edge in vertex.HalfEdges)
-                        {
-                            DrawEdge(edge, graphics, pen);
-                        }
-
-
-                        //if (geo is Vertex)
-                        //    graphics.FillRectangle(vertexBrush, geo.Point.XInt * _factorX, _canvas.Height - (geo.Point.YInt * _factorY), _factorX, _factorY);
-
-                        //var halfEdge = geo as HalfEdge;
-
-                        //if (halfEdge?.EndPoint == null)
-                        //    continue;
-
-                        //var startX = Math.Max(0f, halfEdge.Point.XInt * _factorX);
-                        //var startY = Math.Max(0f, _canvas.Height - halfEdge.Point.YInt * _factorY);
-                        //var endX = Math.Max(0f, halfEdge.EndPoint.XInt * _factorX);
-                        //var endY = Math.Max(0f, _canvas.Height - halfEdge.EndPoint.YInt * _factorY);
-
-                        //if (startX > 0 || startX < _canvas.Width || startY > 0 || startY < _canvas.Height || endX > 0 || endX < _canvas.Width || endY > 0 || endY < _canvas.Height)
-                        //graphics.DrawLine(pen, new PointF(startX, startY), new PointF(endX, endY));
-
-                        //graphics.FillRectangle(vertexBrush, geo.Point.X * _factorX, _canvas.Height - (geo.Point.Y * _factorY), _factorX, _factorY);
-
-                        //if (geo is HalfEdge && geo.Point.X > 0 && geo.Point.X < _canvas.Width && geo.Point.X > 0 && geo.Point.X < _canvas.Height)
-                        //    graphics.FillRectangle(halfEdgeBrush, geo.Point.X * _factorX, _canvas.Height - (geo.Point.Y * _factorY), _factorX, _factorY);
+                        DrawEdge(edge, graphics, pen);
                     }
                 }
             }
@@ -143,10 +114,10 @@ namespace VoronoiViewer
 
         private void DrawEdge(HalfEdge halfEdge, Graphics graphics, Pen pen)
         {
-            var startX = Math.Max(0f, halfEdge.Point.XInt * _factorX);
-            var startY = Math.Max(0f, _canvas.Height - halfEdge.Point.YInt * _factorY);
-            var endX = Math.Max(0f, halfEdge.EndPoint.XInt * _factorX);
-            var endY = Math.Max(0f, _canvas.Height - halfEdge.EndPoint.YInt * _factorY);
+            var startX = halfEdge.Point.XInt * _factorX; //Math.Max(0f, halfEdge.Point.XInt * _factorX);
+            var startY = _canvas.Height - halfEdge.Point.YInt * _factorY; // Math.Max(0f, _canvas.Height - halfEdge.Point.YInt * _factorY);
+            var endX = halfEdge.EndPoint.XInt * _factorX; // Math.Max(0f, halfEdge.EndPoint.XInt * _factorX);
+            var endY = _canvas.Height - halfEdge.EndPoint.YInt * _factorY; // Math.Max(0f, _canvas.Height - halfEdge.EndPoint.YInt * _factorY);
 
             graphics.DrawLine(pen, new PointF(startX, startY), new PointF(endX, endY));
         }
