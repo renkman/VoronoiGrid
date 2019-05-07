@@ -14,8 +14,11 @@ namespace VoronoiViewer
         private Session _session;
         private Bitmap _canvas;
 
-        private int _factorX;
-        private int _factorY;
+        private float  _factorX;
+        private float  _factorY;
+
+        private int _height;
+        private int _width;
 
         public FormVoronoiViewer()
         {
@@ -54,6 +57,8 @@ namespace VoronoiViewer
                 return;
 
             _session.Sites = _voronoiService.GenerateSites(width, height, count);
+            _width = width;
+            _height = height;
 
             using (var graphics = Graphics.FromImage(_canvas))
             {
@@ -61,11 +66,13 @@ namespace VoronoiViewer
 
                 var brush = new SolidBrush(Color.FromArgb(255, 0, 0, 0));
 
-                _factorX = _canvas.Width / width;
-                _factorY = _canvas.Height / height;
+                _factorX = _canvas.Width * 1f / width;
+                _factorY = _canvas.Height * 1f / height;
                 foreach (var site in _session.Sites)
                 {
-                    graphics.FillRectangle(brush, site.Point.XInt * _factorX, _canvas.Height - (site.Point.YInt * _factorY), _factorX, _factorY);
+                    var x = (int)Math.Round(site.Point.XInt * _factorX);
+                    var y = (int)Math.Round(_canvas.Height - (site.Point.YInt * _factorY));
+                    graphics.FillRectangle(brush, x, y, (int) Math.Max(1, _factorX), (int) Math.Max(1, _factorY));
                 }
             }
             tabPageDiagram.Invalidate();
@@ -78,7 +85,7 @@ namespace VoronoiViewer
 
             try
             {
-                var map = _voronoiService.CreateDiagram(_canvas.Height / _factorY, _canvas.Width / _factorX, _session.Sites);
+                var map = _voronoiService.CreateDiagram(_height, _width, _session.Sites);
 
                 //textBoxLog.Text = string.Join(Environment.NewLine, map.Select(g => $"{g.GetType().Name}:\t{g.Point}{(g is HalfEdge ? ",\t"+((HalfEdge)g).EndPoint : null)}").ToArray());
                 textBoxLog.Text = string.Join(Environment.NewLine, map.Select(g => $"{g}").ToArray());
@@ -114,11 +121,17 @@ namespace VoronoiViewer
 
         private void DrawEdge(HalfEdge halfEdge, Graphics graphics, Pen pen)
         {
-            var startX = halfEdge.Point.XInt * _factorX; //Math.Max(0f, halfEdge.Point.XInt * _factorX);
-            var startY = _canvas.Height - halfEdge.Point.YInt * _factorY; // Math.Max(0f, _canvas.Height - halfEdge.Point.YInt * _factorY);
-            var endX = halfEdge.EndPoint.XInt * _factorX; // Math.Max(0f, halfEdge.EndPoint.XInt * _factorX);
-            var endY = _canvas.Height - halfEdge.EndPoint.YInt * _factorY; // Math.Max(0f, _canvas.Height - halfEdge.EndPoint.YInt * _factorY);
-
+            var startX = halfEdge.Point.XInt * _factorX; 
+            //var startX = Math.Max(0f, halfEdge.Point.XInt * _factorX);
+            var startY = _canvas.Height - halfEdge.Point.YInt * _factorY; 
+            //var startY = Math.Max(0f, _canvas.Height - halfEdge.Point.YInt * _factorY);
+            var endX = halfEdge.EndPoint.XInt * _factorX; 
+            //var endX = Math.Max(0f, halfEdge.EndPoint.XInt * _factorX);
+            var endY = _canvas.Height - halfEdge.EndPoint.YInt * _factorY; 
+            //var endY = Math.Max(0f, _canvas.Height - halfEdge.EndPoint.YInt * _factorY);
+            
+            textBoxLog.Text += $"Calculate edge with start x: {halfEdge.Point.XInt}, y: {halfEdge.Point.YInt} and end x: {halfEdge.EndPoint.XInt}, y: {halfEdge.EndPoint.YInt}{Environment.NewLine}";
+            textBoxLog.Text += $"Draw edge with start x: {startX}, y: {startY} and end x: {startX}, y: {startY}{Environment.NewLine}";
             graphics.DrawLine(pen, new PointF(startX, startY), new PointF(endX, endY));
         }
     }
