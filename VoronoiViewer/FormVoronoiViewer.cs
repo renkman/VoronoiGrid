@@ -131,7 +131,7 @@ namespace VoronoiViewer
             //var endY = Math.Max(0f, _canvas.Height - halfEdge.EndPoint.YInt * _factorY);
             
             textBoxLog.Text += $"Calculate edge with start x: {halfEdge.Point.XInt}, y: {halfEdge.Point.YInt} and end x: {halfEdge.EndPoint.XInt}, y: {halfEdge.EndPoint.YInt}{Environment.NewLine}";
-            textBoxLog.Text += $"Draw edge with start x: {startX}, y: {startY} and end x: {startX}, y: {startY}{Environment.NewLine}";
+            textBoxLog.Text += $"Draw edge with start x: {startX}, y: {startY} and end x: {endX}, y: {endY}{Environment.NewLine}";
             graphics.DrawLine(pen, new PointF(startX, startY), new PointF(endX, endY));
         }
     }
