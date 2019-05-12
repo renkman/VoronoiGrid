@@ -21,7 +21,7 @@ namespace VoronoiTests
         public void Setup()
         {
             _eventQueue = new EventQueue();
-            _beachLine = new BeachLine();
+            _beachLine = new BeachLine(10);
             _strategy = new SiteEventHandlerStrategy();
         }
 

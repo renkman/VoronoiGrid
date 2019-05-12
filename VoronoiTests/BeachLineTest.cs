@@ -14,7 +14,7 @@ namespace VoronoiTests
         [Test]
         public void TestAddSingleLeaf()
         {
-            var beachLine = new BeachLine();
+            var beachLine = new BeachLine(2000);
             var site = new Point { X = 464, Y = 500 };
             beachLine.InsertSite(site);
 
@@ -26,7 +26,7 @@ namespace VoronoiTests
         [Test]
         public void TestAddTwoLeaves()
         {
-            var beachLine = new BeachLine();
+            var beachLine = new BeachLine(2000);
             var site1 = new Point { X = 20, Y = 1000 };
             var site2 = new Point { X = 464, Y = 500 };
 
@@ -66,7 +66,7 @@ namespace VoronoiTests
         [Test]
         public void TestAddThreeLeaves()
         {
-            var beachLine = new BeachLine();
+            var beachLine = new BeachLine(2000);
             var site1 = new Point { X = 20, Y = 1000 };
             var site2 = new Point { X = 4000, Y = 500 };
             var site3 = new Point { X = 464, Y = 64 };
@@ -108,7 +108,7 @@ namespace VoronoiTests
         [Test]
         public void TestGenerateCircleEventZeroLengthArc()
         {
-            var beachLine = new BeachLine();
+            var beachLine = new BeachLine(2000);
             var site1 = new Point { X = 40, Y = 60 };
             var site2 = new Point { X = 20, Y = 40 };
             var site3 = new Point { X = 60, Y = 40 };
@@ -132,7 +132,7 @@ namespace VoronoiTests
         [Test]
         public void TestGenerateCircleEvent()
         {
-            var beachLine = new BeachLine();
+            var beachLine = new BeachLine(0);
             var site1 = new Point { X = 130, Y = 160 };
             var site2 = new Point { X = 110, Y = 150 };
             var site3 = new Point { X = 170, Y = 140 };
@@ -157,7 +157,7 @@ namespace VoronoiTests
         [Test]
         public void TestFindCircleEventAbove()
         {
-            var beachLine = new BeachLine();
+            var beachLine = new BeachLine(0);
             var site1 = new Point { X = 130, Y = 160 };
             var site2 = new Point { X = 110, Y = 150 };
             var site3 = new Point { X = 170, Y = 140 };
@@ -180,7 +180,7 @@ namespace VoronoiTests
         [Test]
         public void TestRemoveLeaf()
         {
-            var beachLine = new BeachLine();
+            var beachLine = new BeachLine(0);
             var site1 = new Point { X = 40, Y = 60 };
             var site2 = new Point { X = 20, Y = 40 };
             var site3 = new Point { X = 60, Y = 40 };

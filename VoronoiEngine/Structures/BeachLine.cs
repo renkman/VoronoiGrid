@@ -11,16 +11,18 @@ namespace VoronoiEngine.Structures
 {
     public class BeachLine
     {
+        private readonly int _height;
         private readonly ICircleEventCalculationService _circleEventCalculationService;
         private readonly IBreakpointCalculationService _breakpointCalculationService;
         private readonly Logger _logger;
 
-        public BeachLine() : this(new CircleEventCalculationService(), new BreakpointCalculationService())
+        public BeachLine(int height) : this(height, new CircleEventCalculationService(), new BreakpointCalculationService())
         {
         }
 
-        public BeachLine(ICircleEventCalculationService circleEventCalculationService, IBreakpointCalculationService breakpointCalculationService)
+        public BeachLine(int height, ICircleEventCalculationService circleEventCalculationService, IBreakpointCalculationService breakpointCalculationService)
         {
+            _height = height;
             _circleEventCalculationService = circleEventCalculationService;
             _breakpointCalculationService = breakpointCalculationService;
             _logger = Logger.Instance;
@@ -46,7 +48,12 @@ namespace VoronoiEngine.Structures
                 return null;
             }
 
+
             var root = Root;
+            var arc = root as Leaf;
+            if (root.IsLeaf && arc.Site.Y - point.Y < 0.0001)
+                return InsertLeafOnSameYLikeRoot(arc, point);
+
             var result = root.Insert(point);
 
             // Reset root if root was a leaf
@@ -102,6 +109,29 @@ namespace VoronoiEngine.Structures
             var output = "";
             BuildStringFromTree(Root, output, 0);
             return output;
+        }
+
+        private InsertSiteModel InsertLeafOnSameYLikeRoot(Leaf arc, Point point)
+        {
+            var newRoot = new Node(null);
+            Root = newRoot;
+
+            var newLeaf = new Leaf(point);
+            var start = new Point((arc.Site.X + point.X) / 2, _height);
+
+            var halfEdge = newLeaf.Site.X > arc.Site.X ?
+                new HalfEdge(start, arc.Site, point) :
+                new HalfEdge(start, point, arc.Site);
+            newRoot.HalfEdge = halfEdge;
+            newRoot.Left = arc;
+            arc.Parent = newRoot;
+            newRoot.Right = newLeaf;
+            newLeaf.Parent = newRoot;
+            
+            return new InsertSiteModel
+            {
+                HalfEdge = halfEdge
+            };
         }
 
         private void RemoveLeaf(Leaf leaf, Node parent, Node parentParent, bool isLeft)

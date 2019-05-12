@@ -20,7 +20,7 @@ namespace VoronoiEngine.Elements
 
             var y = _breakpointCalculationService.GetY(arc.Site, newLeaf.Site);
             var start = new Point(newLeaf.Site.X, y);
-
+            
             // Build subtree
             var node = new Node(subRoot);
             

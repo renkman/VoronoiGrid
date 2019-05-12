@@ -46,7 +46,7 @@ namespace VoronoiEngine
         public VoronoiMap CreateVoronoiMap(int height, int width, int pointQuantity)
         {
             _eventQueue = new EventQueue();
-            _beachLine = new BeachLine();
+            _beachLine = new BeachLine(height);
 
             try
             {
@@ -75,7 +75,7 @@ namespace VoronoiEngine
             _logger.Log($"Create Voronoi map with sites: {siteList}");
 
             _eventQueue = new EventQueue();
-            _beachLine = new BeachLine();
+            _beachLine = new BeachLine(height);
             var map = new VoronoiMap();
 
             _eventQueue.Initialize(sites.Select(s => s.Point));

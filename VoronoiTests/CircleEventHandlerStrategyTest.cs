@@ -15,7 +15,7 @@ namespace VoronoiTests
         [Ignore("To be revised")]
         public void TestHandleEvent()
         {
-            var beachLine = new BeachLine();
+            var beachLine = new BeachLine(10);
             var center = beachLine.InsertSite(new Point(4, 6));
             var right = beachLine.InsertSite(new Point(6, 4));
             var left = beachLine.InsertSite(new Point(2, 3));

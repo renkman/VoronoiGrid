@@ -468,5 +468,23 @@ namespace VoronoiTests
             Assert.AreEqual(new Point(4955.922475, 13937.747117), edges[21].Point);
             Assert.AreEqual(new Point(0, 38317.638919), edges[21].EndPoint);
         }
+
+        [Test]
+        public void TestCreateVoronoiMapEdgeCaseRootSameY()
+        {
+            var factory = new VoronoiFactory();
+
+            var sites = new List<Site>
+            {
+                new Site { Point = new Point { X = 60, Y = 60 } },
+                new Site { Point = new Point { X = 20, Y = 60 } }
+            };
+
+            var map = factory.CreateVoronoiMap(80, 80, sites);
+
+            Assert.IsNotNull(map);
+            var halfEdge = map.Single(g => g is HalfEdge);
+            Assert.AreEqual(new Point { X = 40, Y = 80 }, halfEdge.Point);
+        }
     }
 }
