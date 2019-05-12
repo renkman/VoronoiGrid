@@ -69,8 +69,8 @@
             // 
             this.splitContainer.Panel2.BackColor = System.Drawing.SystemColors.Control;
             this.splitContainer.Panel2.Controls.Add(this.tabControlResult);
-            this.splitContainer.Size = new System.Drawing.Size(864, 546);
-            this.splitContainer.SplitterDistance = 222;
+            this.splitContainer.Size = new System.Drawing.Size(1427, 858);
+            this.splitContainer.SplitterDistance = 366;
             this.splitContainer.TabIndex = 0;
             // 
             // buttonVoronoiDiagram
@@ -149,7 +149,7 @@
             this.tabControlResult.Location = new System.Drawing.Point(0, 0);
             this.tabControlResult.Name = "tabControlResult";
             this.tabControlResult.SelectedIndex = 0;
-            this.tabControlResult.Size = new System.Drawing.Size(638, 546);
+            this.tabControlResult.Size = new System.Drawing.Size(1057, 858);
             this.tabControlResult.TabIndex = 0;
             // 
             // tabPageDiagram
@@ -158,7 +158,7 @@
             this.tabPageDiagram.Location = new System.Drawing.Point(4, 22);
             this.tabPageDiagram.Name = "tabPageDiagram";
             this.tabPageDiagram.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageDiagram.Size = new System.Drawing.Size(630, 520);
+            this.tabPageDiagram.Size = new System.Drawing.Size(1049, 832);
             this.tabPageDiagram.TabIndex = 0;
             this.tabPageDiagram.Text = "Diagram";
             this.tabPageDiagram.UseVisualStyleBackColor = true;
@@ -178,7 +178,7 @@
             // textBoxLog
             // 
             this.textBoxLog.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBoxLog.Font = new System.Drawing.Font("Source Code Pro", 8.999999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxLog.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.999999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxLog.Location = new System.Drawing.Point(3, 3);
             this.textBoxLog.Multiline = true;
             this.textBoxLog.Name = "textBoxLog";
@@ -191,7 +191,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(864, 546);
+            this.ClientSize = new System.Drawing.Size(1427, 858);
             this.Controls.Add(this.splitContainer);
             this.Name = "FormVoronoiViewer";
             this.Text = "Voronoi Viewer";
