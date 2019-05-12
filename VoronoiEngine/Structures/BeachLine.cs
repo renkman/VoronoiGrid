@@ -52,7 +52,7 @@ namespace VoronoiEngine.Structures
             var root = Root;
             var arc = root as Leaf;
             if (root.IsLeaf && arc.Site.Y - point.Y < 0.0001)
-                return InsertLeafOnSameYLikeRoot(arc, point);
+                return InsertLeafOnSameYAxisLikeRoot(arc, point);
 
             var result = root.Insert(point);
 
@@ -111,7 +111,7 @@ namespace VoronoiEngine.Structures
             return output;
         }
 
-        private InsertSiteModel InsertLeafOnSameYLikeRoot(Leaf arc, Point point)
+        private InsertSiteModel InsertLeafOnSameYAxisLikeRoot(Leaf arc, Point point)
         {
             var newRoot = new Node(null);
             Root = newRoot;
