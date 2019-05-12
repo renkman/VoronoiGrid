@@ -483,8 +483,9 @@ namespace VoronoiTests
             var map = factory.CreateVoronoiMap(80, 80, sites);
 
             Assert.IsNotNull(map);
-            var halfEdge = map.Single(g => g is HalfEdge);
+            var halfEdge = map.Single(g => g is HalfEdge) as HalfEdge;
             Assert.AreEqual(new Point { X = 40, Y = 80 }, halfEdge.Point);
+            Assert.AreEqual(new Point { X = 40, Y = 0 }, halfEdge.EndPoint);
         }
     }
 }

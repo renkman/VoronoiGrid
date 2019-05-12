@@ -96,7 +96,15 @@ namespace VoronoiEngine.Structures
             //    throw new InvalidOperationException($"Endoint for {innerNode.HalfEdge} already set!");
             var end = new Point(mx, mx * innerNode.HalfEdge.F + innerNode.HalfEdge.G);
 
+            if (double.IsNaN(end.Y))
+            {
+                end.X = innerNode.HalfEdge.Point.X;
+                end.Y = 0;
+            }
+
             _logger.Log($"{node} Set {innerNode.HalfEdge} Direction: {innerNode.HalfEdge.Direction} End: {end}");
+
+
 
             innerNode.HalfEdge.EndPoint = end;
             			
