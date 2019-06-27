@@ -5,6 +5,8 @@ using System.Linq;
 using System.Windows.Forms;
 using VoronoiEngine.Elements;
 using VoronoiEngine.Utilities;
+using Newtonsoft.Json;
+using System.IO;
 
 namespace VoronoiViewer
 {
@@ -52,13 +54,22 @@ namespace VoronoiViewer
             if (!int.TryParse(textBoxHeight.Text, out height))
                 return;
 
-            int count;
-            if (!int.TryParse(textBoxSites.Text, out count))
-                return;
-
-            _session.Sites = _voronoiService.GenerateSites(width, height, count);
             _width = width;
             _height = height;
+
+            if (optionRandom.Checked)
+            {
+                int count;
+                if (!int.TryParse(textBoxSites.Text, out count))
+                    return;
+
+                _session.Sites = _voronoiService.GenerateSites(width, height, count);
+            }
+            else
+            {
+                var points = dataTableBindingSource.Cast<VoronoiEngine.Elements.Point>();
+                _session.Sites = points.Select(p => new Site() { Point = p }).ToList();
+            }
 
             using (var graphics = Graphics.FromImage(_canvas))
             {
@@ -133,6 +144,64 @@ namespace VoronoiViewer
             textBoxLog.Text += $"Calculate edge with start x: {halfEdge.Point.XInt}, y: {halfEdge.Point.YInt} and end x: {halfEdge.EndPoint.XInt}, y: {halfEdge.EndPoint.YInt}{Environment.NewLine}";
             textBoxLog.Text += $"Draw edge with start x: {startX}, y: {startY} and end x: {endX}, y: {endY}{Environment.NewLine}";
             graphics.DrawLine(pen, new PointF(startX, startY), new PointF(endX, endY));
+        }
+
+        private void OptionRandom_CheckedChanged(object sender, EventArgs e)
+        {
+            textBoxSites.Enabled = true;
+            dataGridViewValues.Enabled = false;
+        }
+
+        private void OptionValues_CheckedChanged(object sender, EventArgs e)
+        {
+            textBoxSites.Enabled = false;
+            dataGridViewValues.Enabled = true;
+        }
+
+        private void ButtonSave_Click(object sender, EventArgs e)
+        {
+            var file = new VoronoiFile
+            {
+                Height = _height,
+                Width = _width,
+                Sites = _session.Sites
+            };
+
+            saveFileDialog.ShowDialog();
+            using (var fileStream = saveFileDialog.OpenFile())
+            {
+                using (var streamWriter = new StreamWriter(fileStream))
+                {
+                    var data = JsonConvert.SerializeObject(file);
+                    streamWriter.Write(data);
+                }
+                fileStream.Close();
+            }
+        }
+
+        private void ButtonLoad_Click(object sender, EventArgs e)
+        {
+            VoronoiFile file;
+            openFileDialog.ShowDialog();
+            using (var fileStream = openFileDialog.OpenFile())
+            {
+                using (var streamReader = new StreamReader(fileStream))
+                {
+                    var data = streamReader.ReadToEnd();
+                    file = JsonConvert.DeserializeObject<VoronoiFile>(data);
+                }
+                fileStream.Close();
+            }
+
+            _height = file.Height;
+            _width = file.Width;
+            _session = new Session { Sites = file.Sites };
+
+            textBoxHeight.Text = _height.ToString();
+            textBoxWidth.Text = _width.ToString();
+            dataTableBindingSource.DataSource = Sites.Create(file.Sites);
+            optionValues.Checked = true;
+            optionRandom.Checked = false;
         }
     }
 }
