@@ -48,7 +48,6 @@ namespace VoronoiEngine.Structures
                 return null;
             }
 
-
             var root = Root;
             var arc = root as Leaf;
             if (root.IsLeaf && arc.Site.Y - point.Y < 0.0001)

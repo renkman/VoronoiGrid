@@ -27,18 +27,15 @@ namespace VoronoiEngine.Geomerty
             var intersection = leftEdge.Intersect(rightEdge);
             if (intersection == null)
                 return null;
-
+                       
             var a = left.Site;
-            
-            var x = a.X - intersection.X;
-            var dy = a.Y - intersection.Y;
+            var d = a.CalculateDistance(intersection);
+            var pointY = intersection.Y - d;
 
-            var d = Math.Sqrt(Math.Pow(x, 2) + Math.Pow(dy, 2));
-
-            var circleEventPoint = new Point(intersection.X, intersection.Y - d);
-
-            if (circleEventPoint.Y >= y)
+            if (pointY >= y)
                 return null;
+
+            var circleEventPoint = new Point(intersection.X, pointY);
 
             var circleEvent = new CircleEvent
             {

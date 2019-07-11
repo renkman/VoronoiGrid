@@ -487,5 +487,46 @@ namespace VoronoiTests
             Assert.AreEqual(new Point { X = 40, Y = 80 }, halfEdge.Point);
             Assert.AreEqual(new Point { X = 40, Y = 0 }, halfEdge.EndPoint);
         }
+
+        [Test]
+        [Ignore("Integer numbers generate edge cases for sweepline Y comparision in the circle event determination")]
+        public void TestCreateVoronoiMapCorruptWith3()
+        {
+            var sitesOk = new List<Site>
+            {
+                new Site { Point = new Point {X=60.0,Y=70.0 } },
+                new Site { Point = new Point {X=38.0,Y=73.0 } },
+                new Site { Point = new Point {X=50.0,Y=65.0 } },
+            };
+
+            var factory = new VoronoiFactory();
+
+            var sitesCorrupt = new List<Site>
+            {
+                new Site { Point = new Point {X=60.0,Y=70.0 } },
+                new Site { Point = new Point {X=38.0,Y=74.0 } },
+                new Site { Point = new Point {X=50.0,Y=65.0 } },
+            };
+
+            var mapOk = factory.CreateVoronoiMap(100, 100, sitesOk);
+            Logger.Instance.ToFile();
+
+            var mapCorrupt = factory.CreateVoronoiMap(100, 100, sitesCorrupt);
+            Logger.Instance.ToFile();
+
+            Assert.IsNotNull(mapOk);
+            Assert.IsNotNull(mapCorrupt);
+
+            var halfEdgesOk = mapOk.Where(g => g is HalfEdge).Cast<HalfEdge>();
+            var halfEdgesCorrupt = mapCorrupt.Where(g => g is HalfEdge).Cast<HalfEdge>();
+
+            var verticesOk = mapOk.Where(g => g is Vertex).Cast<Vertex>();
+            var verticesCorrupt = mapCorrupt.Where(g => g is Vertex).Cast<Vertex>();
+
+
+
+            //Assert.AreEqual(halfEdgesOk.Count(), halfEdgesCorrupt.Count());
+            Assert.AreEqual(verticesOk.Count(), verticesCorrupt.Count());
+        }
     }
 }

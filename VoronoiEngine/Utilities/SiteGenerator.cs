@@ -14,7 +14,7 @@ namespace VoronoiEngine.Utilities
 
             while (points.Count < quantity)
             {
-                var point = new Point { X = random.Next(x), Y = random.Next(y) };
+                var point = new Point { X = x * random.NextDouble(), Y = y * random.NextDouble() };
                 if(!points.Contains(point))
                     points.Add(point);
             }

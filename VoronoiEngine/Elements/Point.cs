@@ -22,17 +22,12 @@ namespace VoronoiEngine.Elements
 
         public int CompareTo(Point other)
         {
-            return X.CompareTo(other.X);
+            if (Equals(X, other.X))
+                return 0;
+            if (X < other.X)
+                return -1;
+            return 1;
         }
-
-        //public static Point operator -(Point a, Point b)
-        //{
-        //    return new Point
-        //    {
-        //        X = Math.Abs(a.X - b.X),
-        //        Y = Math.Abs(a.Y - b.Y)
-        //    };
-        //}
 
         public override bool Equals(object obj)
         {
@@ -51,12 +46,22 @@ namespace VoronoiEngine.Elements
         {
             if (other == null)
                 return false;
-            return Math.Abs(X - other.X) < 0.0001 && Math.Abs(Y - other.Y) < 0.0001;
+            return Equals(X, other.X) && Equals(Y, other.Y);
+        }
+
+        public double CalculateDistance(Point other)
+        {
+            return Math.Sqrt((other.X - X) * (other.X - X) + (other.Y - Y) * (other.Y - Y));
         }
 
         public override string ToString()
         {
             return $"{nameof(Point)}: X: {X}, Y: {Y}";
+        }
+
+        private static bool Equals(double a, double b)
+        {
+            return Math.Abs(a - b) < 0.0001;
         }
     }
 }
