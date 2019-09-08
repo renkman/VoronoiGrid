@@ -25,7 +25,7 @@ namespace VoronoiEngine
         public VoronoiFactory() : this(
             new SiteEventHandlerStrategy(),
             new CircleEventHandlerStrategy(),
-            new SiteGenerator(),
+            new RandomSiteGenerator(),
             new BoundingBoxService())
         {
         }

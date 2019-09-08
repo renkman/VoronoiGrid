@@ -1,23 +1,25 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using VoronoiEngine.Elements;
 using VoronoiEngine.Utilities;
-using Newtonsoft.Json;
-using System.IO;
 
 namespace VoronoiViewer
 {
     public partial class FormVoronoiViewer : Form
     {
+        private Dictionary<string, ISiteGenerator> _siteGenerators;
         private VoronoiService _voronoiService;
         private Session _session;
         private Bitmap _canvas;
 
-        private float  _factorX;
-        private float  _factorY;
+        private float _factorX;
+        private float _factorY;
 
         private int _height;
         private int _width;
@@ -26,13 +28,22 @@ namespace VoronoiViewer
         {
             InitializeComponent();
 
-            _voronoiService = new VoronoiService();
+            _siteGenerators = new Dictionary<string, ISiteGenerator>
+            {
+                {nameof(RandomSiteGenerator), new RandomSiteGenerator()},
+                {nameof(EvenlySpreadSiteGenerator), new EvenlySpreadSiteGenerator()}
+            };
+            _voronoiService = new VoronoiService(_siteGenerators.Values.First());
+
+            comboBoxSiteGenerators.Items.AddRange(_siteGenerators.Keys.ToArray());
+            comboBoxSiteGenerators.SelectedIndex = 0;
+
             _session = new Session();
             _canvas = new Bitmap(
                  tabPageDiagram.ClientRectangle.Width,
                  tabPageDiagram.ClientRectangle.Height,
                  System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-
+                       
             InitCanvas();
         }
 
@@ -83,7 +94,7 @@ namespace VoronoiViewer
                 {
                     var x = (int)Math.Round(site.Point.XInt * _factorX);
                     var y = (int)Math.Round(_canvas.Height - (site.Point.YInt * _factorY));
-                    graphics.FillRectangle(brush, x, y, (int) Math.Max(1, _factorX), (int) Math.Max(1, _factorY));
+                    graphics.FillRectangle(brush, x, y, (int)Math.Max(1, _factorX), (int)Math.Max(1, _factorY));
                 }
             }
             tabPageDiagram.Invalidate();
@@ -108,7 +119,7 @@ namespace VoronoiViewer
 
                     var pen = new Pen(halfEdgeBrush);
 
-                    foreach (var edge in map.Where(g=>g is HalfEdge).Cast<HalfEdge>())
+                    foreach (var edge in map.Where(g => g is HalfEdge).Cast<HalfEdge>())
                     {
                         DrawEdge(edge, graphics, pen);
                     }
@@ -132,15 +143,15 @@ namespace VoronoiViewer
 
         private void DrawEdge(HalfEdge halfEdge, Graphics graphics, Pen pen)
         {
-            var startX = halfEdge.Point.XInt * _factorX; 
+            var startX = halfEdge.Point.XInt * _factorX;
             //var startX = Math.Max(0f, halfEdge.Point.XInt * _factorX);
-            var startY = _canvas.Height - halfEdge.Point.YInt * _factorY; 
+            var startY = _canvas.Height - halfEdge.Point.YInt * _factorY;
             //var startY = Math.Max(0f, _canvas.Height - halfEdge.Point.YInt * _factorY);
-            var endX = halfEdge.EndPoint.XInt * _factorX; 
+            var endX = halfEdge.EndPoint.XInt * _factorX;
             //var endX = Math.Max(0f, halfEdge.EndPoint.XInt * _factorX);
-            var endY = _canvas.Height - halfEdge.EndPoint.YInt * _factorY; 
+            var endY = _canvas.Height - halfEdge.EndPoint.YInt * _factorY;
             //var endY = Math.Max(0f, _canvas.Height - halfEdge.EndPoint.YInt * _factorY);
-            
+
             textBoxLog.Text += $"Calculate edge with start x: {halfEdge.Point.XInt}, y: {halfEdge.Point.YInt} and end x: {halfEdge.EndPoint.XInt}, y: {halfEdge.EndPoint.YInt}{Environment.NewLine}";
             textBoxLog.Text += $"Draw edge with start x: {startX}, y: {startY} and end x: {endX}, y: {endY}{Environment.NewLine}";
             graphics.DrawLine(pen, new PointF(startX, startY), new PointF(endX, endY));
@@ -149,12 +160,14 @@ namespace VoronoiViewer
         private void OptionRandom_CheckedChanged(object sender, EventArgs e)
         {
             textBoxSites.Enabled = true;
+            comboBoxSiteGenerators.Enabled = true;
             dataGridViewValues.Enabled = false;
         }
 
         private void OptionValues_CheckedChanged(object sender, EventArgs e)
         {
             textBoxSites.Enabled = false;
+            comboBoxSiteGenerators.Enabled = false;
             dataGridViewValues.Enabled = true;
         }
 
@@ -183,6 +196,10 @@ namespace VoronoiViewer
         {
             VoronoiFile file;
             openFileDialog.ShowDialog();
+
+            if (string.IsNullOrWhiteSpace(openFileDialog.FileName))
+                return;
+
             using (var fileStream = openFileDialog.OpenFile())
             {
                 using (var streamReader = new StreamReader(fileStream))
@@ -202,6 +219,12 @@ namespace VoronoiViewer
             dataTableBindingSource.DataSource = Sites.Create(file.Sites);
             optionValues.Checked = true;
             optionRandom.Checked = false;
+        }
+
+        private void ComboBoxSiteGenerators_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var siteGenerator = _siteGenerators[comboBoxSiteGenerators.SelectedItem.ToString()];
+            _voronoiService.SwitchSiteGenerator(siteGenerator);
         }
     }
 }

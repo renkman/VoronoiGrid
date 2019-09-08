@@ -30,13 +30,12 @@
         {
             this.components = new System.ComponentModel.Container();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
+            this.buttonLoad = new System.Windows.Forms.Button();
+            this.buttonSave = new System.Windows.Forms.Button();
             this.groupBoxOptions = new System.Windows.Forms.GroupBox();
             this.optionValues = new System.Windows.Forms.RadioButton();
             this.optionRandom = new System.Windows.Forms.RadioButton();
             this.dataGridViewValues = new System.Windows.Forms.DataGridView();
-            this.xDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.yDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataTableBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.buttonVoronoiDiagram = new System.Windows.Forms.Button();
             this.textBoxHeight = new System.Windows.Forms.TextBox();
             this.textBoxWidth = new System.Windows.Forms.TextBox();
@@ -49,18 +48,20 @@
             this.tabPageDiagram = new System.Windows.Forms.TabPage();
             this.tabPageLog = new System.Windows.Forms.TabPage();
             this.textBoxLog = new System.Windows.Forms.TextBox();
-            this.buttonSave = new System.Windows.Forms.Button();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.buttonLoad = new System.Windows.Forms.Button();
+            this.comboBoxSiteGenerators = new System.Windows.Forms.ComboBox();
+            this.xDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.yDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataTableBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
             this.splitContainer.SuspendLayout();
             this.groupBoxOptions.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewValues)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataTableBindingSource)).BeginInit();
             this.tabControlResult.SuspendLayout();
             this.tabPageLog.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataTableBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // splitContainer
@@ -71,6 +72,7 @@
             // 
             // splitContainer.Panel1
             // 
+            this.splitContainer.Panel1.Controls.Add(this.comboBoxSiteGenerators);
             this.splitContainer.Panel1.Controls.Add(this.buttonLoad);
             this.splitContainer.Panel1.Controls.Add(this.buttonSave);
             this.splitContainer.Panel1.Controls.Add(this.groupBoxOptions);
@@ -91,6 +93,26 @@
             this.splitContainer.Size = new System.Drawing.Size(1427, 858);
             this.splitContainer.SplitterDistance = 366;
             this.splitContainer.TabIndex = 0;
+            // 
+            // buttonLoad
+            // 
+            this.buttonLoad.Location = new System.Drawing.Point(100, 806);
+            this.buttonLoad.Name = "buttonLoad";
+            this.buttonLoad.Size = new System.Drawing.Size(100, 28);
+            this.buttonLoad.TabIndex = 9;
+            this.buttonLoad.Text = "Load";
+            this.buttonLoad.UseVisualStyleBackColor = true;
+            this.buttonLoad.Click += new System.EventHandler(this.ButtonLoad_Click);
+            // 
+            // buttonSave
+            // 
+            this.buttonSave.Location = new System.Drawing.Point(100, 772);
+            this.buttonSave.Name = "buttonSave";
+            this.buttonSave.Size = new System.Drawing.Size(100, 28);
+            this.buttonSave.TabIndex = 8;
+            this.buttonSave.Text = "Save";
+            this.buttonSave.UseVisualStyleBackColor = true;
+            this.buttonSave.Click += new System.EventHandler(this.ButtonSave_Click);
             // 
             // groupBoxOptions
             // 
@@ -137,28 +159,10 @@
             this.yDataGridViewTextBoxColumn});
             this.dataGridViewValues.DataSource = this.dataTableBindingSource;
             this.dataGridViewValues.Enabled = false;
-            this.dataGridViewValues.Location = new System.Drawing.Point(15, 142);
+            this.dataGridViewValues.Location = new System.Drawing.Point(15, 169);
             this.dataGridViewValues.Name = "dataGridViewValues";
-            this.dataGridViewValues.Size = new System.Drawing.Size(185, 554);
+            this.dataGridViewValues.Size = new System.Drawing.Size(185, 527);
             this.dataGridViewValues.TabIndex = 6;
-            // 
-            // xDataGridViewTextBoxColumn
-            // 
-            this.xDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.xDataGridViewTextBoxColumn.DataPropertyName = "X";
-            this.xDataGridViewTextBoxColumn.HeaderText = "X";
-            this.xDataGridViewTextBoxColumn.Name = "xDataGridViewTextBoxColumn";
-            // 
-            // yDataGridViewTextBoxColumn
-            // 
-            this.yDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.yDataGridViewTextBoxColumn.DataPropertyName = "Y";
-            this.yDataGridViewTextBoxColumn.HeaderText = "Y";
-            this.yDataGridViewTextBoxColumn.Name = "yDataGridViewTextBoxColumn";
-            // 
-            // dataTableBindingSource
-            // 
-            this.dataTableBindingSource.DataSource = typeof(Sites);
             // 
             // buttonVoronoiDiagram
             // 
@@ -274,25 +278,32 @@
             this.textBoxLog.Size = new System.Drawing.Size(1043, 826);
             this.textBoxLog.TabIndex = 6;
             // 
-            // buttonSave
+            // comboBoxSiteGenerators
             // 
-            this.buttonSave.Location = new System.Drawing.Point(100, 772);
-            this.buttonSave.Name = "buttonSave";
-            this.buttonSave.Size = new System.Drawing.Size(100, 28);
-            this.buttonSave.TabIndex = 8;
-            this.buttonSave.Text = "Save";
-            this.buttonSave.UseVisualStyleBackColor = true;
-            this.buttonSave.Click += new System.EventHandler(this.ButtonSave_Click);
+            this.comboBoxSiteGenerators.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxSiteGenerators.Location = new System.Drawing.Point(15, 142);
+            this.comboBoxSiteGenerators.Name = "comboBoxSiteGenerators";
+            this.comboBoxSiteGenerators.Size = new System.Drawing.Size(185, 21);
+            this.comboBoxSiteGenerators.TabIndex = 10;
+            this.comboBoxSiteGenerators.SelectedIndexChanged += new System.EventHandler(this.ComboBoxSiteGenerators_SelectedIndexChanged);
             // 
-            // buttonLoad
+            // xDataGridViewTextBoxColumn
             // 
-            this.buttonLoad.Location = new System.Drawing.Point(100, 806);
-            this.buttonLoad.Name = "buttonLoad";
-            this.buttonLoad.Size = new System.Drawing.Size(100, 28);
-            this.buttonLoad.TabIndex = 9;
-            this.buttonLoad.Text = "Load";
-            this.buttonLoad.UseVisualStyleBackColor = true;
-            this.buttonLoad.Click += new System.EventHandler(this.ButtonLoad_Click);
+            this.xDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.xDataGridViewTextBoxColumn.DataPropertyName = "X";
+            this.xDataGridViewTextBoxColumn.HeaderText = "X";
+            this.xDataGridViewTextBoxColumn.Name = "xDataGridViewTextBoxColumn";
+            // 
+            // yDataGridViewTextBoxColumn
+            // 
+            this.yDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.yDataGridViewTextBoxColumn.DataPropertyName = "Y";
+            this.yDataGridViewTextBoxColumn.HeaderText = "Y";
+            this.yDataGridViewTextBoxColumn.Name = "yDataGridViewTextBoxColumn";
+            // 
+            // dataTableBindingSource
+            // 
+            this.dataTableBindingSource.DataSource = typeof(Sites);
             // 
             // FormVoronoiViewer
             // 
@@ -309,10 +320,10 @@
             this.groupBoxOptions.ResumeLayout(false);
             this.groupBoxOptions.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewValues)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataTableBindingSource)).EndInit();
             this.tabControlResult.ResumeLayout(false);
             this.tabPageLog.ResumeLayout(false);
             this.tabPageLog.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataTableBindingSource)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -343,6 +354,7 @@
         private System.Windows.Forms.SaveFileDialog saveFileDialog;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.Button buttonLoad;
+        private System.Windows.Forms.ComboBox comboBoxSiteGenerators;
     }
 }
 

@@ -523,8 +523,6 @@ namespace VoronoiTests
             var verticesOk = mapOk.Where(g => g is Vertex).Cast<Vertex>();
             var verticesCorrupt = mapCorrupt.Where(g => g is Vertex).Cast<Vertex>();
 
-
-
             //Assert.AreEqual(halfEdgesOk.Count(), halfEdgesCorrupt.Count());
             Assert.AreEqual(verticesOk.Count(), verticesCorrupt.Count());
         }

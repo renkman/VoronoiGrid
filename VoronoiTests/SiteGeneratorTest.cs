@@ -10,7 +10,7 @@ namespace VoronoiTests
         [Test]
         public void TestGenerate()
         {
-            var generator = new SiteGenerator();
+            var generator = new RandomSiteGenerator();
             var result = generator.GenerateSites(200, 200, 20);
 
             Assert.AreEqual(20, result.Count);
