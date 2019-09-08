@@ -30,6 +30,14 @@ namespace VoronoiEngine
         {
         }
 
+        public VoronoiFactory(ISiteGenerator siteGenerator) : this(
+            new SiteEventHandlerStrategy(),
+            new CircleEventHandlerStrategy(),
+            siteGenerator,
+            new BoundingBoxService())
+        {
+        }
+
         public VoronoiFactory(
             IEventHandlerStrategy<SiteEvent> siteEventHandler,
             IEventHandlerStrategy<CircleEvent> circleEventHandler,
