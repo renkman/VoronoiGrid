@@ -18,6 +18,7 @@ namespace VoronoiTests
         [TestCase(32, 8, 4)]
         [TestCase(7, 7, 1)]
         [TestCase(0, 1, 0)]
+        [TestCase(8, 4, 2)]
         public void TestGetGreatestDivisors(int number, int divisorA, int divisorB)
         {
             var result = number.GetGreatestDivisors();

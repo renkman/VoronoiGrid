@@ -7,6 +7,8 @@ namespace VoronoiEngine.Utilities
 {
     public class EvenlySpreadSiteGenerator : ISiteGenerator
     {
+        const int Margin = 2;
+
         public ICollection<Site> GenerateSites(int x, int y, int quantity)
         {
             var max = Math.Max(x, y);
@@ -33,8 +35,8 @@ namespace VoronoiEngine.Utilities
                     var minY = j * stepY;
                     var maxY = minY + stepY;
 
-                    var x = random.Range(minX, maxX);
-                    var y = random.Range(minY, maxY);
+                    var x = random.Range(minX + Margin, maxX - Margin);
+                    var y = random.Range(minY + Margin, maxY - Margin);
 
                     yield return new Point(x, y);
                 }
