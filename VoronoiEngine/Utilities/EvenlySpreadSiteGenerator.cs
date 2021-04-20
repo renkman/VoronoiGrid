@@ -19,6 +19,9 @@ namespace VoronoiEngine.Utilities
             var stepX = x / divisors.Item1 * 1f;
             var stepY = y / divisors.Item2 * 1f;
 
+            if (stepX - Margin <= Margin || stepY - Margin <= Margin)
+                throw new InvalidOperationException($"Too many sites {quantity} for map size of height: {x} and width: {y}");
+
             var positions = GeneratePositions(divisors.Item1, stepX, divisors.Item2, stepY).ToList();
             return positions.Select(p => new Site { Point = p }).ToList();
         }

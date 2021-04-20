@@ -62,13 +62,9 @@ namespace VoronoiTests
         [Test]
         public void GenerateSites_With20x10Map10Points_SitesFitToGrid()
         {
-            const int x = 20;
-            const int y = 10;
-            const int quantity = 8;
-
             var generator = new EvenlySpreadSiteGenerator();
 
-            var result = generator.GenerateSites(x, y, quantity);
+            var result = generator.GenerateSites(20, 10, 8);
 
             Assert.NotNull(result);
 
@@ -92,6 +88,31 @@ namespace VoronoiTests
             AssertIsBetween(7, 9, sites[7].Point.Y);
         }
 
+        [Test]
+        public void GenerateSites_With100x75Map250Points_SitesKeepDistance()
+        {
+            var generator = new EvenlySpreadSiteGenerator();
+
+            Assert.Throws<InvalidOperationException>(() => generator.GenerateSites(100, 75, 250));
+        }
+
+        [Test]
+        public void GenerateSites_With100x75Map200Points_SitesKeepDistance()
+        {
+            var generator = new EvenlySpreadSiteGenerator();
+
+            var result = generator.GenerateSites(100, 75, 200);
+
+            foreach(var site in result)
+            {
+                foreach (var other in result.Where(s => s != site))
+                {
+                    var distance = site.Point.CalculateDistance(other.Point);
+                    Assert.LessOrEqual(2, distance, $"Distance of {site} and {other} is too close");
+                }
+            }
+        }
+        
         private void AssertIsBetween(int min, int max, double value)
         {
             Assert.GreaterOrEqual(value, min);

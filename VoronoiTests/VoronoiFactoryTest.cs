@@ -526,5 +526,16 @@ namespace VoronoiTests
             //Assert.AreEqual(halfEdgesOk.Count(), halfEdgesCorrupt.Count());
             Assert.AreEqual(verticesOk.Count(), verticesCorrupt.Count());
         }
+
+        [Test]
+        public void GenerateMap_With100x75Map200Points_SitesKeepDistance()
+        {
+            var generator = new EvenlySpreadSiteGenerator();
+            var factory = new VoronoiFactory(generator);
+
+            var map = factory.CreateVoronoiMap(75, 100, 200);
+
+            Assert.NotNull(map);
+        }
     }
 }
