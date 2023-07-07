@@ -33,6 +33,20 @@ jobs:
 
     - name: Run UnitTests
       run: .\NUnit.ConsoleRunner.3.13.0\tools\nunit3-console.exe D:\a\VoronoiGrid\VoronoiGrid\VoronoiTests\bin\Release\VoronoiTests.dll
+      
+    - name: Display directories
+      run: |
+        dir
+        cd D:\a\VoronoiGrid\VoronoiGrid\
+        dir
+        cd D:\a\VoronoiGrid\VoronoiGrid\VoronoiTests\bin\Release\
+        dir
+        cd cd D:\a\VoronoiGrid\VoronoiGrid\VoronoiTests\
+        dir
+        cd cd D:\a\VoronoiGrid\VoronoiGrid\
+        dir
+        cd D:\a\VoronoiGrid\
+        dir          
 
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v3
