@@ -1,4 +1,9 @@
 # VoronoiGrid
+
+[![.NET](https://github.com/renkman/VoronoiGrid/actions/workflows/ci-pipeline.yml/badge.svg)](https://github.com/renkman/VoronoiGrid/actions/workflows/ci-pipeline.yml)
+[![codecov](https://codecov.io/gh/renkman/VoronoiGrid/branch/master/graph/badge.svg?token=SUJJ39A1CD)](https://codecov.io/gh/renkman/VoronoiGrid)
+[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://github.com/lachsfilet/Renkbench/blob/master/LICENSE)
+
 Library for grid based Voronoi diagram generation.
 
 This library generates two dimensional region maps, based on Vornoi diagram generation using [Fortune's Sweepline algorithm](https://en.wikipedia.org/wiki/Fortune%27s_algorithm).
