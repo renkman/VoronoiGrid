@@ -24,10 +24,10 @@ jobs:
       uses: NuGet/setup-nuget@v1.2.0
 
     - name: Restore Packages
-      run: nuget restore VoroniEngine.sln
+      run: nuget restore VoronoiEngine.sln
     
     - name: Build solution
-      run: msbuild VoroniEngine.sln -t:rebuild -property:Configuration=Release   
+      run: msbuild VoronoiEngine.sln -t:rebuild -property:Configuration=Release   
           
     - name: Install NUnit.ConsoleRunner
       run: nuget install NUnit.ConsoleRunner -Version 3.13.0 -DirectDownload -OutputDirectory .
