@@ -38,3 +38,4 @@ jobs:
       uses: codecov/codecov-action@v3
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
+        file: D:\a\VoronoiGrid\VoronoiGrid\TestResult.xml
