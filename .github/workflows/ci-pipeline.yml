@@ -22,7 +22,9 @@ jobs:
         dotnet-version: '8.0.x'
    
     - name: Setup NuGet.exe for use with actions
-      uses: nuget/setup-nuget@latest
+      uses: nuget/setup-nuget@v2
+      with:
+        nuget-version: latest
 
     - name: Restore Packages
       run: nuget restore VoronoiEngine.sln
