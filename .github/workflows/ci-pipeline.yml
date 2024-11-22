@@ -30,10 +30,10 @@ jobs:
     - name: Install OpenCover
       run: nuget install OpenCover -Version 4.7.1221 -DirectDownload -OutputDirectory .
 
-#    - name: Run UnitTests and coverage
-#      run: .\opencover.4.7.1221\tools\OpenCover.Console.exe -register:user -target:".\NUnit.ConsoleRunner.3.13.0\tools\nunit3-console.exe" -targetargs:"D:\a\VoronoiGrid\VoronoiGrid\VoronoiTests\bin\Release\VoronoiTests.dll" -filter:"+[VoronoiEngine*]* -[VoronoiTests*]*" -output:".\VoronoiEngine_coverage.xml"
-#    
-#    - name: Upload coverage reports to Codecov
-#      uses: codecov/codecov-action@v3
-#      with:
-#        token: ${{ secrets.CODECOV_TOKEN }}
+    - name: Run UnitTests and coverage
+      run: .\opencover.4.7.1221\tools\OpenCover.Console.exe -register:user -target:".\NUnit.ConsoleRunner.3.13.0\tools\nunit3-console.exe" -targetargs:"D:\a\VoronoiGrid\VoronoiGrid\VoronoiTests\bin\Release\VoronoiTests.dll" -filter:"+[VoronoiEngine*]* -[VoronoiTests*]*" -output:".\VoronoiEngine_coverage.xml"
+
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
