@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using VoronoiEngine.Elements;
+﻿using VoronoiEngine.Elements;
 
 namespace VoronoiEngine.Utilities
 {

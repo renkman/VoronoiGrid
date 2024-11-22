@@ -1,16 +1,11 @@
-﻿using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using VoronoiEngine.Elements;
+﻿using VoronoiEngine.Elements;
+using Xunit;
 
 namespace VoronoiTests
 {
-    [TestFixture]
     public class VertexTest
     {
-        [Test]
+        [Fact]
         public void TestReplace()
         {
             var vertex = new Vertex();

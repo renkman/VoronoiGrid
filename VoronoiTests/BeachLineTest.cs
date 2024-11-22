@@ -1,17 +1,15 @@
-﻿using NUnit.Framework;
-using System.Linq;
-using VoronoiEngine.Elements;
+﻿using VoronoiEngine.Elements;
 using VoronoiEngine.Structures;
+using Xunit;
 
 namespace VoronoiTests
 {
     /// <summary>
     /// Summary description for BeachLineTest
     /// </summary>
-    [TestFixture]
     public class BeachLineTest
     {
-        [Test]
+        [Fact]
         public void TestAddSingleLeaf()
         {
             var beachLine = new BeachLine(2000);
@@ -19,11 +17,11 @@ namespace VoronoiTests
             beachLine.InsertSite(site);
 
             var leaf = beachLine.Root as Leaf;
-            Assert.IsNotNull(leaf);
-            Assert.AreEqual(site, leaf.Site);
+            Assert.NotNull(leaf);
+            Assert.Equal(site, leaf.Site);
         }
 
-        [Test]
+        [Fact]
         public void TestAddTwoLeaves()
         {
             var beachLine = new BeachLine(2000);
@@ -34,36 +32,36 @@ namespace VoronoiTests
             beachLine.InsertSite(site2);
 
             var root = beachLine.Root as Node;
-            Assert.IsNotNull(root);
-            Assert.IsNotNull(root.HalfEdge);
-            Assert.AreEqual(site1, root.HalfEdge.Right);
-            Assert.AreEqual(site2, root.HalfEdge.Left);
+            Assert.NotNull(root);
+            Assert.NotNull(root.HalfEdge);
+            Assert.Equal(site1, root.HalfEdge.Right);
+            Assert.Equal(site2, root.HalfEdge.Left);
 
             var nodeLeft = root.Left as Node;
-            Assert.IsNotNull(nodeLeft);
-            Assert.IsNotNull(nodeLeft.HalfEdge);
-            Assert.AreEqual(site1, nodeLeft.HalfEdge.Left);
-            Assert.AreEqual(site2, nodeLeft.HalfEdge.Right);
+            Assert.NotNull(nodeLeft);
+            Assert.NotNull(nodeLeft.HalfEdge);
+            Assert.Equal(site1, nodeLeft.HalfEdge.Left);
+            Assert.Equal(site2, nodeLeft.HalfEdge.Right);
 
             var leafRight = root.Right as Leaf;
             var leafLeftLeft = nodeLeft.Left as Leaf;
             var leafLeftRight = nodeLeft.Right as Leaf;
 
-            Assert.IsNotNull(leafRight);
-            Assert.IsNotNull(leafLeftLeft);
-            Assert.IsNotNull(leafLeftRight);
+            Assert.NotNull(leafRight);
+            Assert.NotNull(leafLeftLeft);
+            Assert.NotNull(leafLeftRight);
 
-            Assert.AreEqual(site2, leafLeftRight.Site);
-            Assert.AreEqual(site1, leafLeftLeft.Site);
-            Assert.AreEqual(site1, leafRight.Site);
+            Assert.Equal(site2, leafLeftRight.Site);
+            Assert.Equal(site1, leafLeftLeft.Site);
+            Assert.Equal(site1, leafRight.Site);
 
-            Assert.AreEqual(root.Breakpoint.Left, site2);
-            Assert.AreEqual(root.Breakpoint.Right, site1);
-            Assert.AreEqual(nodeLeft.Breakpoint.Left, site1);
-            Assert.AreEqual(nodeLeft.Breakpoint.Right, site2);
+            Assert.Equal(root.Breakpoint.Left, site2);
+            Assert.Equal(root.Breakpoint.Right, site1);
+            Assert.Equal(nodeLeft.Breakpoint.Left, site1);
+            Assert.Equal(nodeLeft.Breakpoint.Right, site2);
         }
 
-        [Test]
+        [Fact]
         public void TestAddThreeLeaves()
         {
             var beachLine = new BeachLine(2000);
@@ -77,14 +75,14 @@ namespace VoronoiTests
 
             var root = beachLine.Root as Node;
 
-            Assert.IsNotNull(root);
+            Assert.NotNull(root);
 
             var nodeLeft = root.Left as Node;
             var nodeLeftLeft = nodeLeft.Left as Node;
             var nodeLeftLeftLeft = nodeLeftLeft.Left as Node;
-            Assert.IsNotNull(nodeLeft);
-            Assert.IsNotNull(nodeLeftLeft);
-            Assert.IsNotNull(nodeLeftLeftLeft);
+            Assert.NotNull(nodeLeft);
+            Assert.NotNull(nodeLeftLeft);
+            Assert.NotNull(nodeLeftLeftLeft);
 
             var leafRight = root.Right as Leaf;
             var leafLeftRight = nodeLeft.Right as Leaf;
@@ -92,20 +90,20 @@ namespace VoronoiTests
             var leafLeftLeftLeftLeft = nodeLeftLeftLeft.Left as Leaf;
             var leafLeftLeftLeftRight = nodeLeftLeftLeft.Right as Leaf;
 
-            Assert.IsNotNull(leafRight);
-            Assert.IsNotNull(leafLeftRight);
-            Assert.IsNotNull(leafLeftLeftRight);
-            Assert.IsNotNull(leafLeftLeftLeftLeft);
-            Assert.IsNotNull(leafLeftLeftLeftRight);
+            Assert.NotNull(leafRight);
+            Assert.NotNull(leafLeftRight);
+            Assert.NotNull(leafLeftLeftRight);
+            Assert.NotNull(leafLeftLeftLeftLeft);
+            Assert.NotNull(leafLeftLeftLeftRight);
 
-            Assert.AreEqual(site1, leafRight.Site);
-            Assert.AreEqual(site2, leafLeftRight.Site);
-            Assert.AreEqual(site1, leafLeftLeftRight.Site);
-            Assert.AreEqual(site1, leafLeftLeftLeftLeft.Site);
-            Assert.AreEqual(site3, leafLeftLeftLeftRight.Site);
+            Assert.Equal(site1, leafRight.Site);
+            Assert.Equal(site2, leafLeftRight.Site);
+            Assert.Equal(site1, leafLeftLeftRight.Site);
+            Assert.Equal(site1, leafLeftLeftLeftLeft.Site);
+            Assert.Equal(site3, leafLeftLeftLeftRight.Site);
         }
 
-        [Test]
+        [Fact]
         public void TestGenerateCircleEventZeroLengthArc()
         {
             var beachLine = new BeachLine(2000);
@@ -121,15 +119,15 @@ namespace VoronoiTests
 
             var result = beachLine.GenerateCircleEvent(insert.Leaves, site3.Y);
 
-            Assert.IsNotNull(result);
-            Assert.AreEqual(1, result.Count);
-            Assert.AreEqual(expectedCricleEvent, result.Single().Point);
-            //Assert.AreEqual(site2, result.Single().LeftArc.Site);
-            Assert.AreEqual(site1, result.Single().Arc.Site);
-            //Assert.AreEqual(site3, result.Single().RightArc.Site);
+            Assert.NotNull(result);
+            Assert.Single(result);
+            Assert.Equal(expectedCricleEvent, result.Single().Point);
+            //Assert.Equal(site2, result.Single().LeftArc.Site);
+            Assert.Equal(site1, result.Single().Arc.Site);
+            //Assert.Equal(site3, result.Single().RightArc.Site);
         }
 
-        [Test]
+        [Fact]
         public void TestGenerateCircleEvent()
         {
             var beachLine = new BeachLine(0);
@@ -145,16 +143,16 @@ namespace VoronoiTests
 
             var result = beachLine.GenerateCircleEvent(insert.Leaves, site3.Y);
 
-            Assert.IsNotNull(result);
-            Assert.AreEqual(1, result.Count);
-            Assert.AreEqual(expectedCricleEvent.XInt, result.Single().Point.XInt);
-            Assert.AreEqual(expectedCricleEvent.YInt, result.Single().Point.YInt);
-            //Assert.AreEqual(site2, result.Single().LeftArc.Site);
-            Assert.AreEqual(site1, result.Single().Arc.Site);
-            //Assert.AreEqual(site3, result.Single().RightArc.Site);
+            Assert.NotNull(result);
+            Assert.Single(result);
+            Assert.Equal(expectedCricleEvent.XInt, result.Single().Point.XInt);
+            Assert.Equal(expectedCricleEvent.YInt, result.Single().Point.YInt);
+            //Assert.Equal(site2, result.Single().LeftArc.Site);
+            Assert.Equal(site1, result.Single().Arc.Site);
+            //Assert.Equal(site3, result.Single().RightArc.Site);
         }
 
-        [Test]
+        [Fact]
         public void TestFindCircleEventAbove()
         {
             var beachLine = new BeachLine(0);
@@ -173,11 +171,11 @@ namespace VoronoiTests
             var circleEvents = beachLine.GenerateCircleEvent(insert.Leaves, site3.Y);
             var result = beachLine.FindCircleEventAbove(site4);
 
-            Assert.IsNotNull(result);
-            Assert.AreEqual(circleEvents.Single().Point, result.Point);
+            Assert.NotNull(result);
+            Assert.Equal(circleEvents.Single().Point, result.Point);
         }
 
-        [Test]
+        [Fact]
         public void TestRemoveLeaf()
         {
             var beachLine = new BeachLine(0);
@@ -198,16 +196,16 @@ namespace VoronoiTests
             var leafLeft = rightSubtree.Left as Leaf;
             var leafRight = rightSubtree.Right as Leaf;
 
-            Assert.IsNotNull(leafLeft);
-            Assert.IsNotNull(leafRight);
+            Assert.NotNull(leafLeft);
+            Assert.NotNull(leafRight);
 
-            Assert.AreEqual(rightSubtree.Breakpoint.Left, site3);
-            Assert.AreEqual(rightSubtree.Breakpoint.Right, site1);
-            Assert.AreEqual(leafLeft.Site, site3);
-            Assert.AreEqual(leafRight.Site, site1);
+            Assert.Equal(rightSubtree.Breakpoint.Left, site3);
+            Assert.Equal(rightSubtree.Breakpoint.Right, site1);
+            Assert.Equal(leafLeft.Site, site3);
+            Assert.Equal(leafRight.Site, site1);
         }
 
-        //[Test]
+        //[Fact]
         //public void TestRemoveLastLeaf()
         //{
         //    var beachLine = new BeachLine();
@@ -225,7 +223,7 @@ namespace VoronoiTests
 
         //    Assert.IsNull(root.Right);
         //    var left = root.Left as Leaf;
-        //    Assert.IsNotNull(left);
+        //    Assert.NotNull(left);
         //}
     }
 }

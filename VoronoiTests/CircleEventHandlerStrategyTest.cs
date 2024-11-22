@@ -1,18 +1,12 @@
-﻿using NUnit.Framework;
-using System.Collections.Generic;
-using System.Linq;
-using VoronoiEngine.Elements;
-using VoronoiEngine.EventHandler;
-using VoronoiEngine.Events;
+﻿using VoronoiEngine.Elements;
 using VoronoiEngine.Structures;
+using Xunit;
 
 namespace VoronoiTests
 {
-    [TestFixture]
     public class CircleEventHandlerStrategyTest
     {
-        [Test]
-        [Ignore("To be revised")]
+        [Fact(Skip = "To be revised")]
         public void TestHandleEvent()
         {
             var beachLine = new BeachLine(10);
@@ -39,20 +33,20 @@ namespace VoronoiTests
             //var strategy = new CircleEventHandlerStrategy();
             //var result = strategy.HandleEvent(sweepEvent, eventQueue, beachLine).ToList();
 
-            //Assert.IsNotNull(result);
+            //Assert.NotNull(result);
             //var vertex = ((Vertex)result.Single(g => g is Vertex));
-            //Assert.AreEqual(sweepEvent.Vertex, vertex.Point);
-            //Assert.AreEqual(3, vertex.HalfEdges.Count);
+            //Assert.Equal(sweepEvent.Vertex, vertex.Point);
+            //Assert.Equal(3, vertex.HalfEdges.Count);
 
             //var start = vertex.HalfEdges.Single(h => h.Start != null);
             //Assert.IsNull(start.End);
-            //Assert.AreEqual(new Point(2, 3), start.Left);
-            //Assert.AreEqual(new Point(6, 4), start.Right);
+            //Assert.Equal(new Point(2, 3), start.Left);
+            //Assert.Equal(new Point(6, 4), start.Right);
 
             //var ends = vertex.HalfEdges.Where(h => h.End != null);
-            //Assert.AreEqual(2, ends.Count());
-            //Assert.IsTrue(!ends.Contains(start));
-            //Assert.IsTrue(ends.All(h => h.Start == null));
+            //Assert.Equal(2, ends.Count());
+            //Assert.True(!ends.Contains(start));
+            //Assert.True(ends.All(h => h.Start == null));
         }
     }
 }

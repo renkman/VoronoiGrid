@@ -1,5 +1,4 @@
-﻿using System;
-using VoronoiEngine.Elements;
+﻿using VoronoiEngine.Elements;
 
 namespace VoronoiEngine.Geomerty
 {

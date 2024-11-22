@@ -1,113 +1,108 @@
-﻿using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using VoronoiEngine.Elements;
+﻿using VoronoiEngine.Elements;
 using VoronoiEngine.Geomerty;
+using Xunit;
 
 namespace VoronoiTests
 {
-    [TestFixture]
     public class BreakpointCalculationServiceTest
     {
-        [Test]
+        [Fact]
         public void TestCalculateBreakpoint()
         {
             var breakpointCalculationService = new BreakpointCalculationService();
             var result = breakpointCalculationService.CalculateBreakpoint(new Point(4, 6), new Point(6, 4), 4);
 
-            Assert.IsNotNull(result);
-            Assert.AreEqual(new Point(6, 4), result);
+            Assert.NotNull(result);
+            Assert.Equal(new Point(6, 4), result);
         }
 
-        [Test]
+        [Fact]
         public void TestCalculateBreakpointLeftRight()
         {
             var breakpointCalculationService = new BreakpointCalculationService();
             var result = breakpointCalculationService.CalculateBreakpoint(new Point(170, 140), new Point(130, 160), 120);
 
-            Assert.IsNotNull(result);
+            Assert.NotNull(result);
         }
 
-        [Test]
+        [Fact]
         public void TestCalculateBreakpointRightLeft()
         {
             var breakpointCalculationService = new BreakpointCalculationService();
             var result = breakpointCalculationService.CalculateBreakpoint(new Point(130, 160), new Point(170, 140), 120);
 
-            Assert.IsNotNull(result);
+            Assert.NotNull(result);
         }
         
-        [Test]
+        [Fact]
         public void TestCalculateBreakpointStep3FirstNode()
         {
             var breakpointCalculationService = new BreakpointCalculationService();
             var result = breakpointCalculationService.CalculateBreakpoint(new Point(130, 160), new Point(110, 150), 140);
 
-            Assert.IsNotNull(result);
+            Assert.NotNull(result);
         }
         
-        [Test]
+        [Fact]
         public void TestCalculateBreakpointStep3SecondNode()
         {
             var breakpointCalculationService = new BreakpointCalculationService();
             var result = breakpointCalculationService.CalculateBreakpoint(new Point(110, 150), new Point(130, 160), 140);
 
-            Assert.IsNotNull(result);
+            Assert.NotNull(result);
         }
         
-        [Test]
+        [Fact]
         public void TestCalculateBreakpointStep4()
         {
             var breakpointCalculationService = new BreakpointCalculationService();
             var result = breakpointCalculationService.CalculateBreakpoint(new Point(110, 150), new Point(170, 140), 120);
 
-            Assert.IsNotNull(result);
+            Assert.NotNull(result);
         }
 
-        [Test]
+        [Fact]
         public void TestCalculateBreakpointStep5()
         {
             var breakpointCalculationService = new BreakpointCalculationService();
             var result = breakpointCalculationService.CalculateBreakpoint(new Point(2, 10), new Point(20, 12), 5);
 
-            Assert.IsNotNull(result);
-            Assert.AreEqual(11, result.XInt);
-            Assert.AreEqual(5, result.YInt);
+            Assert.NotNull(result);
+            Assert.Equal(11, result.XInt);
+            Assert.Equal(5, result.YInt);
         }
 
-        [Test]
+        [Fact]
         public void TestCalculateBreakpointSameY()
         {
             var breakpointCalculationService = new BreakpointCalculationService();
             var result = breakpointCalculationService.CalculateBreakpoint(new Point(15, 120), new Point(20, 120), 40);
 
-            Assert.IsNotNull(result);
-            Assert.AreEqual(18, result.XInt);
-            Assert.AreEqual(40, result.YInt);
+            Assert.NotNull(result);
+            Assert.Equal(18, result.XInt);
+            Assert.Equal(40, result.YInt);
         }
 
-        [Test]
+        [Fact]
         public void TestCalculateBreakpointLeftOnSweepline()
         {
             var breakpointCalculationService = new BreakpointCalculationService();
             var result = breakpointCalculationService.CalculateBreakpoint(new Point(15, 120), new Point(20, 12), 120);
 
-            Assert.IsNotNull(result);
-            Assert.AreEqual(15, result.X);
-            Assert.AreEqual(120, result.Y);
+            Assert.NotNull(result);
+            Assert.Equal(15, result.X);
+            Assert.Equal(120, result.Y);
         }
 
-        [Test]
+        [Fact]
         public void TestCalculateBreakpointRightOnSweepline()
         {
             var breakpointCalculationService = new BreakpointCalculationService();
             var result = breakpointCalculationService.CalculateBreakpoint(new Point(15, 120), new Point(20, 40), 40);
 
-            Assert.IsNotNull(result);
-            Assert.AreEqual(20, result.X);
-            Assert.AreEqual(40, result.Y);
+            Assert.NotNull(result);
+            Assert.Equal(20, result.X);
+            Assert.Equal(40, result.Y);
         }
     }
 }

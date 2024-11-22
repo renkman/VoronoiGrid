@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace VoronoiEngine.Utilities
+﻿namespace VoronoiEngine.Utilities
 {
     public static class RandomExtensions
     {

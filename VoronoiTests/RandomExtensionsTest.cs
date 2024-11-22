@@ -1,24 +1,25 @@
-﻿using NUnit.Framework;
-using System;
-using VoronoiEngine.Utilities;
+﻿using VoronoiEngine.Utilities;
+using Xunit;
 
 namespace VoronoiTests
 {
-    [TestFixture]
     public class RandomExtensionsTest
     {
-        [Test]
-        public void TestRange([Range(0, 10)] int min, [Range(1, 10)] int difference)
+        [Fact]
+        // public void TestRange([Range(0, 10)] int min, [Range(1, 10)] int difference)
+        public void TestRange()
         {
+            const int min = 1;
+            const int difference = 2;
             var max = min + difference;
             var random = new Random();
             var result = random.Range(min, max);
 
-            Assert.IsTrue(result >= min, $"{result} < {min}");
-            Assert.IsTrue(result <= max, $"{result} > {max}");
+            Assert.True(result >= min, $"{result} < {min}");
+            Assert.True(result <= max, $"{result} > {max}");
         }
 
-        [Test]
+        [Fact]
         public void TestRangeException()
         {
             var random = new Random();

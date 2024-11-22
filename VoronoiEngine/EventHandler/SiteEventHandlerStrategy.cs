@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using VoronoiEngine.Elements;
+﻿using VoronoiEngine.Elements;
 using VoronoiEngine.Events;
 using VoronoiEngine.Structures;
 using VoronoiEngine.Utilities;

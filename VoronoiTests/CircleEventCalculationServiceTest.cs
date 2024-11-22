@@ -1,18 +1,12 @@
-﻿using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using VoronoiEngine.Elements;
+﻿using VoronoiEngine.Elements;
 using VoronoiEngine.Geomerty;
+using Xunit;
 
 namespace VoronoiTests
 {
-    [TestFixture]
     public class CircleEventCalculationServiceTest
     {
-        [Test]
-        [Ignore("To be revised")]
+        [Fact(Skip = "To be revised")]
         public void TestDetermineCircleEvent()
         {
             var parentDummy = new Node(null);
@@ -34,7 +28,7 @@ namespace VoronoiTests
             var service = new CircleEventCalculationService();
             var result = service.DetermineCircleEvent(node3, 140);
 
-            Assert.AreEqual(expectedCricleEvent, result.Point);
+            Assert.Equal(expectedCricleEvent, result.Point);
        }
     }
 }

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace VoronoiEngine.Elements
+﻿namespace VoronoiEngine.Elements
 {
     public class HalfEdge : IGeometry, IEquatable<HalfEdge>
     {

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace VoronoiEngine.Geomerty
+﻿namespace VoronoiEngine.Geomerty
 {
     public static class GeometryHelper
     {

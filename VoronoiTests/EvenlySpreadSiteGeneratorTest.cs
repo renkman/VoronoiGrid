@@ -1,16 +1,12 @@
-﻿using NUnit.Framework;
-using System;
-using System.Globalization;
-using System.Linq;
-using VoronoiEngine.Elements;
+﻿using System.Globalization;
 using VoronoiEngine.Utilities;
+using Xunit;
 
 namespace VoronoiTests
 {
-    [TestFixture]
     public class EvenlySpreadSiteGeneratorTest
     {
-        [Test]
+        [Fact]
         public void TestGenerateSites_10_6_9()
         {
             const int quantity = 9;
@@ -18,37 +14,37 @@ namespace VoronoiTests
             var siteGenerator = new EvenlySpreadSiteGenerator();
             var result = siteGenerator.GenerateSites(36, 27, quantity).ToList();
 
-            Assert.AreEqual(quantity, result.Count);
+            Assert.Equal(quantity, result.Count);
 
-            Assert.IsTrue(result[0].Point.X >= 0 && result[0].Point.X <= 12, result[0].Point.X.ToString(CultureInfo.InvariantCulture));
-            Assert.IsTrue(result[0].Point.Y >= 0 && result[0].Point.Y <= 9, result[0].Point.Y.ToString(CultureInfo.InvariantCulture));
+            Assert.True(result[0].Point.X >= 0 && result[0].Point.X <= 12, result[0].Point.X.ToString(CultureInfo.InvariantCulture));
+            Assert.True(result[0].Point.Y >= 0 && result[0].Point.Y <= 9, result[0].Point.Y.ToString(CultureInfo.InvariantCulture));
 
-            Assert.IsTrue(result[1].Point.X >= 0 && result[1].Point.X <= 12, result[1].Point.X.ToString(CultureInfo.InvariantCulture));
-            Assert.IsTrue(result[1].Point.Y >= 9 && result[1].Point.Y <= 18, result[1].Point.Y.ToString(CultureInfo.InvariantCulture));
+            Assert.True(result[1].Point.X >= 0 && result[1].Point.X <= 12, result[1].Point.X.ToString(CultureInfo.InvariantCulture));
+            Assert.True(result[1].Point.Y >= 9 && result[1].Point.Y <= 18, result[1].Point.Y.ToString(CultureInfo.InvariantCulture));
 
-            Assert.IsTrue(result[2].Point.X >= 0 && result[2].Point.X <= 12);
-            Assert.IsTrue(result[2].Point.Y >= 18 && result[2].Point.Y <= 27);
+            Assert.True(result[2].Point.X >= 0 && result[2].Point.X <= 12);
+            Assert.True(result[2].Point.Y >= 18 && result[2].Point.Y <= 27);
 
-            Assert.IsTrue(result[3].Point.X >= 12 && result[3].Point.X <= 24);
-            Assert.IsTrue(result[3].Point.Y >= 0 && result[0].Point.Y <= 9, result[0].Point.Y.ToString(CultureInfo.InvariantCulture));
+            Assert.True(result[3].Point.X >= 12 && result[3].Point.X <= 24);
+            Assert.True(result[3].Point.Y >= 0 && result[0].Point.Y <= 9, result[0].Point.Y.ToString(CultureInfo.InvariantCulture));
 
-            Assert.IsTrue(result[4].Point.X >= 12 && result[4].Point.X <= 24);
-            Assert.IsTrue(result[4].Point.Y >= 9 && result[4].Point.Y <= 18);
+            Assert.True(result[4].Point.X >= 12 && result[4].Point.X <= 24);
+            Assert.True(result[4].Point.Y >= 9 && result[4].Point.Y <= 18);
 
-            Assert.IsTrue(result[5].Point.X >= 12 && result[5].Point.X <= 24);
-            Assert.IsTrue(result[5].Point.Y >= 18 && result[5].Point.Y <= 27);
+            Assert.True(result[5].Point.X >= 12 && result[5].Point.X <= 24);
+            Assert.True(result[5].Point.Y >= 18 && result[5].Point.Y <= 27);
 
-            Assert.IsTrue(result[6].Point.X >= 24 && result[6].Point.X <= 36);
-            Assert.IsTrue(result[6].Point.Y >= 0 && result[6].Point.Y <= 9, result[0].Point.Y.ToString(CultureInfo.InvariantCulture));
+            Assert.True(result[6].Point.X >= 24 && result[6].Point.X <= 36);
+            Assert.True(result[6].Point.Y >= 0 && result[6].Point.Y <= 9, result[0].Point.Y.ToString(CultureInfo.InvariantCulture));
 
-            Assert.IsTrue(result[7].Point.X >= 24 && result[7].Point.X <= 36);
-            Assert.IsTrue(result[7].Point.Y >= 9 && result[7].Point.Y <= 18);
+            Assert.True(result[7].Point.X >= 24 && result[7].Point.X <= 36);
+            Assert.True(result[7].Point.Y >= 9 && result[7].Point.Y <= 18);
 
-            Assert.IsTrue(result[8].Point.X >= 24 && result[8].Point.X <= 36);
-            Assert.IsTrue(result[8].Point.Y >= 18 && result[8].Point.Y <= 27);
+            Assert.True(result[8].Point.X >= 24 && result[8].Point.X <= 36);
+            Assert.True(result[8].Point.Y >= 18 && result[8].Point.Y <= 27);
         }
 
-        [Test]
+        [Fact]
         public void TestGenerateSites_8_6_10()
         {
             const int quantity = 10;
@@ -56,10 +52,10 @@ namespace VoronoiTests
             var siteGenerator = new EvenlySpreadSiteGenerator();
             var result = siteGenerator.GenerateSites(100, 100, quantity).ToList();
 
-            Assert.AreEqual(quantity, result.Count);
+            Assert.Equal(quantity, result.Count);
         }
 
-        [Test]
+        [Fact]
         public void GenerateSites_With20x10Map10Points_SitesFitToGrid()
         {
             var generator = new EvenlySpreadSiteGenerator();
@@ -88,7 +84,7 @@ namespace VoronoiTests
             AssertIsBetween(7, 9, sites[7].Point.Y);
         }
 
-        [Test]
+        [Fact]
         public void GenerateSites_With100x75Map250Points_SitesKeepDistance()
         {
             var generator = new EvenlySpreadSiteGenerator();
@@ -96,7 +92,7 @@ namespace VoronoiTests
             Assert.Throws<InvalidOperationException>(() => generator.GenerateSites(100, 75, 250));
         }
 
-        [Test]
+        [Fact]
         public void GenerateSites_With100x75Map200Points_SitesKeepDistance()
         {
             var generator = new EvenlySpreadSiteGenerator();
@@ -108,15 +104,15 @@ namespace VoronoiTests
                 foreach (var other in result.Where(s => s != site))
                 {
                     var distance = site.Point.CalculateDistance(other.Point);
-                    Assert.LessOrEqual(2, distance, $"Distance of {site} and {other} is too close");
+                    Assert.True(2 <= distance, $"Distance of {site} and {other} is too close");
                 }
             }
         }
         
         private void AssertIsBetween(int min, int max, double value)
         {
-            Assert.GreaterOrEqual(value, min);
-            Assert.Less(value, max);
+            Assert.True(value >= min);
+            Assert.True(value < max);
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using VoronoiEngine.Elements;
+﻿using VoronoiEngine.Elements;
 using VoronoiEngine.Events;
 using VoronoiEngine.Geomerty;
 using VoronoiEngine.Structures;

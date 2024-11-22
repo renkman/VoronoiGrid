@@ -1,16 +1,12 @@
-﻿using NUnit.Framework;
-using System.Collections.Generic;
-using System.Linq;
-using VoronoiEngine.Elements;
-using VoronoiEngine.Geomerty;
+﻿using VoronoiEngine.Elements;
 using VoronoiEngine.Structures;
+using Xunit;
 
 namespace VoronoiTests
 {
-    [TestFixture]
     public class VoronoiMapTest
     {
-        [Test]
+        [Fact]
         public void TestAdd()
         {
             var sites = new[] {
@@ -24,10 +20,10 @@ namespace VoronoiTests
             map.Add(sites[1]);
             map.Add(sites[2]);
 
-            Assert.AreEqual(sites.Count(), map.Count());
+            Assert.Equal(sites.Count(), map.Count());
         }
 
-        [Test]
+        [Fact]
         public void TestAddRange()
         {
             var sites = new[] {
@@ -39,10 +35,10 @@ namespace VoronoiTests
             var map = new VoronoiMap();
             map.AddRange(sites);
 
-            Assert.AreEqual(sites.Count(), map.Count());
+            Assert.Equal(sites.Count(), map.Count());
         }
 
-        [Test]
+        [Fact]
         public void TestToArray()
         {
             var sites = new IGeometry[]
@@ -59,17 +55,16 @@ namespace VoronoiTests
 
             var result = map.ToArray();
 
-            Assert.IsNotNull(result);
-            Assert.AreEqual(70, result.GetLength(0));
-            Assert.AreEqual(70, result.GetLength(1));
-            Assert.AreEqual(new Point { X = 40, Y = 60 }, result[45, 65].Point);
-            Assert.AreEqual(new Point { X = 20, Y = 40 }, result[25, 45].Point);
-            Assert.AreEqual(new Point { X = 60, Y = 40 }, result[65, 45].Point);
-            Assert.AreEqual(new Point { X = 40, Y = 40 }, result[45, 45].Point);
+            Assert.NotNull(result);
+            Assert.Equal(70, result.GetLength(0));
+            Assert.Equal(70, result.GetLength(1));
+            Assert.Equal(new Point { X = 40, Y = 60 }, result[45, 65].Point);
+            Assert.Equal(new Point { X = 20, Y = 40 }, result[25, 45].Point);
+            Assert.Equal(new Point { X = 60, Y = 40 }, result[65, 45].Point);
+            Assert.Equal(new Point { X = 40, Y = 40 }, result[45, 45].Point);
         }
         
-        [Test]
-        [Ignore("Obsolete test case")]
+        [Fact (Skip = "Obsolete test case")]
         public void TestAddVertex()
         {
             var left = new HalfEdge(new Point { X = 74, Y = 139 }, new Point { X = 170, Y = 140 }, new Point { X = 130, Y = 160 });
@@ -88,9 +83,9 @@ namespace VoronoiTests
             var map = new VoronoiMap();
             map.Add(vertex);
 
-            Assert.AreEqual(4, map.Count());
-            Assert.AreEqual(1, map.Count(g => g is Vertex));
-            Assert.AreEqual(3, map.Count(g => g is HalfEdge));
+            Assert.Equal(4, map.Count());
+            Assert.Equal(1, map.Count(g => g is Vertex));
+            Assert.Equal(3, map.Count(g => g is HalfEdge));
 
             // Found circle event for arcs: 
             // Leaf: Point: X: 95, Y: 75, CircleEvent: , 
@@ -115,9 +110,9 @@ namespace VoronoiTests
 
             map.Add(vertex2);
 
-            Assert.AreEqual(7, map.Count());
-            Assert.AreEqual(2, map.Count(g => g is Vertex));
-            Assert.AreEqual(5, map.Count(g => g is HalfEdge));
+            Assert.Equal(7, map.Count());
+            Assert.Equal(2, map.Count(g => g is Vertex));
+            Assert.Equal(5, map.Count(g => g is HalfEdge));
         }
     }
 }

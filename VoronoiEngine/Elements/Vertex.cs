@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace VoronoiEngine.Elements
+﻿namespace VoronoiEngine.Elements
 {
     public class Vertex : IGeometry
     {

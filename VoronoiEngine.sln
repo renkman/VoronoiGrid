@@ -1,13 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.572
+# Visual Studio 17
+VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoronoiEngine", "VoronoiEngine\VoronoiEngine.csproj", "{960FEC25-17C7-4964-9EA4-F3BD3FC57052}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoronoiTests", "VoronoiTests\VoronoiTests.csproj", "{3F58E1EE-3D1C-4E86-9341-6798740C3259}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoronoiViewer", "VoronoiViewer\VoronoiViewer.csproj", "{2B2A76A6-D9D3-4184-837F-4EC8C965B411}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +21,6 @@ Global
 		{3F58E1EE-3D1C-4E86-9341-6798740C3259}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3F58E1EE-3D1C-4E86-9341-6798740C3259}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3F58E1EE-3D1C-4E86-9341-6798740C3259}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2B2A76A6-D9D3-4184-837F-4EC8C965B411}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2B2A76A6-D9D3-4184-837F-4EC8C965B411}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2B2A76A6-D9D3-4184-837F-4EC8C965B411}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2B2A76A6-D9D3-4184-837F-4EC8C965B411}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

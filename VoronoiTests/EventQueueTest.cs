@@ -1,32 +1,31 @@
-﻿using NUnit.Framework;
-using VoronoiEngine.Elements;
+﻿using VoronoiEngine.Elements;
 using VoronoiEngine.Events;
 using VoronoiEngine.Structures;
+using Xunit;
 
 namespace VoronoiTests
 {
-    [TestFixture]
     public class EventQueueTest
     {
-        [Test]
+        [Fact]
         public void TestHasEvents()
         {
             var sites = new[] { new Point() { X = 1, Y = 2 } };
             var eventQueue = new EventQueue();
             eventQueue.Initialize(sites);
 
-            Assert.IsTrue(eventQueue.HasEvents);
+            Assert.True(eventQueue.HasEvents);
         }
 
-        [Test]
+        [Fact]
         public void TestHasNoEvents()
         {
             var eventQueue = new EventQueue();
 
-            Assert.IsFalse(eventQueue.HasEvents);
+            Assert.False(eventQueue.HasEvents);
         }
 
-        [Test]
+        [Fact]
         public void TestGetNextEvent()
         {
             var sites = new[] { new Point() { X = 1, Y = 2 }, new Point() { X = 1, Y = 1 }, new Point() { X = 1, Y = 5 } };
@@ -35,13 +34,13 @@ namespace VoronoiTests
 
             var resultSet = new[] { eventQueue.GetNextEvent(), eventQueue.GetNextEvent(), eventQueue.GetNextEvent(), eventQueue.GetNextEvent() };
 
-            Assert.AreEqual(resultSet[0].Point, sites[2]);
-            Assert.AreEqual(resultSet[1].Point, sites[0]);
-            Assert.AreEqual(resultSet[2].Point, sites[1]);
-            Assert.AreEqual(resultSet[3], null);
+            Assert.Equal(resultSet[0].Point, sites[2]);
+            Assert.Equal(resultSet[1].Point, sites[0]);
+            Assert.Equal(resultSet[2].Point, sites[1]);
+            Assert.Equal(resultSet[3], null);
         }
 
-        [Test]
+        [Fact]
         public void TestInsert()
         {
             var sites = new[] { new Point() { X = 1, Y = 16 }, new Point() { X = 1, Y = 64 } };
@@ -52,12 +51,12 @@ namespace VoronoiTests
             eventQueue.Insert(circleEvent);
             var resultSet = new[] { eventQueue.GetNextEvent(), eventQueue.GetNextEvent(), eventQueue.GetNextEvent() };
 
-            Assert.AreEqual(resultSet[0].Point, sites[1]);
-            Assert.AreEqual(resultSet[1], circleEvent);
-            Assert.AreEqual(resultSet[2].Point, sites[0]);
+            Assert.Equal(resultSet[0].Point, sites[1]);
+            Assert.Equal(resultSet[1], circleEvent);
+            Assert.Equal(resultSet[2].Point, sites[0]);
         }
 
-        [Test]
+        [Fact]
         public void TestRemove()
         { 
             var sites = new[] { new Point() { X = 1, Y = 64 }, new Point() { X = 1, Y = 16 } };
@@ -69,8 +68,8 @@ namespace VoronoiTests
             eventQueue.Remove(circleEvent);
             var resultSet = new[] { eventQueue.GetNextEvent(), eventQueue.GetNextEvent(), eventQueue.GetNextEvent() };
 
-            Assert.AreEqual(resultSet[0].Point, sites[0]);
-            Assert.AreEqual(resultSet[1].Point, sites[1]);
+            Assert.Equal(resultSet[0].Point, sites[0]);
+            Assert.Equal(resultSet[1].Point, sites[1]);
         }
     }
 }
