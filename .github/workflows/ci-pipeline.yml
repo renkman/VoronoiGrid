@@ -24,14 +24,11 @@ jobs:
     - name: Build solution
       run: dotnet build -c Release
     
-    - name: Install NUnit.ConsoleRunner
-      run: nuget install xunit.runner.console -Version 2.9.2 -DirectDownload -OutputDirectory .
-
     - name: Install OpenCover
       run: nuget install OpenCover -Version 4.7.1221 -DirectDownload -OutputDirectory .
 
     - name: Run UnitTests and coverage
-      run: .\opencover.4.7.1221\tools\OpenCover.Console.exe -register:user -target:".\NUnit.ConsoleRunner.3.13.0\tools\nunit3-console.exe" -targetargs:"D:\a\VoronoiGrid\VoronoiGrid\VoronoiTests\bin\Release\VoronoiTests.dll" -filter:"+[VoronoiEngine*]* -[VoronoiTests*]*" -output:".\VoronoiEngine_coverage.xml"
+      run: dotnet test VoronoiTests/VoronoiTests.csproj --configuration Release --no-build --collect:"XPlat Code Coverage"
 
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v3
