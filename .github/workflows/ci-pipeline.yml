@@ -11,7 +11,7 @@ on:
 
 jobs:
   build-and-test:
-    runs-on: windows-2019
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v3
@@ -22,7 +22,7 @@ jobs:
         dotnet-version: '8.0.x'
    
     - name: Setup NuGet.exe for use with actions
-      uses: nuget/setup-nuget@v2
+      uses: nuget/setup-nuget@latest
 
     - name: Restore Packages
       run: nuget restore VoronoiEngine.sln
