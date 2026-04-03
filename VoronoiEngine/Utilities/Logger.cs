@@ -3,7 +3,7 @@
     public class Logger
     {
         private const string VoronoiDirectoryName = "VoronoiEngine";
-        private const string LogDirectoryName = "Voronoi";
+        private const string LogDirectoryName = "logs";
         
         private static Logger _instance;
 
