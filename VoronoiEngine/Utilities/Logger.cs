@@ -7,7 +7,7 @@
         
         private static Logger _instance;
 
-        public static Logger Instance { get { return _instance ?? (_instance = new Logger()); } }
+        public static Logger Instance { get { return _instance ??= new Logger(); } }
 
         public ICollection<string> Messages { get; }
 
