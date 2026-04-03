@@ -531,5 +531,17 @@ namespace VoronoiTests
 
             Assert.NotNull(map);
         }
+        
+        
+        [Fact]
+        public void GenerateMap_With120x60Map400Points_SitesKeepDistance()
+        {
+            var generator = new PoissonDiskSiteGenerator();
+            var factory = new VoronoiFactory(generator);
+
+            var map = factory.CreateVoronoiMap(60, 120, 400);
+
+            Assert.NotNull(map);
+        }
     }
 }

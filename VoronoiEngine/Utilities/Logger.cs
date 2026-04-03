@@ -2,6 +2,9 @@
 {
     public class Logger
     {
+        private const string VoronoiDirectoryName = "VoronoiEngine";
+        private const string LogDirectoryName = "Voronoi";
+        
         private static Logger _instance;
 
         public static Logger Instance { get { return _instance ?? (_instance = new Logger()); } }
@@ -21,7 +24,9 @@
 
         public void ToFile()
         {
-            var path = @"c:\temp\VoronoiLogs";
+            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                VoronoiDirectoryName,
+                LogDirectoryName);
             Directory.CreateDirectory(path);
             var timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
             var fileName = $"voronoi_{timestamp}.log";
